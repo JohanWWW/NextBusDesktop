@@ -9,33 +9,60 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <SplitView DisplayMode="CompactInline"
-                   IsPaneOpen="True"
-                   OpenPaneLength="200">
+        <SplitView x:Name="MainSplitView"
+                   DisplayMode="CompactInline"
+                   IsPaneOpen="False"
+                   OpenPaneLength="200"
+                   Background="#222222">
             <SplitView.Pane>
-                <ListBox>
-                    <ListBoxItem>
+                <ListBox x:Name="UtilitiyListBox"
+                         SelectionMode="Single"
+                         Background="#565656"
+                         PointerEntered="OnPointerEnterMainSplitViewPane"
+                         PointerExited="OnPointerExitMainSplitViewPane"
+                         SelectionChanged="OnUtilityListBoxChanged">
+                    <ListBoxItem x:Name="HomeListItem">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="24" 
                                        FontFamily="Segoe MDL2 Assets" 
-                                       Text="&#xE80F;"></TextBlock>
-                            <TextBlock Text="Home" Margin="20 0 0 0"/>
+                                       Foreground="White"
+                                       Text="&#xEA8A;"></TextBlock>
+                            <TextBlock Text="Home" 
+                                       Foreground="White"
+                                       Margin="20 0 0 0"/>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem>
+                    <ListBoxItem x:Name="DeparturesListItem">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="24" 
                                        FontFamily="Segoe MDL2 Assets" 
-                                       Text="&#xE787;"></TextBlock>
-                            <TextBlock Text="Departures" Margin="20 0 0 0"/>
+                                       Foreground="White"
+                                       Text="&#xF0AF;"></TextBlock>
+                            <TextBlock Text="Departures" 
+                                       Foreground="White"
+                                       Margin="20 0 0 0"/>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem>
+                    <ListBoxItem x:Name="ArrivalsListItem">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="24" 
                                        FontFamily="Segoe MDL2 Assets" 
+                                       Foreground="White"
+                                       Text="&#xF0B0;"></TextBlock>
+                            <TextBlock Text="Arrivals" 
+                                       Foreground="White"
+                                       Margin="20 0 0 0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem x:Name="TripPlannerListItem">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="24" 
+                                       FontFamily="Segoe MDL2 Assets" 
+                                       Foreground="White"
                                        Text="&#xE816;"></TextBlock>
-                            <TextBlock Text="Trip Planner" Margin="20 0 0 0"/>
+                            <TextBlock Text="Trip Planner" 
+                                       Foreground="White"
+                                       Margin="20 0 0 0"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>

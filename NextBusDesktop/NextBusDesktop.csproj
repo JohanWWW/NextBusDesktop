@@ -129,8 +129,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DeparturesPage.xaml.cs">
-      <DependentUpon>DeparturesPage.xaml</DependentUpon>
+    <Compile Include="DeparturesWindow.xaml.cs">
+      <DependentUpon>DeparturesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HomeWindow.xaml.cs">
       <DependentUpon>HomeWindow.xaml</DependentUpon>
@@ -160,7 +160,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="DeparturesPage.xaml">
+    <Page Include="DeparturesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

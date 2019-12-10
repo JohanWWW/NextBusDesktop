@@ -8,7 +8,11 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        
+    <Grid Background="#222222">
+        <TextBlock FontSize="150"
+                   Foreground="White"
+                   TextWrapping="Wrap">
+            This is the main page!
+        </TextBlock>
     </Grid>
 </Page>

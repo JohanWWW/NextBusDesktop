@@ -26,7 +26,25 @@ namespace NextBusDesktop
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            HomeListItem.Tag = typeof(HomeWindow);
+            DeparturesListItem.Tag = typeof(DeparturesWindow);
+
+            UtilitiyListBox.SelectedIndex = 0;
+            MainContentFrame.Navigate(typeof(HomeWindow));
+        }
+
+         private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;
+
+        private void OnPointerExitMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = false;
+
+        private void OnUtilityListBoxChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Type pageType = (UtilitiyListBox.SelectedItem as ListBoxItem).Tag as Type;
+
+            if (!MainContentFrame.Navigate(pageType))
+                throw new NotImplementedException("Not yet implemented!");
         }
     }
 }
