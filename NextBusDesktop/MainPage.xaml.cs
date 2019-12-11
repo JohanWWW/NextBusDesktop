@@ -28,11 +28,13 @@ namespace NextBusDesktop
         {
             InitializeComponent();
 
+            _api = new API.API();
+            _api.GenerateAccessToken();
             HomeListItem.Tag = typeof(HomeWindow);
             DeparturesListItem.Tag = typeof(DeparturesWindow);
 
             UtilitiyListBox.SelectedIndex = 0;
-            MainContentFrame.Navigate(typeof(HomeWindow));
+            //MainContentFrame.Navigate(typeof(HomeWindow));
         }
 
          private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;
@@ -43,7 +45,7 @@ namespace NextBusDesktop
         {
             Type pageType = (UtilitiyListBox.SelectedItem as ListBoxItem).Tag as Type;
 
-            if (!MainContentFrame.Navigate(pageType))
+            if (!MainContentFrame.Navigate(pageType, _api))
                 throw new NotImplementedException("Not yet implemented!");
         }
     }

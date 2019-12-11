@@ -34,7 +34,6 @@ namespace NextBusDesktop.API
             _tokenGenerationClient.Authenticator = new HttpBasicAuthenticator(
                 localSettings.Values["Api_ClientId"].ToString(), 
                 localSettings.Values["Api_Secret"].ToString());
-
         }
 
         public APIResult<LocationList> GetLocationList(string searchString)

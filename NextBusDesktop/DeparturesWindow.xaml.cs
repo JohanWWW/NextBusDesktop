@@ -22,9 +22,64 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class DeparturesWindow : Page
     {
+        private API.API _api;
+
         public DeparturesWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private void OnSearchTextKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                string searchQuery = SearchTextBox.Text;
+                var locationList = _api.GetLocationList(searchQuery);
+
+                foreach (var stopLocation in locationList.Data.StopLocations)
+                {
+                    ListBoxItem listItem = new ListBoxItem();
+                    listItem.Content = new TextBlock { Text = stopLocation.Name, TextWrapping = TextWrapping.Wrap };
+                    listItem.Tag = stopLocation.Id;
+                    SearchResultList.Items.Add(listItem);
+                }
+
+                MainSplitView.IsPaneOpen = true;
+            }
+        }
+
+        private void OnSearchResultItemClick(object sender, SelectionChangedEventArgs e)
+        {
+            ListBoxItem selectedListItem = SearchResultList.SelectedItem as ListBoxItem;
+            string stopId = selectedListItem.Tag as string;
+
+            DepartureListBox.Items.Clear();
+
+            var departureBoard = _api.GetDepartureBoard(stopId);
+            foreach (var departure in departureBoard.Data.Departures)
+            {
+                ListBoxItem departureBox = new ListBoxItem { Height = 150 };
+                StackPanel panel = new StackPanel();
+                TextBlock textBlock = new TextBlock { Text = departure.Name, FontSize = 56, Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 255, 255)) };
+
+                panel.Children.Add(textBlock);
+                departureBox.Content = panel;
+                DepartureListBox.Items.Add(departureBox);
+            }
+
+            MainSplitView.IsPaneOpen = false;
+
+            // Unsubscribe in order to avoid invocation when the list is cleared.
+            SearchResultList.SelectionChanged -= OnSearchResultItemClick;
+            SearchResultList.Items.Clear();
+            // Subscribe.
+            SearchResultList.SelectionChanged += OnSearchResultItemClick;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var api = e.Parameter as API.API;
+            _api = api;
         }
     }
 }
