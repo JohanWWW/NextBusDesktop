@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
-using NextBusDesktop.API.ResponseModels;
+using NextBusDesktop.ResponseModels;
 using Windows.Storage;
 
-namespace NextBusDesktop.API
+namespace NextBusDesktop.DataProvider
 {
     /// <summary>
     /// Västtrafik - Reseplaneraren

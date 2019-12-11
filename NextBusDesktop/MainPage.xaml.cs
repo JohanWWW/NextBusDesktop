@@ -22,13 +22,13 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private API.API _api;
+        private DataProvider.API _api;
 
         public MainPage()
         {
             InitializeComponent();
 
-            _api = new API.API();
+            _api = new DataProvider.API();
             _api.GenerateAccessToken();
             HomeListItem.Tag = typeof(HomeWindow);
             DeparturesListItem.Tag = typeof(DeparturesWindow);

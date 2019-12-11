@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp.Deserializers;
 
-namespace NextBusDesktop.API.ResponseModels
+namespace NextBusDesktop.ResponseModels
 {
-    public class DepartureBoard
+    public class LocationList
     {
         [DeserializeAs(Name = "serverTime")] public string ServerTime { get; set; }
         [DeserializeAs(Name = "serverDate")] public string ServerDate { get; set; }
-        [DeserializeAs(Name = "Departure")] public IEnumerable<Departure> Departures { get; set; }
+        [DeserializeAs(Name = "StopLocation")] public IEnumerable<StopLocation> StopLocations { get; set; }
     }
 }

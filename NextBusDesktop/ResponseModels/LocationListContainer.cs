@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp.Deserializers;
 
-namespace NextBusDesktop.API.ResponseModels
+namespace NextBusDesktop.ResponseModels
 {
     public class LocationListContainer
     {

@@ -116,16 +116,16 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="API\API.cs" />
-    <Compile Include="API\APIResult.cs" />
-    <Compile Include="API\IServerDateTimeParser.cs" />
-    <Compile Include="API\ResponseModels\AccessToken.cs" />
-    <Compile Include="API\ResponseModels\Departure.cs" />
-    <Compile Include="API\ResponseModels\DepartureBoard.cs" />
-    <Compile Include="API\ResponseModels\DepartureBoardContainer.cs" />
-    <Compile Include="API\ResponseModels\LocationList.cs" />
-    <Compile Include="API\ResponseModels\LocationListContainer.cs" />
-    <Compile Include="API\ResponseModels\StopLocation.cs" />
+    <Compile Include="DataProvider\API.cs" />
+    <Compile Include="DataProvider\APIResult.cs" />
+    <Compile Include="DataProvider\IServerDateTimeParser.cs" />
+    <Compile Include="ResponseModels\AccessToken.cs" />
+    <Compile Include="ResponseModels\Departure.cs" />
+    <Compile Include="ResponseModels\DepartureBoard.cs" />
+    <Compile Include="ResponseModels\DepartureBoardContainer.cs" />
+    <Compile Include="ResponseModels\LocationList.cs" />
+    <Compile Include="ResponseModels\LocationListContainer.cs" />
+    <Compile Include="ResponseModels\StopLocation.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>

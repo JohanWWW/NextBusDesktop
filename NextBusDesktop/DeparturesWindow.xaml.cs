@@ -22,7 +22,7 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class DeparturesWindow : Page
     {
-        private API.API _api;
+        private DataProvider.API _api;
 
         public DeparturesWindow()
         {
@@ -78,7 +78,7 @@ namespace NextBusDesktop
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var api = e.Parameter as API.API;
+            var api = e.Parameter as DataProvider.API;
             _api = api;
         }
     }

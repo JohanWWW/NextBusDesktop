@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 
-namespace NextBusDesktop.API
+namespace NextBusDesktop.DataProvider
 {
     public class APIResult<T>
     {
