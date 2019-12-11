@@ -116,9 +116,16 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DataProvider\AccessTokenProvider.cs" />
     <Compile Include="DataProvider\API.cs" />
     <Compile Include="DataProvider\APIResult.cs" />
+    <Compile Include="DataProvider\IAccessTokenProvider.cs" />
+    <Compile Include="DataProvider\IAccessTokenProviderAsync.cs" />
+    <Compile Include="DataProvider\IApiHelper.cs" />
     <Compile Include="DataProvider\IServerDateTimeParser.cs" />
+    <Compile Include="DataProvider\ITripPlannerProviderAsync.cs" />
+    <Compile Include="DataProvider\ITripPlannerProvider.cs" />
+    <Compile Include="DataProvider\TripPlannerProvider.cs" />
     <Compile Include="ResponseModels\AccessToken.cs" />
     <Compile Include="ResponseModels\Departure.cs" />
     <Compile Include="ResponseModels\DepartureBoard.cs" />

@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using NextBusDesktop.DataProvider;
+using NextBusDesktop.ResponseModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -22,22 +24,29 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private DataProvider.API _api;
+        private IAccessTokenProviderAsync _accessTokenProvider;
+        private ITripPlannerProviderAsync _tripPlannerProvider;
+        private AccessToken _accessToken;
 
         public MainPage()
         {
             InitializeComponent();
+            Startup();
 
-            _api = new DataProvider.API();
-            _api.GenerateAccessToken();
             HomeListItem.Tag = typeof(HomeWindow);
             DeparturesListItem.Tag = typeof(DeparturesWindow);
 
             UtilitiyListBox.SelectedIndex = 0;
-            //MainContentFrame.Navigate(typeof(HomeWindow));
         }
 
-         private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;
+        private async void Startup()
+        {
+            _accessTokenProvider = new AccessTokenProvider();
+            _accessToken = await _accessTokenProvider.GetAccessTokenAsync();
+            _tripPlannerProvider = new TripPlannerProvider(_accessToken);
+        }
+
+        private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;
 
         private void OnPointerExitMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = false;
 
@@ -45,7 +54,7 @@ namespace NextBusDesktop
         {
             Type pageType = (UtilitiyListBox.SelectedItem as ListBoxItem).Tag as Type;
 
-            if (!MainContentFrame.Navigate(pageType, _api))
+            if (!MainContentFrame.Navigate(pageType, _tripPlannerProvider))
                 throw new NotImplementedException("Not yet implemented!");
         }
     }

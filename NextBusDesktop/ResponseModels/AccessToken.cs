@@ -13,5 +13,12 @@ namespace NextBusDesktop.ResponseModels
         [DeserializeAs(Name = "token_type")] public string TokenType { get; set; }
         [DeserializeAs(Name = "expires_in")] public int Expires { get; set; }
         [DeserializeAs(Name = "access_token")] public Guid Token { get; set; }
+
+        private DateTime _createdDateTime;
+
+        public DateTime CreatedDateTime => _createdDateTime;
+        public DateTime ExpiresDateTime => _createdDateTime.AddSeconds(Expires);
+
+        public AccessToken() => _createdDateTime = DateTime.Now;
     }
 }

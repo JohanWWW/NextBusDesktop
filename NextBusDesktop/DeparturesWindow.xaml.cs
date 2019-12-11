@@ -22,21 +22,21 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class DeparturesWindow : Page
     {
-        private DataProvider.API _api;
+        private DataProvider.ITripPlannerProviderAsync _tripPlannerProvider;
 
         public DeparturesWindow()
         {
             InitializeComponent();
         }
 
-        private void OnSearchTextKeyDown(object sender, KeyRoutedEventArgs e)
+        private async void OnSearchTextKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 string searchQuery = SearchTextBox.Text;
-                var locationList = _api.GetLocationList(searchQuery);
+                var locationList = await _tripPlannerProvider.GetLocationListAsync(searchQuery);
 
-                foreach (var stopLocation in locationList.Data.StopLocations)
+                foreach (var stopLocation in locationList.StopLocations)
                 {
                     ListBoxItem listItem = new ListBoxItem();
                     listItem.Content = new TextBlock { Text = stopLocation.Name, TextWrapping = TextWrapping.Wrap };
@@ -48,15 +48,15 @@ namespace NextBusDesktop
             }
         }
 
-        private void OnSearchResultItemClick(object sender, SelectionChangedEventArgs e)
+        private async void OnSearchResultItemClick(object sender, SelectionChangedEventArgs e)
         {
             ListBoxItem selectedListItem = SearchResultList.SelectedItem as ListBoxItem;
             string stopId = selectedListItem.Tag as string;
 
             DepartureListBox.Items.Clear();
 
-            var departureBoard = _api.GetDepartureBoard(stopId);
-            foreach (var departure in departureBoard.Data.Departures)
+            var departureBoard = await _tripPlannerProvider.GetDepartureBoardAsync(stopId);
+            foreach (var departure in departureBoard.Departures)
             {
                 ListBoxItem departureBox = new ListBoxItem { Height = 150 };
                 StackPanel panel = new StackPanel();
@@ -78,8 +78,8 @@ namespace NextBusDesktop
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var api = e.Parameter as DataProvider.API;
-            _api = api;
+            var api = e.Parameter as DataProvider.ITripPlannerProviderAsync;
+            _tripPlannerProvider = api;
         }
     }
 }
