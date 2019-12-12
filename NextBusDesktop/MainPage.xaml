@@ -17,7 +17,7 @@
             <SplitView.Pane>
                 <ListBox x:Name="UtilitiyListBox"
                          SelectionMode="Single"
-                         Background="#565656"
+                         Background="DarkOrange"
                          PointerEntered="OnPointerEnterMainSplitViewPane"
                          PointerExited="OnPointerExitMainSplitViewPane"
                          SelectionChanged="OnUtilityListBoxChanged">

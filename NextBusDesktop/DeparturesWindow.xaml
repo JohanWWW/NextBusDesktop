@@ -29,7 +29,6 @@
             <SplitView.Pane>
                 <ListBox x:Name="SearchResultList"
                          Grid.Row="1"
-                         Margin="0"
                          SelectionChanged="OnSearchResultItemClick">
                     <!-- Programatically generated ListBoxItems -->
                 </ListBox>
@@ -37,18 +36,43 @@
             <SplitView.Content>
                 <ListBox x:Name="DepartureListBox"
                          Grid.Column="1" 
-                         Grid.Row="1"
                          Background="#222222">
                     <!-- Programatically generated -->
-                    <!--<ListBoxItem Height="150"
-                                 Margin="0">
-                        <StackPanel>
-                            <TextBlock Foreground="White" FontSize="56">hello, world</TextBlock>
+                    <!--<ListBoxItem>
+                        --><!--departure box--><!--
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical"
+                                        Background="LightBlue"
+                                        Width="100"
+                                        Height="60"
+                                        CornerRadius="10">
+                                <TextBlock FontSize="24"
+                                           Foreground="White"
+                                           Text="TÅG"
+                                           HorizontalAlignment="Center"
+                                           Margin="0 13 0 0"/>
+                            </StackPanel>
+                            --><!--direction--><!--
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="10 0 0 0">
+                                <TextBlock Text="mot Göteborg C"
+                                           FontSize="24"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            --><!--departure information--><!--
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="10 0 0 0">
+                                <TextBlock Text="Avgår 09:39 om 5 minuter"
+                                           FontSize="24"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
                         </StackPanel>
                     </ListBoxItem>-->
                 </ListBox>
             </SplitView.Content>
         </SplitView>
-        
+
     </Grid>
 </Page>

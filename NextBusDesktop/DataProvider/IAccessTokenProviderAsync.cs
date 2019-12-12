@@ -7,7 +7,7 @@ using NextBusDesktop.ResponseModels;
 
 namespace NextBusDesktop.DataProvider
 {
-    public interface IAccessTokenProviderAsync : IAccessTokenProvider
+    public interface IAccessTokenProviderAsync
     {
         Task<AccessToken> GetAccessTokenAsync();
     }

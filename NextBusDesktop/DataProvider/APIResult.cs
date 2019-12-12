@@ -8,6 +8,7 @@ using RestSharp;
 
 namespace NextBusDesktop.DataProvider
 {
+    [Obsolete]
     public class APIResult<T>
     {
         public HttpStatusCode Status { get; private set; }

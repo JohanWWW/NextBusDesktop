@@ -10,6 +10,7 @@ using Windows.Storage;
 
 namespace NextBusDesktop.DataProvider
 {
+    [Obsolete]
     /// <summary>
     /// Västtrafik - Reseplaneraren
     /// </summary>
