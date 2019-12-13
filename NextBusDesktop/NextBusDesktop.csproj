@@ -126,6 +126,8 @@
     <Compile Include="DataProvider\ITripPlannerProviderAsync.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
+    <Compile Include="Error.cs" />
+    <Compile Include="ErrorType.cs" />
     <Compile Include="ResponseModels\AccessToken.cs" />
     <Compile Include="ResponseModels\Departure.cs" />
     <Compile Include="ResponseModels\DepartureBoard.cs" />
@@ -149,6 +151,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -207,6 +216,18 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Strings\sv-SE\DeparturesWindow.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\en-US\SettingsWindow.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\sv-SE\SettingsWindow.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\en-US\ErrorWindow.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\sv-SE\ErrorWindow.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

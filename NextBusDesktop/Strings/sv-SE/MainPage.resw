@@ -126,6 +126,9 @@
   <data name="Home.Text" xml:space="preserve">
     <value>Hem</value>
   </data>
+  <data name="Settings.Text" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
   <data name="TripPlanner.Text" xml:space="preserve">
     <value>Reseplaneraren</value>
   </data>

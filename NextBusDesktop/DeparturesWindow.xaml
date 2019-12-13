@@ -32,6 +32,7 @@
                          Grid.Row="1"
                          SelectionChanged="OnSearchResultItemClick">
                     <!-- Programatically generated ListBoxItems -->
+
                 </ListBox>
             </SplitView.Pane>
             <SplitView.Content>

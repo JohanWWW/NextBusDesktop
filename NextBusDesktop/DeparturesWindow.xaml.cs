@@ -39,12 +39,34 @@ namespace NextBusDesktop
                 string searchQuery = SearchTextBox.Text;
                 var locationList = await _tripPlannerProvider.GetLocationListAsync(searchQuery);
 
+                if (locationList is null)
+                {
+                    Frame.Navigate(typeof(ErrorWindow), ErrorType.Unknown);
+                    return;
+                }
+
+                if (locationList.StopLocations is null)
+                {
+                    Frame.Navigate(typeof(ErrorWindow), ErrorType.SearchResultEmpty);
+                    return;
+                }
+
+                // Avoid invoking event when the list is cleared.
+                SearchResultList.SelectionChanged -= OnSearchResultItemClick;
+                SearchResultList.Items.Clear();
+                SearchResultList.SelectionChanged += OnSearchResultItemClick;
+
                 foreach (var stopLocation in locationList.StopLocations)
                 {
-                    ListBoxItem listItem = new ListBoxItem();
-                    listItem.Content = new TextBlock { Text = stopLocation.Name, TextWrapping = TextWrapping.Wrap };
-                    listItem.Tag = stopLocation.Id;
-                    SearchResultList.Items.Add(listItem);
+                    SearchResultList.Items.Add(new ListBoxItem
+                    {
+                        Content = new TextBlock
+                        {
+                            Text = stopLocation.Name,
+                            TextWrapping = TextWrapping.Wrap
+                        },
+                        Tag = stopLocation.Id
+                    });
                 }
 
                 MainSplitView.IsPaneOpen = true;
@@ -54,29 +76,44 @@ namespace NextBusDesktop
         private async void OnSearchResultItemClick(object sender, SelectionChangedEventArgs e)
         {
             ListBoxItem selectedListItem = SearchResultList.SelectedItem as ListBoxItem;
+            SearchTextBox.Text = ((TextBlock)selectedListItem.Content).Text;
             string stopId = selectedListItem.Tag as string;
 
             DepartureListBox.Items.Clear();
 
             var departureBoard = await _tripPlannerProvider.GetDepartureBoardAsync(stopId);
+
+            if (departureBoard is null)
+            {
+                Frame.Navigate(typeof(ErrorWindow), ErrorType.Unknown);
+                return;
+            }
+
+            if (departureBoard.Departures is null)
+            {
+                Frame.Navigate(typeof(ErrorWindow), ErrorType.DeparturesNotFound);
+                return;
+            }
+
             foreach (var departure in departureBoard.Departures)
             {
-                ListBoxItem departureBox = new ListBoxItem();
-                departureBox.Content = CreateDepartureBox(departure);
-                DepartureListBox.Items.Add(departureBox);
+                DepartureListBox.Items.Add(new ListBoxItem
+                {
+                    Content = CreateDepartureBox(departure)
+                });
             }
 
             MainSplitView.IsPaneOpen = false;
 
-            // Unsubscribe in order to avoid invocation when the list is cleared.
+            // Avoid invoking event when the list is cleared.
             SearchResultList.SelectionChanged -= OnSearchResultItemClick;
             SearchResultList.Items.Clear();
-            // Subscribe.
             SearchResultList.SelectionChanged += OnSearchResultItemClick;
         }
 
         private UIElement CreateDepartureBox(ResponseModels.Departure departure)
         {
+            // Flip bgColor with fgColor because helper inverts the color for some unknown reason.
             Color bgColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), departure.ForegroundColor);
             Color fgColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), departure.BackgroundColor);
             Color white = Color.FromArgb(255, 255, 255, 255);

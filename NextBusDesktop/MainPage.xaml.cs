@@ -33,14 +33,13 @@ namespace NextBusDesktop
 
         public MainPage()
         {
-            ApplicationLanguages.PrimaryLanguageOverride = "sv-SE";
-            _translator = new Translator(nameof(MainPage));
+
             InitializeComponent();
+            _translator = new Translator(nameof(MainPage));
             Startup();
-            HomeListItem.Tag = typeof(HomeWindow);
-            DeparturesListItem.Tag = typeof(DeparturesWindow);
 
             UtilitiyListBox.SelectedIndex = 0;
+            MainContentFrame.Navigate(typeof(HomeWindow));
         }
 
         private async void Startup()
@@ -56,10 +55,22 @@ namespace NextBusDesktop
 
         private void OnUtilityListBoxChanged(object sender, SelectionChangedEventArgs e)
         {
-            Type pageType = (UtilitiyListBox.SelectedItem as ListBoxItem).Tag as Type;
+            if (HomeListItem.IsSelected)
+                MainContentFrame.Navigate(typeof(HomeWindow));
 
-            if (!MainContentFrame.Navigate(pageType, _tripPlannerProvider))
-                throw new NotImplementedException("Not yet implemented!");
+            if (DeparturesListItem.IsSelected)
+                MainContentFrame.Navigate(typeof(DeparturesWindow), _tripPlannerProvider);
+
+            if (SettingsListItem.IsSelected)
+                MainContentFrame.Navigate(typeof(SettingsWindow), new Action(() => 
+                {
+                    // Translate sidebar whenever the language setting is modified
+                    HomeText.Text = _translator["Home.Text"];
+                    DeparturesText.Text = _translator["Departures.Text"];
+                    ArrivalsText.Text = _translator["Arrivals.Text"];
+                    TripPlannerText.Text = _translator["TripPlanner.Text"];
+                    SettingsText.Text = _translator["Settings.Text"];
+                }));
         }
     }
 }

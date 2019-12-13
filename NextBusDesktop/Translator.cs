@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Globalization;
 using Windows.ApplicationModel.Resources;
+using Windows.Globalization;
 
 namespace NextBusDesktop
 {
     public class Translator
     {
         private ResourceLoader _loader;
+
+        public string[] SupportedLanguages => ApplicationLanguages.ManifestLanguages.ToArray();
+        public string CurrentLanguage => ApplicationLanguages.PrimaryLanguageOverride;
 
         public Translator(string name) => 
             _loader = ResourceLoader.GetForCurrentView(name);

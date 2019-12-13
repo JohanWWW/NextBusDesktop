@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,23 +24,38 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class ErrorWindow : Page
     {
+        private Translator _translator;
+
         public ErrorWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            _translator = new Translator(nameof(ErrorWindow));
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var statusCode = (HttpStatusCode)e.Parameter;
-
-            switch (statusCode)
+            ErrorType errorType = (ErrorType)e.Parameter;
+            switch (errorType)
             {
-                case HttpStatusCode.Unauthorized:
-                    ErrorSymbolTextBlock.Text = "\uE72E";
-                    ErrorMessageTextBlock.Text = "Unauthorized";
+                case ErrorType.DeparturesNotFound:
+                    ErrorSymbolTextBlock.Text = "\uE9CE"; // Unknown (?)
+                    ErrorMessageTextBlock.Text = _translator["DeparturesNotFound"];
+                    await Task.Delay(5000);
+                    Frame.GoBack();
                     break;
-                default:
-
+                case ErrorType.SearchResultEmpty:
+                    ErrorSymbolTextBlock.Text = "\uE783"; // Error (!)
+                    ErrorMessageTextBlock.Text = _translator["NoResults"];
+                    await Task.Delay(5000);
+                    Frame.GoBack();
+                    break;
+                case ErrorType.Unauthorized:
+                    ErrorSymbolTextBlock.Text = "\uE72E"; // Lock
+                    ErrorMessageTextBlock.Text = _translator["Unauthorized"];
+                    break;
+                case ErrorType.Unknown:
+                    ErrorSymbolTextBlock.Text = "\uE783"; // Error (!)
+                    ErrorMessageTextBlock.Text = _translator["ErrorOccurred"];
                     break;
             }
         }
