@@ -27,7 +27,8 @@
                                        FontFamily="Segoe MDL2 Assets" 
                                        Foreground="White"
                                        Text="&#xEA8A;"></TextBlock>
-                            <TextBlock Text="Home" 
+                            <TextBlock x:Uid="/MainPage/Home"
+                                       Text="Home"
                                        Foreground="White"
                                        Margin="20 0 0 0"/>
                         </StackPanel>
@@ -38,7 +39,8 @@
                                        FontFamily="Segoe MDL2 Assets" 
                                        Foreground="White"
                                        Text="&#xF0AF;"></TextBlock>
-                            <TextBlock Text="Departures" 
+                            <TextBlock x:Uid="/MainPage/Departures"
+                                       Text="Departures" 
                                        Foreground="White"
                                        Margin="20 0 0 0"/>
                         </StackPanel>
@@ -49,7 +51,8 @@
                                        FontFamily="Segoe MDL2 Assets" 
                                        Foreground="White"
                                        Text="&#xF0B0;"></TextBlock>
-                            <TextBlock Text="Arrivals" 
+                            <TextBlock x:Uid="/MainPage/Arrivals"
+                                       Text="Arrivals" 
                                        Foreground="White"
                                        Margin="20 0 0 0"/>
                         </StackPanel>
@@ -60,7 +63,8 @@
                                        FontFamily="Segoe MDL2 Assets" 
                                        Foreground="White"
                                        Text="&#xE816;"></TextBlock>
-                            <TextBlock Text="Trip Planner" 
+                            <TextBlock x:Uid="/MainPage/TripPlanner"
+                                       Text="Trip Planner" 
                                        Foreground="White"
                                        Margin="20 0 0 0"/>
                         </StackPanel>

@@ -24,10 +24,12 @@ namespace NextBusDesktop
     public sealed partial class DeparturesWindow : Page
     {
         private DataProvider.ITripPlannerProviderAsync _tripPlannerProvider;
+        private Translator _translator;
 
         public DeparturesWindow()
         {
             InitializeComponent();
+            _translator = new Translator(nameof(DeparturesWindow));
         }
 
         private async void OnSearchTextKeyDown(object sender, KeyRoutedEventArgs e)
@@ -85,6 +87,27 @@ namespace NextBusDesktop
                 DateTime.ParseExact($"{departure.RealisticDate} {departure.RealisticTime}", "yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.InvariantCulture);
             TimeSpan departsIn = scheduledDepartureDateTime - DateTime.Now;
 
+            string directionOfText = _translator["DirectionOf", departure.Direction];
+            string timeUnit;
+            string timeSpanFormat;
+            if (departsIn.TotalMinutes < 60)
+            {
+                timeUnit = _translator["Minutes"];
+                timeSpanFormat = "mm";
+            }
+            else if (departsIn.TotalHours < 24)
+            {
+                timeUnit = _translator["Hours"];
+                timeSpanFormat = "h\\:mm";
+            }
+            else
+            {
+                timeUnit = _translator["Days"];
+                timeSpanFormat = "dd";
+            }
+
+            string departsInText = _translator["DepartsIn", scheduledDepartureDateTime.ToString("HH:mm"), departsIn.ToString(timeSpanFormat).TrimStart('0'), timeUnit];
+
             // departure box
             return AddChildren(new StackPanel
             {
@@ -116,7 +139,7 @@ namespace NextBusDesktop
                 },
                     new TextBlock
                     {
-                        Text = departure.Direction,
+                        Text = directionOfText,
                         FontSize = 24,
                         Foreground = new SolidColorBrush(white),
                         VerticalAlignment = VerticalAlignment.Center
@@ -130,7 +153,7 @@ namespace NextBusDesktop
                 },
                     new TextBlock
                     {
-                        Text = $"Avgår " + scheduledDepartureDateTime.ToString("HH:mm") + " om " + Math.Round(departsIn.TotalMinutes) + " minuter",
+                        Text = departsInText,
                         FontSize = 24,
                         Foreground = new SolidColorBrush(white),
                         VerticalAlignment = VerticalAlignment.Center

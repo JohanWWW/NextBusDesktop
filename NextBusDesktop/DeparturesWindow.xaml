@@ -15,6 +15,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox"
+                 x:Uid="/DeparturesWindow/SearchForStop"
                  Grid.Column="0" Grid.Row="0"
                  Grid.ColumnSpan="2"
                  FontSize="24"

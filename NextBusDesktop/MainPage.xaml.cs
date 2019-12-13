@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Globalization;
+using System.Resources;
 using NextBusDesktop.DataProvider;
 using NextBusDesktop.ResponseModels;
 
@@ -27,12 +29,14 @@ namespace NextBusDesktop
         private IAccessTokenProviderAsync _accessTokenProvider;
         private ITripPlannerProviderAsync _tripPlannerProvider;
         private AccessToken _accessToken;
+        private Translator _translator;
 
         public MainPage()
         {
+            ApplicationLanguages.PrimaryLanguageOverride = "sv-SE";
+            _translator = new Translator(nameof(MainPage));
             InitializeComponent();
             Startup();
-
             HomeListItem.Tag = typeof(HomeWindow);
             DeparturesListItem.Tag = typeof(DeparturesWindow);
 
