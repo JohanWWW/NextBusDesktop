@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="All" xml:space="preserve">
+    <value>Allt</value>
+  </data>
+  <data name="Cancelled.Text" xml:space="preserve">
+    <value>Inställt</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>dagar</value>
   </data>
@@ -124,20 +130,44 @@
     <value>Avgår {0} om {1} {2}</value>
     <comment>Insert time, span and time unit</comment>
   </data>
+  <data name="DepartureTime.Text" xml:space="preserve">
+    <value>Avgångstid</value>
+  </data>
+  <data name="Direction.Text" xml:space="preserve">
+    <value>Riktning</value>
+  </data>
   <data name="DirectionOf" xml:space="preserve">
     <value>mot {0}</value>
     <comment>Insert direction</comment>
   </data>
+  <data name="Earliest.Text" xml:space="preserve">
+    <value>Tidigast</value>
+  </data>
   <data name="Hours" xml:space="preserve">
     <value>timmar</value>
   </data>
+  <data name="Line.Text" xml:space="preserve">
+    <value>Linje</value>
+  </data>
   <data name="Minutes" xml:space="preserve">
     <value>minuter</value>
+  </data>
+  <data name="NewTime" xml:space="preserve">
+    <value>Ny tid</value>
+  </data>
+  <data name="Remaining.Text" xml:space="preserve">
+    <value>Återstående</value>
   </data>
   <data name="SearchForStop.PlaceholderText" xml:space="preserve">
     <value>Sök efter hållplats</value>
   </data>
   <data name="Seconds" xml:space="preserve">
     <value>sekunder</value>
+  </data>
+  <data name="Track.Text" xml:space="preserve">
+    <value>Läge</value>
+  </data>
+  <data name="Unprovided" xml:space="preserve">
+    <value>Ej tilldelat</value>
   </data>
 </root>

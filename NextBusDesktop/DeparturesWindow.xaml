@@ -7,11 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <Grid Background="#222222"
-          Padding="0">
+    <Grid Background="#222222">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
+            <!--<RowDefinition Height="45"/>-->
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox"
@@ -22,57 +21,203 @@
                  BorderThickness="0"
                  PlaceholderText="Search for stop"
                  KeyDown="OnSearchTextKeyDown"/>
+
         <SplitView x:Name="MainSplitView"
                    IsPaneOpen="False"
                    DisplayMode="Inline"
                    OpenPaneLength="250"
-                   Grid.Row="1">
+                   Grid.Row="2">
             <SplitView.Pane>
                 <ListBox x:Name="SearchResultList"
-                         Grid.Row="1"
                          SelectionChanged="OnSearchResultItemClick">
                     <!-- Programatically generated ListBoxItems -->
 
                 </ListBox>
             </SplitView.Pane>
             <SplitView.Content>
-                <ListBox x:Name="DepartureListBox"
-                         Grid.Column="1" 
-                         Background="#222222">
-                    <!-- Programatically generated -->
-                    <!--<ListBoxItem>
-                        --><!--departure box--><!--
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Vertical"
-                                        Background="LightBlue"
-                                        Width="100"
-                                        Height="60"
-                                        CornerRadius="10">
-                                <TextBlock FontSize="24"
-                                           Foreground="White"
-                                           Text="TÅG"
-                                           HorizontalAlignment="Center"
-                                           Margin="0 13 0 0"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="0">
+                        <TextBlock x:Uid="/DeparturesWindow/Earliest" 
+                                   Text="Earliest"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   FontSize="18"
+                                   Margin="12 0 5 0"/>
+                        <TimePicker x:Name="DepartureTimePicker"
+                                    ClockIdentifier="24HourClock"/>
+                        <TextBlock x:Uid="/DeparturesWindow/Track"
+                                   Text="Track"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   FontSize="18"
+                                   Margin="12 0 5 0"/>
+                        <ComboBox x:Name="TrackComboBox"
+                                  VerticalAlignment="Center"
+                                  SelectionChanged="OnTrackChanged">
+                            <!-- Programatically generated -->
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1"
+                                Margin="10 15 10 0">
+                        <Grid BorderBrush="White"
+                              BorderThickness="0 0 0 1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="20*"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="10*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Uid="/DeparturesWindow/Line"
+                                           Text="Line"
+                                           Margin="5 0 0 5"
+                                           Foreground="White" 
+                                           FontSize="18"/>
                             </StackPanel>
-                            --><!--direction--><!--
-                            <StackPanel Orientation="Horizontal"
+                            <StackPanel Grid.Column="1"
+                                        BorderBrush="White"
+                                        BorderThickness="1 0 0 0">
+                                <TextBlock x:Uid="/DeparturesWindow/Direction"
+                                           Text="Direction"
+                                           Margin="5 0 0 5"
+                                           Foreground="White" 
+                                           FontSize="18"/> 
+                            </StackPanel>
+                            <StackPanel Grid.Column="2"
+                                        BorderBrush="White"
+                                        BorderThickness="1 0 0 0">
+                                <TextBlock x:Uid="/DeparturesWindow/DepartureTime"
+                                           Text="Departure time"
+                                           Margin="5 0 0 5"
+                                           Foreground="White" 
+                                           FontSize="18"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4"
+                                        BorderBrush="White"
+                                        BorderThickness="1 0 0 0">
+                                <TextBlock x:Uid="/DeparturesWindow/Remaining"
+                                           Text="Remaining"
+                                           Margin="5 0 0 5"
+                                           Foreground="White" 
+                                           FontSize="18"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="5"
+                                        BorderBrush="White"
+                                        BorderThickness="1 0 0 0">
+                                <TextBlock x:Uid="/DeparturesWindow/Track"
+                                           Text="Track"
+                                           Margin="5 0 0 5"
+                                           Foreground="White" 
+                                           FontSize="18"/>
+                            </StackPanel>
+                            
+                        </Grid>
+                    </StackPanel>
+                    <ListBox x:Name="DepartureListBox"
+                             Grid.Row="2" 
+                             Background="#222222">
+
+                        <!-- Programatically generated -->
+                        <!--<ListBoxItem>
+                            --><!--departure box--><!--
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Vertical"
+                                            Background="LightBlue"
+                                            Width="100"
+                                            Height="60"
+                                            CornerRadius="10">
+                                    <TextBlock FontSize="24"
+                                               Foreground="White"
+                                               Text="TÅG"
+                                               HorizontalAlignment="Center"
+                                               Margin="0 13 0 0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
                                         Margin="10 0 0 0">
-                                <TextBlock Text="mot Göteborg C"
+                                    <TextBlock Text="mot Göteborg C"
                                            FontSize="24"
                                            Foreground="White"
                                            VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0">
+                                    <TextBlock Text="Avgår 09:39 om 5 minuter"
+                                               FontSize="24"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
                             </StackPanel>
-                            --><!--departure information--><!--
-                            <StackPanel Orientation="Horizontal"
-                                        Margin="10 0 0 0">
-                                <TextBlock Text="Avgår 09:39 om 5 minuter"
-                                           FontSize="24"
-                                           Foreground="White"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </ListBoxItem>-->
-                </ListBox>
+                        </ListBoxItem>
+                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                            --><!--departure box--><!--
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="40*"/>
+                                    <ColumnDefinition Width="20*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="30*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical"
+                                            Background="LightBlue"
+                                            Height="60"
+                                            CornerRadius="10"
+                                            Grid.Column="0">
+                                    <TextBlock FontSize="24"
+                                               Foreground="White"
+                                               Text="TÅG"
+                                               HorizontalAlignment="Center"
+                                               Margin="0 13 0 0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0"
+                                            Grid.Column="1">
+                                    <TextBlock Text="mot Göteborg C"
+                                               FontSize="18"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0"
+                                            Grid.Column="2">
+                                    <TextBlock Text="09:39 Inställt"
+                                               FontSize="18"
+                                               Foreground="Red"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" 
+                                            Background="Red"
+                                            CornerRadius="5"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0"
+                                            Grid.Column="4">
+                                    <TextBlock Text="1h 30min"
+                                               FontSize="18"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0"
+                                            Grid.Column="5">
+                                    <TextBlock Text="1A"
+                                               FontSize="18"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                            </Grid>
+                        </ListBoxItem>-->
+                    </ListBox>
+                </Grid>
             </SplitView.Content>
         </SplitView>
 

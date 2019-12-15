@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Cancelled.Text" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>days</value>
   </data>
@@ -124,20 +130,44 @@
     <value>Departs {0} in {1} {2}</value>
     <comment>Insert time, span and time unit</comment>
   </data>
+  <data name="DepartureTime.Text" xml:space="preserve">
+    <value>Departure time</value>
+  </data>
+  <data name="Direction.Text" xml:space="preserve">
+    <value>Direction</value>
+  </data>
   <data name="DirectionOf" xml:space="preserve">
     <value>direction of {0}</value>
     <comment>Insert direction</comment>
   </data>
+  <data name="Earliest.Text" xml:space="preserve">
+    <value>Earliest</value>
+  </data>
   <data name="Hours" xml:space="preserve">
     <value>hours</value>
   </data>
+  <data name="Line.Text" xml:space="preserve">
+    <value>Line</value>
+  </data>
   <data name="Minutes" xml:space="preserve">
     <value>minutes</value>
+  </data>
+  <data name="NewTime" xml:space="preserve">
+    <value>New time</value>
+  </data>
+  <data name="Remaining.Text" xml:space="preserve">
+    <value>Remaining</value>
   </data>
   <data name="SearchForStop.PlaceholderText" xml:space="preserve">
     <value>Search for stop</value>
   </data>
   <data name="Seconds" xml:space="preserve">
     <value>seconds</value>
+  </data>
+  <data name="Track.Text" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="Unprovided" xml:space="preserve">
+    <value>Unprovided</value>
   </data>
 </root>

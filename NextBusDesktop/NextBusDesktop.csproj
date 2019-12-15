@@ -128,6 +128,9 @@
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="ErrorType.cs" />
+    <Compile Include="LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ResponseModels\AccessToken.cs" />
     <Compile Include="ResponseModels\Departure.cs" />
     <Compile Include="ResponseModels\DepartureBoard.cs" />
@@ -185,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HomeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

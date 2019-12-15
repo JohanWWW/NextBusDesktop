@@ -27,6 +27,17 @@ namespace NextBusDesktop.ResponseModels
         [DeserializeAs(Name = "stroke")] public string Stroke { get; set; }
         [DeserializeAs(Name = "accessibility")] public string Accessibility { get; set; }
 
+        public DateTime GetScheduledDateTime() => 
+            DateTime.ParseExact($"{ScheduledDate} {ScheduledTime}", "yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+        public DateTime? GetRealisticDateTime()
+        {
+            if (string.IsNullOrEmpty(RealisticDate) || string.IsNullOrEmpty(RealisticTime))
+                return null;
+
+            return DateTime.ParseExact($"{RealisticDate} {RealisticTime}", "yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
         public override string ToString() => Name;
     }
 }
