@@ -126,6 +126,9 @@
     <Compile Include="DataProvider\ITripPlannerProviderAsync.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
+    <Compile Include="DepartureBoxControl.xaml.cs">
+      <DependentUpon>DepartureBoxControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Error.cs" />
     <Compile Include="ErrorType.cs" />
     <Compile Include="LoadingWindow.xaml.cs">
@@ -179,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="DepartureBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DeparturesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

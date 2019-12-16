@@ -10,7 +10,6 @@
     <Grid Background="#222222">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
-            <!--<RowDefinition Height="45"/>-->
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox"
@@ -118,7 +117,6 @@
                                            Foreground="White" 
                                            FontSize="18"/>
                             </StackPanel>
-                            
                         </Grid>
                     </StackPanel>
                     <ListBox x:Name="DepartureListBox"
@@ -126,95 +124,8 @@
                              Background="#222222">
 
                         <!-- Programatically generated -->
-                        <!--<ListBoxItem>
-                            --><!--departure box--><!--
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Vertical"
-                                            Background="LightBlue"
-                                            Width="100"
-                                            Height="60"
-                                            CornerRadius="10">
-                                    <TextBlock FontSize="24"
-                                               Foreground="White"
-                                               Text="TÅG"
-                                               HorizontalAlignment="Center"
-                                               Margin="0 13 0 0"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                        Margin="10 0 0 0">
-                                    <TextBlock Text="mot Göteborg C"
-                                           FontSize="24"
-                                           Foreground="White"
-                                           VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="10 0 0 0">
-                                    <TextBlock Text="Avgår 09:39 om 5 minuter"
-                                               FontSize="24"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem HorizontalContentAlignment="Stretch">
-                            --><!--departure box--><!--
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="40*"/>
-                                    <ColumnDefinition Width="20*"/>
-                                    <ColumnDefinition Width="5"/>
-                                    <ColumnDefinition Width="30*"/>
-                                    <ColumnDefinition Width="10*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Orientation="Vertical"
-                                            Background="LightBlue"
-                                            Height="60"
-                                            CornerRadius="10"
-                                            Grid.Column="0">
-                                    <TextBlock FontSize="24"
-                                               Foreground="White"
-                                               Text="TÅG"
-                                               HorizontalAlignment="Center"
-                                               Margin="0 13 0 0"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="10 0 0 0"
-                                            Grid.Column="1">
-                                    <TextBlock Text="mot Göteborg C"
-                                               FontSize="18"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="10 0 0 0"
-                                            Grid.Column="2">
-                                    <TextBlock Text="09:39 Inställt"
-                                               FontSize="18"
-                                               Foreground="Red"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="3" 
-                                            Background="Red"
-                                            CornerRadius="5"/>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="10 0 0 0"
-                                            Grid.Column="4">
-                                    <TextBlock Text="1h 30min"
-                                               FontSize="18"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="10 0 0 0"
-                                            Grid.Column="5">
-                                    <TextBlock Text="1A"
-                                               FontSize="18"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                                
-                            </Grid>
+                        <!--<ListBoxItem HorizontalContentAlignment="Stretch">
+                            <local:DepartureBoxControl Margin="0"/>
                         </ListBoxItem>-->
                     </ListBox>
                 </Grid>

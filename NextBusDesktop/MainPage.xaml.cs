@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,15 +35,15 @@ namespace NextBusDesktop
         public MainPage()
         {
             InitializeComponent();
+
             _translator = new Translator(nameof(MainPage));
-            Startup();
-            //MainContentFrame.Navigate(typeof(LoadingWindow));
+            InitializeTripPlannerProvider();
 
             UtilitiyListBox.SelectedIndex = 0;
             MainContentFrame.Navigate(typeof(HomeWindow));
         }
 
-        private async void Startup()
+        private async void InitializeTripPlannerProvider()
         {
             _accessTokenProvider = new AccessTokenProvider();
             _accessToken = await _accessTokenProvider.GetAccessTokenAsync(); // TODO: Bug that causes program to crash when searching for departure and accessToken has not been provided.

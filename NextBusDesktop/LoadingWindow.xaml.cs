@@ -30,9 +30,7 @@ namespace NextBusDesktop
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            //LoadingText.FontFamily = new FontFamily("Segoe MDL2 Assets");
-            //LoadingText.FontSize = 48;
-            //DateTime dateTime = DateTime.Now;
+
         }
     }
 }

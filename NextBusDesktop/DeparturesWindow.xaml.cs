@@ -104,7 +104,12 @@ namespace NextBusDesktop
 
             foreach (var departure in departureBoard.Departures)
             {
-                DepartureListBox.Items.Add(CreateDepartureBox(departure));
+                //DepartureListBox.Items.Add(CreateDepartureBox(departure));
+                DepartureListBox.Items.Add(new ListBoxItem
+                {
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                    Content = new DepartureBoxControl { Departure = departure }
+                });
             }
 
             MainSplitView.IsPaneOpen = false;
@@ -144,6 +149,7 @@ namespace NextBusDesktop
 
         }
 
+        [Obsolete]
         private UIElement CreateDepartureBox(ResponseModels.Departure departure)
         {
             // Flip bgColor with fgColor because helper inverts the color for some unknown reason.
@@ -187,60 +193,6 @@ namespace NextBusDesktop
             }
 
             string departsInText = _translator["DepartsIn", scheduledDepartureDateTime.ToString("HH:mm"), departsIn.ToString(timeSpanFormat).TrimStart('0'), timeUnit];
-
-            // departure box
-            //return AddChildren(new StackPanel
-            //{
-            //    Orientation = Orientation.Horizontal
-            //},
-            //    // line logo
-            //    AddChildren(new StackPanel
-            //    {
-            //        Orientation = Orientation.Vertical,
-            //        Background = new SolidColorBrush(bgColor),
-            //        Width = 100,
-            //        Height = 60,
-            //        CornerRadius = new CornerRadius(10)
-            //    },
-            //        new TextBlock
-            //        {
-            //            FontSize = 24,
-            //            Foreground = new SolidColorBrush(fgColor),
-            //            Text = departure.SName,
-            //            HorizontalAlignment = HorizontalAlignment.Center,
-            //            Margin = new Thickness(0, 13, 0, 0)
-            //        }
-            //    ),
-            //    // direction
-            //    AddChildren(new StackPanel
-            //    {
-            //        Orientation = Orientation.Horizontal,
-            //        Margin = new Thickness(10, 0, 0, 0)
-            //    },
-            //        new TextBlock
-            //        {
-            //            Text = directionOfText,
-            //            FontSize = 24,
-            //            Foreground = new SolidColorBrush(white),
-            //            VerticalAlignment = VerticalAlignment.Center
-            //        }
-            //    ),
-            //    // departure information
-            //    AddChildren(new StackPanel
-            //    {
-            //        Orientation = Orientation.Horizontal,
-            //        Margin = new Thickness(10, 0, 0, 0)
-            //    },
-            //        new TextBlock
-            //        {
-            //            Text = departsInText,
-            //            FontSize = 24,
-            //            Foreground = new SolidColorBrush(white),
-            //            VerticalAlignment = VerticalAlignment.Center
-            //        }
-            //    )
-            //);
-
 
             Grid grid = AddDefinitions(new Grid(),
                 (new ColumnDefinition
@@ -428,13 +380,23 @@ namespace NextBusDesktop
             if (track is "*") // All
             {
                 foreach (var departure in _currentDepartureBoard.Departures)
-                    DepartureListBox.Items.Add(CreateDepartureBox(departure));
+                    //DepartureListBox.Items.Add(CreateDepartureBox(departure));
+                    DepartureListBox.Items.Add(new ListBoxItem
+                    {
+                        HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                        Content = new DepartureBoxControl { Departure = departure }
+                    });
             }
             else
             {
                 var filteredDepartures = _currentDepartureBoard.Departures.Where(d => d.Track == track);
                 foreach (var departure in filteredDepartures)
-                    DepartureListBox.Items.Add(CreateDepartureBox(departure));
+                    //DepartureListBox.Items.Add(CreateDepartureBox(departure));
+                    DepartureListBox.Items.Add(new ListBoxItem
+                    {
+                        HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                        Content = new DepartureBoxControl { Departure = departure }
+                    });
             }
 
         }

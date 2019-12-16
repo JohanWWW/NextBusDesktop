@@ -9,5 +9,15 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Background="#222222">
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock x:Name="LoadingTextBlock"
+                       Text="Loading..."
+                       FontSize="18"
+                       Foreground="White"/>
+            <TextBlock FontFamily="Segoe MDL2 Assets"
+                       Foreground="White"/>
+        </StackPanel>
     </Grid>
 </Page>
