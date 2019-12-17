@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NextBusDesktop.ResponseModels;
 
 namespace NextBusDesktop.Models
 {
@@ -25,7 +26,7 @@ namespace NextBusDesktop.Models
         public string LineLogoBackgroundColor { get; set; }
         public string LineLogoBorderStyle { get; set; }
 
-        public Departure(ResponseModels.Departure departureResponseModel)
+        public Departure(DepartureResponse departureResponseModel)
         {
             FullName = departureResponseModel.Name;
             ShortName = departureResponseModel.SName;

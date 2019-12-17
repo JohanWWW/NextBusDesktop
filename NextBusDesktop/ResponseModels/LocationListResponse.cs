@@ -7,10 +7,10 @@ using RestSharp.Deserializers;
 
 namespace NextBusDesktop.ResponseModels
 {
-    public class DepartureBoard
+    public class LocationListResponse
     {
         [DeserializeAs(Name = "serverTime")] public string ServerTime { get; set; }
         [DeserializeAs(Name = "serverDate")] public string ServerDate { get; set; }
-        [DeserializeAs(Name = "Departure")] public IEnumerable<Departure> Departures { get; set; }
+        [DeserializeAs(Name = "StopLocation")] public IEnumerable<StopLocationResponse> StopLocations { get; set; }
     }
 }

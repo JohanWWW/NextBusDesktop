@@ -10,6 +10,6 @@ namespace NextBusDesktop.DataProvider
 {
     public interface IAccessTokenProvider
     {
-        AccessToken GetAccessToken();
+        AccessTokenResponse GetAccessToken();
     }
 }

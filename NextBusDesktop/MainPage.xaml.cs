@@ -29,7 +29,7 @@ namespace NextBusDesktop
     {
         private IAccessTokenProviderAsync _accessTokenProvider;
         private ITripPlannerProviderAsync _tripPlannerProvider;
-        private AccessToken _accessToken;
+        private AccessTokenResponse _accessToken;
         private Translator _translator;
 
         public MainPage()

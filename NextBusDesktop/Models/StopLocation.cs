@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NextBusDesktop.ResponseModels;
 
 namespace NextBusDesktop.Models
 {
@@ -12,7 +13,7 @@ namespace NextBusDesktop.Models
         public string Id { get; set; }
         public int Index { get; set; }
 
-        public StopLocation(ResponseModels.StopLocation stopLocationResponseModel)
+        public StopLocation(StopLocationResponse stopLocationResponseModel)
         {
             Name = stopLocationResponseModel.Name;
             Id = stopLocationResponseModel.Id;
@@ -22,5 +23,7 @@ namespace NextBusDesktop.Models
         public StopLocation()
         {
         }
+
+        public override string ToString() => Name;
     }
 }

@@ -20,7 +20,7 @@ namespace NextBusDesktop.DataProvider
 
         public AccessTokenProvider() => _client = new RestClient("https://api.vasttrafik.se/token");
 
-        public async Task<AccessToken> GetAccessTokenAsync()
+        public async Task<AccessTokenResponse> GetAccessTokenAsync()
         {
             ApplicationDataContainer localStorage = ApplicationData.Current.LocalSettings;
 
@@ -31,12 +31,12 @@ namespace NextBusDesktop.DataProvider
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials", ParameterType.GetOrPost);
 
-            IRestResponse<AccessToken> result = await _client.ExecuteTaskAsync<AccessToken>(request, Method.POST);
+            IRestResponse<AccessTokenResponse> result = await _client.ExecuteTaskAsync<AccessTokenResponse>(request, Method.POST);
 
             return result.Data;
         }
 
-        public AccessToken GetAccessToken()
+        public AccessTokenResponse GetAccessToken()
         {
             ApplicationDataContainer localStorage = ApplicationData.Current.LocalSettings;
 
@@ -47,7 +47,7 @@ namespace NextBusDesktop.DataProvider
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials", ParameterType.GetOrPost);
 
-            IRestResponse<AccessToken> response = _client.Execute<AccessToken>(request, Method.POST);
+            IRestResponse<AccessTokenResponse> response = _client.Execute<AccessTokenResponse>(request, Method.POST);
 
             return response.Data;
         }

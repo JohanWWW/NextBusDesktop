@@ -7,9 +7,9 @@ using RestSharp.Deserializers;
 
 namespace NextBusDesktop.ResponseModels
 {
-    public class LocationListContainer
+    public class DepartureBoardResponseContainer
     {
-        [DeserializeAs(Name = "LocationList")]
-        public LocationList LocationList { get; set; }
+        [DeserializeAs(Name = "DepartureBoard")]
+        public DepartureBoardResponse DepartureBoard { get; set; }
     }
 }

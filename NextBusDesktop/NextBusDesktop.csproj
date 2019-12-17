@@ -117,12 +117,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DataProvider\AccessTokenProvider.cs" />
-    <Compile Include="DataProvider\API.cs" />
-    <Compile Include="DataProvider\APIResult.cs" />
     <Compile Include="DataProvider\IAccessTokenProvider.cs" />
     <Compile Include="DataProvider\IAccessTokenProviderAsync.cs" />
-    <Compile Include="DataProvider\IApiHelper.cs" />
-    <Compile Include="DataProvider\IServerDateTimeParser.cs" />
     <Compile Include="DataProvider\ITripPlannerProviderAsync.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
@@ -139,13 +135,13 @@
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Models\Departure.cs" />
     <Compile Include="Models\DepartureBoard.cs" />
-    <Compile Include="ResponseModels\AccessToken.cs" />
-    <Compile Include="ResponseModels\Departure.cs" />
-    <Compile Include="ResponseModels\DepartureBoard.cs" />
-    <Compile Include="ResponseModels\DepartureBoardContainer.cs" />
-    <Compile Include="ResponseModels\LocationList.cs" />
-    <Compile Include="ResponseModels\LocationListContainer.cs" />
-    <Compile Include="ResponseModels\StopLocation.cs" />
+    <Compile Include="ResponseModels\AccessTokenResponse.cs" />
+    <Compile Include="ResponseModels\DepartureResponse.cs" />
+    <Compile Include="ResponseModels\DepartureBoardResponse.cs" />
+    <Compile Include="ResponseModels\DepartureBoardResponseContainer.cs" />
+    <Compile Include="ResponseModels\LocationListResponse.cs" />
+    <Compile Include="ResponseModels\LocationListResponseContainer.cs" />
+    <Compile Include="ResponseModels\StopLocationResponse.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
