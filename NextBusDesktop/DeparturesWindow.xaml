@@ -122,7 +122,6 @@
                     <ListBox x:Name="DepartureListBox"
                              Grid.Row="2" 
                              Background="#222222">
-
                         <!-- Programatically generated -->
                         <!--<ListBoxItem HorizontalContentAlignment="Stretch">
                             <local:DepartureBoxControl Margin="0"/>

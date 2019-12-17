@@ -134,6 +134,11 @@
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\LocationList.cs" />
+    <Compile Include="Models\StopLocation.cs" />
+    <Compile Include="Models\Vehicle.cs" />
+    <Compile Include="Models\Departure.cs" />
+    <Compile Include="Models\DepartureBoard.cs" />
     <Compile Include="ResponseModels\AccessToken.cs" />
     <Compile Include="ResponseModels\Departure.cs" />
     <Compile Include="ResponseModels\DepartureBoard.cs" />
@@ -161,6 +166,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Translator.cs" />
+    <Compile Include="ViewModels\NotificationBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

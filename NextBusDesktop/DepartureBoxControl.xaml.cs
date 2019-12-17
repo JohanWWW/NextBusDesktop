@@ -12,8 +12,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using NextBusDesktop.ResponseModels;
+using NextBusDesktop.Models;
 using Windows.UI;
+using System.ComponentModel;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -32,11 +33,9 @@ namespace NextBusDesktop
                 _departure = value;
 
                 Color white = ColorHelper("White");
-                DateTime scheduledDepartureDateTime = _departure.GetScheduledDateTime();
-                DateTime? realisticDepartureDateTime = _departure.GetRealisticDateTime();
-                bool reschedule;
-                if (realisticDepartureDateTime != null) reschedule = scheduledDepartureDateTime != realisticDepartureDateTime;
-                else reschedule = false;
+                DateTime scheduledDepartureDateTime = value.ScheduledDeparture;
+                DateTime? realisticDepartureDateTime = value.RealisticDeparture;
+                bool reschedule = realisticDepartureDateTime != null && scheduledDepartureDateTime != realisticDepartureDateTime ? true : false;
                 TimeSpan departsIn = reschedule ? (DateTime)realisticDepartureDateTime - DateTime.Now : scheduledDepartureDateTime - DateTime.Now;
 
                 string timeSpanFormat;
@@ -46,9 +45,9 @@ namespace NextBusDesktop
                 else timeSpanFormat = @"dd\d";
 
                 // fgColor and bgColor are flipped because helper inverts them for some reason.
-                LineLogo.Background = new SolidColorBrush(ColorHelper(value.ForegroundColor));
-                LineNumber.Foreground = new SolidColorBrush(ColorHelper(value.BackgroundColor));
-                LineNumber.Text = value.SName;
+                LineLogo.Background = new SolidColorBrush(ColorHelper(value.LineLogoTextColor));
+                LineNumber.Foreground = new SolidColorBrush(ColorHelper(value.LineLogoBackgroundColor));
+                LineNumber.Text = value.ShortName;
                 Direction.Text = _translator["DirectionOf", value.Direction];
                 DepartureTime.Text =
                     reschedule ?

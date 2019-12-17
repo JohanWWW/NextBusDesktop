@@ -26,9 +26,9 @@ namespace NextBusDesktop.DataProvider
             _client = new RestClient("https://api.vasttrafik.se/bin/rest.exe/v2/");
         }
 
-        public DepartureBoard GetDepartureBoard(string stopId) => GetDepartureBoard(stopId, DateTime.Now);
+        public Models.DepartureBoard GetDepartureBoard(string stopId) => GetDepartureBoard(stopId, DateTime.Now);
 
-        public DepartureBoard GetDepartureBoard(string stopId, DateTime dateTime)
+        public Models.DepartureBoard GetDepartureBoard(string stopId, DateTime dateTime)
         {
             IRestRequest request = new RestRequest("/departureBoard");
             request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
@@ -38,14 +38,13 @@ namespace NextBusDesktop.DataProvider
             request.AddParameter("format", "json");
 
             IRestResponse<DepartureBoardContainer> response = _client.Execute<DepartureBoardContainer>(request, Method.GET);
-            DepartureBoard departureBoard = response.Data.DepartureBoard;
 
-            return departureBoard;
+            return new Models.DepartureBoard(response.Data.DepartureBoard);
         }
 
-        public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId) => await GetDepartureBoardAsync(stopId, DateTime.Now);
+        public async Task<Models.DepartureBoard> GetDepartureBoardAsync(string stopId) => await GetDepartureBoardAsync(stopId, DateTime.Now);
 
-        public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
+        public async Task<Models.DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
         {
             IRestRequest request = new RestRequest("/departureBoard");
             request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
@@ -56,12 +55,11 @@ namespace NextBusDesktop.DataProvider
 
             //await Task.Delay(5000);
             IRestResponse<DepartureBoardContainer> response = await _client.ExecuteTaskAsync<DepartureBoardContainer>(request, Method.GET);
-            DepartureBoard departureBoard = response.Data.DepartureBoard;
 
-            return departureBoard;
+            return new Models.DepartureBoard(response.Data.DepartureBoard);
         }
 
-        public LocationList GetLocationList(string query)
+        public Models.LocationList GetLocationList(string query)
         {
             IRestRequest request = new RestRequest("/location.name");
             request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
@@ -69,13 +67,12 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("format", "json");
 
             IRestResponse<LocationListContainer> response = _client.Execute<LocationListContainer>(request, Method.GET);
-            LocationList locationList = response.Data.LocationList;
 
-            return locationList;
+            return new Models.LocationList(response.Data.LocationList);
 
         }
 
-        public async Task<LocationList> GetLocationListAsync(string query)
+        public async Task<Models.LocationList> GetLocationListAsync(string query)
         {
             IRestRequest request = new RestRequest("/location.name");
             request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
@@ -84,9 +81,8 @@ namespace NextBusDesktop.DataProvider
 
             //await Task.Delay(5000);
             IRestResponse<LocationListContainer> response = await _client.ExecuteTaskAsync<LocationListContainer>(request, Method.GET);
-            LocationList locationList = response.Data.LocationList;
 
-            return locationList;
+            return new Models.LocationList(response.Data.LocationList);
         }
     }
 }

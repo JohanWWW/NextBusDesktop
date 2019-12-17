@@ -11,8 +11,6 @@ namespace NextBusDesktop.ResponseModels
     {
         [DeserializeAs(Name="name")] public string Name { get; set; }
         [DeserializeAs(Name="id")] public string Id { get; set; }
-        [DeserializeAs(Name="idx")] public int ListOrder { get; set; }
-
-        public override string ToString() => Name;
+        [DeserializeAs(Name="idx")] public int Index { get; set; }
     }
 }

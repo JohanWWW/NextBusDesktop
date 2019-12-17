@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using NextBusDesktop.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,7 +26,7 @@ namespace NextBusDesktop
     {
         private DataProvider.ITripPlannerProviderAsync _tripPlannerProvider;
         private Translator _translator;
-        private ResponseModels.DepartureBoard _currentDepartureBoard;
+        private DepartureBoard _currentDepartureBoard;
 
         public DeparturesWindow()
         {
@@ -147,183 +148,6 @@ namespace NextBusDesktop
             TrackComboBox.SelectedIndex = 0;
             TrackComboBox.SelectionChanged += OnTrackChanged;
 
-        }
-
-        [Obsolete]
-        private UIElement CreateDepartureBox(ResponseModels.Departure departure)
-        {
-            // Flip bgColor with fgColor because helper inverts the color for some unknown reason.
-            Color bgColor = ColorHelper(departure.ForegroundColor);
-            Color fgColor = ColorHelper(departure.BackgroundColor);
-            Color white = Color.FromArgb(255, 255, 255, 255);
-
-            DateTime scheduledDepartureDateTime = departure.GetScheduledDateTime();
-            DateTime? realisticDepartureDateTime = departure.GetRealisticDateTime();
-
-            bool reschedule;
-            if (realisticDepartureDateTime != null)
-                reschedule = scheduledDepartureDateTime != realisticDepartureDateTime;
-            else
-                reschedule = false;
-
-            TimeSpan departsIn = reschedule ? (DateTime)realisticDepartureDateTime - DateTime.Now : scheduledDepartureDateTime - DateTime.Now;
-
-            string directionOfText = _translator["DirectionOf", departure.Direction];
-            string timeUnit;
-            string timeSpanFormat;
-            if (departsIn.TotalMinutes < 1)
-            {
-                timeUnit = _translator["Minutes"];
-                timeSpanFormat = @"\n\o\w";
-            }
-            else if (departsIn.TotalMinutes < 60)
-            {
-                timeUnit = _translator["Minutes"];
-                timeSpanFormat = @"mm\ \m\i\n";
-            }
-            else if (departsIn.TotalHours < 24)
-            {
-                timeUnit = _translator["Hours"];
-                timeSpanFormat = @"h\h\ mm\m\i\n";
-            }
-            else
-            {
-                timeUnit = _translator["Days"];
-                timeSpanFormat = @"dd\d";
-            }
-
-            string departsInText = _translator["DepartsIn", scheduledDepartureDateTime.ToString("HH:mm"), departsIn.ToString(timeSpanFormat).TrimStart('0'), timeUnit];
-
-            Grid grid = AddDefinitions(new Grid(),
-                (new ColumnDefinition
-                {
-                    Width = new GridLength(100, GridUnitType.Pixel)
-                },
-                null),
-                (new ColumnDefinition
-                {
-                    Width = new GridLength(40, GridUnitType.Star)
-                },
-                null),
-                (new ColumnDefinition
-                {
-                    Width = new GridLength(20, GridUnitType.Star)
-                },
-                null),
-                (new ColumnDefinition
-                {
-                    Width = new GridLength(5, GridUnitType.Pixel)
-                }, 
-                null),
-                (new ColumnDefinition
-                {
-                    Width = new GridLength(30, GridUnitType.Star)
-                }, 
-                null),
-                (new ColumnDefinition
-                {
-                    Width = new GridLength(10, GridUnitType.Star)
-                },
-                null)
-            );
-
-            grid = (Grid)AddChildren(grid,
-                // line logo
-                AddChildren(new StackPanel
-                {
-                    Orientation = Orientation.Vertical,
-                    Background = new SolidColorBrush(bgColor),
-                    Height = 60,
-                    CornerRadius = new CornerRadius(10)
-                },
-                    new TextBlock
-                    {
-                        Text = departure.SName,
-                        FontSize = 24,
-                        Foreground = new SolidColorBrush(fgColor),
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        Margin = new Thickness(0, 13, 0, 0)
-                    }
-                ),
-                // direction
-                AddChildren(new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    Margin = new Thickness(10, 0, 0, 0)
-                },
-                    new TextBlock
-                    {
-                        Text = directionOfText,
-                        FontSize = 18,
-                        Foreground = new SolidColorBrush(white),
-                        VerticalAlignment = VerticalAlignment.Center
-                    }
-                ),
-                // departure time
-                AddChildren(new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    Margin = new Thickness(10, 0, 0, 0)
-                },
-                    new TextBlock
-                    {
-                        Text = reschedule ? 
-                            $"{((DateTime)realisticDepartureDateTime).ToString("HH:mm")} {_translator["NewTime"]}" :
-                            scheduledDepartureDateTime.ToString("HH:mm"),
-                        FontSize = 18,
-                        Foreground = new SolidColorBrush(white),
-                        VerticalAlignment = VerticalAlignment.Center
-                    }
-                ),
-                // status indicator
-                new StackPanel
-                {
-                    Background = reschedule ? 
-                        new SolidColorBrush(ColorHelper("yellow")) : 
-                        null,
-                    CornerRadius = new CornerRadius(5)
-                },
-                // time remaining until departure
-                AddChildren(new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    Margin = new Thickness(10, 0, 0, 0)
-                },
-                    new TextBlock
-                    {
-                        Text = departsIn.ToString(timeSpanFormat).TrimStart('0'),
-                        FontSize = 18,
-                        Foreground = new SolidColorBrush(white),
-                        VerticalAlignment = VerticalAlignment.Center
-                    }
-                ),
-                // track
-                AddChildren(new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    Margin = new Thickness(10, 0, 0, 0)
-                },
-                    new TextBlock
-                    {
-                        Text = departure.Track ?? "-",
-                        FontSize = 18,
-                        Foreground = new SolidColorBrush(white),
-                        VerticalAlignment = VerticalAlignment.Center
-                    }
-                )
-            );
-
-            for (int i = 0; i < grid.Children.Count; i++)
-            {
-                Grid.SetColumn((FrameworkElement)grid.Children.ElementAt(i), i);
-            }
-
-
-            return new ListBoxItem
-            {
-                HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                Content = grid
-            };
         }
 
         private UIElement AddChildren(Panel panelElement, params UIElement[] children)
