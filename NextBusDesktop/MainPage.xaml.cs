@@ -27,9 +27,6 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private IAccessTokenProviderAsync _accessTokenProvider;
-        private ITripPlannerProviderAsync _tripPlannerProvider;
-        private AccessTokenResponse _accessToken;
         private Translator _translator;
 
         public MainPage()
@@ -43,12 +40,8 @@ namespace NextBusDesktop
             MainContentFrame.Navigate(typeof(HomeWindow));
         }
 
-        private async void InitializeTripPlannerProvider()
-        {
-            _accessTokenProvider = new AccessTokenProvider();
-            _accessToken = await _accessTokenProvider.GetAccessTokenAsync(); // TODO: Bug that causes program to crash when searching for departure and accessToken has not been provided.
-            _tripPlannerProvider = new TripPlannerProvider(_accessToken);
-        }
+        private async void InitializeTripPlannerProvider() =>
+            await TripPlannerProviderContainer.Initialize();
 
         private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;
 
@@ -60,7 +53,7 @@ namespace NextBusDesktop
                 MainContentFrame.Navigate(typeof(HomeWindow));
 
             if (DeparturesListItem.IsSelected)
-                MainContentFrame.Navigate(typeof(DeparturesWindow), _tripPlannerProvider);
+                MainContentFrame.Navigate(typeof(DeparturesWindow));
 
             if (SettingsListItem.IsSelected)
                 MainContentFrame.Navigate(typeof(SettingsWindow), new Action(() => 

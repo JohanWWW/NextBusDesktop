@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using NextBusDesktop.Models;
 using Windows.UI;
 using System.ComponentModel;
+using NextBusDesktop.ViewModels;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -22,48 +23,82 @@ namespace NextBusDesktop
 {
     public sealed partial class DepartureBoxControl : UserControl
     {
-        private Departure _departure;
-        private Translator _translator;
-
-        public Departure Departure
+        private string _line;
+        public string Line
         {
-            get => _departure;
+            get => _line;
             set
             {
-                _departure = value;
+                _line = value;
+                LineNumber.Text = value;
+            }
+        }
 
-                Color white = ColorHelper("White");
-                DateTime scheduledDepartureDateTime = value.ScheduledDeparture;
-                DateTime? realisticDepartureDateTime = value.RealisticDeparture;
-                bool reschedule = realisticDepartureDateTime != null && scheduledDepartureDateTime != realisticDepartureDateTime ? true : false;
-                TimeSpan departsIn = reschedule ? (DateTime)realisticDepartureDateTime - DateTime.Now : scheduledDepartureDateTime - DateTime.Now;
+        private string _directionInfo;
+        public string DirectionInfo
+        {
+            get => _directionInfo;
+            set
+            {
+                _directionInfo = value;
+                Direction.Text = value;
+            }
+        }
 
-                string timeSpanFormat;
-                if (departsIn.TotalMinutes < 1) timeSpanFormat = @"\n\o\w";
-                else if (departsIn.TotalMinutes < 60) timeSpanFormat = @"mm\ \m\i\n";
-                else if (departsIn.TotalHours < 24) timeSpanFormat = @"h\h\ mm\m\i\n";
-                else timeSpanFormat = @"dd\d";
+        private string _departureTimeInfo;
+        public string DepartureTimeInfo
+        {
+            get => _departureTimeInfo;
+            set
+            {
+                _departureTimeInfo = value;
+                DepartureTime.Text = value;
+            }
+        }
 
-                // fgColor and bgColor are flipped because helper inverts them for some reason.
-                LineLogo.Background = new SolidColorBrush(ColorHelper(value.LineLogoTextColor));
-                LineNumber.Foreground = new SolidColorBrush(ColorHelper(value.LineLogoBackgroundColor));
-                LineNumber.Text = value.ShortName;
-                Direction.Text = _translator["DirectionOf", value.Direction];
-                DepartureTime.Text =
-                    reschedule ?
-                    string.Format("{0} {1}", ((DateTime)realisticDepartureDateTime).ToString("HH:mm"), _translator["NewTime"]) :
-                    scheduledDepartureDateTime.ToString("HH:mm");
-                DepartureTime.Foreground = reschedule ? new SolidColorBrush(ColorHelper("Yellow")) : new SolidColorBrush(white);
-                StatusIndicator.Background = reschedule ? new SolidColorBrush(ColorHelper("Yellow")) : null;
-                TimeLeft.Text = departsIn.ToString(timeSpanFormat).TrimStart('0');
-                TrackNumber.Text = value.Track ?? "-";
+        private Brush _statusIndicatorColor;
+        public Brush StatusIndicatorColor
+        {
+            get => _statusIndicatorColor;
+            set
+            {
+                _statusIndicatorColor = value;
+                StatusIndicator.Background = value;
+            }
+        }
+
+        private string _timeLeftInfo;
+        public string TimeLeftInfo
+        {
+            get => _timeLeftInfo;
+            set
+            {
+                _timeLeftInfo = value;
+                TimeLeft.Text = value;
+            }
+        }
+
+        private string _track;
+        public string Track
+        {
+            get => _track;
+            set
+            {
+                _track = value;
+                TrackNumber.Text = value;
             }
         }
 
         public DepartureBoxControl()
         {
             InitializeComponent();
-            _translator = new Translator(nameof(DeparturesWindow)); // <- Obs! Använder DeparturesWindow resources för tillfället!
+
+            _line = LineNumber.Text;
+            _directionInfo = Direction.Text;
+            _departureTimeInfo = DepartureTime.Text;
+            _statusIndicatorColor = StatusIndicator.Background;
+            _timeLeftInfo = TimeLeft.Text;
+            _track = TrackNumber.Text;
         }
 
         private Color ColorHelper(string value) =>

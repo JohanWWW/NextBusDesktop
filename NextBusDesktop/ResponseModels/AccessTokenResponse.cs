@@ -7,6 +7,7 @@ using RestSharp.Deserializers;
 
 namespace NextBusDesktop.ResponseModels
 {
+    // TODO: Model
     public class AccessTokenResponse
     {
         [DeserializeAs(Name = "scope")] public string Scope { get; set; }
@@ -14,11 +15,11 @@ namespace NextBusDesktop.ResponseModels
         [DeserializeAs(Name = "expires_in")] public int Expires { get; set; }
         [DeserializeAs(Name = "access_token")] public Guid Token { get; set; }
 
-        private DateTime _createdDateTime;
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime ExpiresDateTime => CreatedDateTime.AddSeconds(Expires);
 
-        public DateTime CreatedDateTime => _createdDateTime;
-        public DateTime ExpiresDateTime => _createdDateTime.AddSeconds(Expires);
-
-        public AccessTokenResponse() => _createdDateTime = DateTime.Now;
+        public AccessTokenResponse()
+        {
+        }
     }
 }

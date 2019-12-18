@@ -122,6 +122,7 @@
     <Compile Include="DataProvider\ITripPlannerProviderAsync.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
+    <Compile Include="DataProvider\TripPlannerProviderContainer.cs" />
     <Compile Include="DepartureBoxControl.xaml.cs">
       <DependentUpon>DepartureBoxControl.xaml</DependentUpon>
     </Compile>
@@ -162,7 +163,11 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Translator.cs" />
+    <Compile Include="ViewModels\DepartureBoardViewModel.cs" />
+    <Compile Include="ViewModels\DepartureViewModel.cs" />
     <Compile Include="ViewModels\NotificationBase.cs" />
+    <Compile Include="ViewModels\LocationListViewModel.cs" />
+    <Compile Include="ViewModels\StopLocationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
