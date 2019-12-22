@@ -11,6 +11,8 @@ namespace NextBusDesktop.ViewModels
 {
     public class DepartureBoardViewModel : NotificationBase
     {
+        private Translator _translator;
+
         private bool _errorOnGetLocationList;
         public bool ErrorOnGetLocationList
         {
@@ -30,6 +32,20 @@ namespace NextBusDesktop.ViewModels
         {
             get => _searchQuery;
             set => SetProperty(ref _searchQuery, value);
+        }
+
+        private TimeSpan _departureTime;
+        public TimeSpan DepartureTime
+        {
+            get => _departureTime;
+            set => SetProperty(ref _departureTime, value);
+        }
+
+        private TrackFilterListViewModel _trackFilter;
+        public TrackFilterListViewModel TrackFilter
+        {
+            get => _trackFilter;
+            set => SetProperty(ref _trackFilter, value);
         }
 
         private ObservableCollection<StopLocationViewModel> _stopLocations;
@@ -63,6 +79,8 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
+        private IEnumerable<DepartureViewModel> _cachedDepartures;
+
         private ObservableCollection<DepartureViewModel> _departures;
         public ObservableCollection<DepartureViewModel> Departures
         {
@@ -79,11 +97,15 @@ namespace NextBusDesktop.ViewModels
 
         public DepartureBoardViewModel()
         {
+            _translator = new Translator("DeparturesWindow");
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
             _departures = new ObservableCollection<DepartureViewModel>();
             _selectedStopLocationIndex = -1;
             _selectedStopLocation = null;
             _searchResultPaneIsOpen = false;
+            DateTime now = DateTime.Now;
+            DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
+            _trackFilter = new TrackFilterListViewModel();
         }
 
         public async void GetLocationList()
@@ -105,24 +127,61 @@ namespace NextBusDesktop.ViewModels
 
         public async void GetDepartures()
         {
+            TrackFilter.Clear();
             if (_selectedStopLocation is null)
                 return;
 
             SearchQuery = _selectedStopLocation.Name;
             SearchResultPaneIsOpen = false;
 
-            DepartureBoard departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, DateTime.Now);
+            DateTime today = DateTime.Today;
+            DepartureBoard departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
+            _cachedDepartures = departureBoard.Departures?.Select(d => new DepartureViewModel(d));
+
+            TrackFilter.Add(new TrackViewModel(_translator["All"], "*"));
+            foreach (var track in _cachedDepartures.Select(d => d.Track).Distinct().OrderBy(t => t))
+            {
+                TrackViewModel viewModel = new TrackViewModel(track);
+                TrackFilter.Add(viewModel);
+            }
+
             ErrorOnGetDepartureBoard = departureBoard?.ErrorMessage != null;
+
             if (departureBoard.Departures is null)
                 return;
 
             Departures.Clear();
 
-            foreach (var departure in departureBoard.Departures)
+            PopulateDepartureBoard();
+        }
+
+        public void FilterDepartures()
+        {
+            var selectedTrack = _trackFilter.SelectedTrack;
+            if (selectedTrack is null)
+                return;
+
+            if (selectedTrack.Type is "*")
             {
-                var viewModel = new DepartureViewModel(departure);
-                Departures.Add(viewModel);
+                Departures.Clear();
+                PopulateDepartureBoard();
+            }
+            else
+            {
+                Departures.Clear();
+                PopulateDepartureBoard(departure => departure.Track == selectedTrack.TrackNumber);
             }
         }
+
+        private void PopulateDepartureBoard(Func<DepartureViewModel, bool> where)
+        {
+            foreach (var departure in _cachedDepartures)
+            {
+                if (where(departure))
+                    Departures.Add(departure);
+            }
+        }
+
+        private void PopulateDepartureBoard() => PopulateDepartureBoard(departure => true);
     }
 }

@@ -58,6 +58,7 @@
                                    FontSize="18"
                                    Margin="12 0 5 0"/>
                         <TimePicker x:Name="DepartureTimePicker"
+                                    Time="{x:Bind DepartureBoard.DepartureTime, Mode=TwoWay}"
                                     ClockIdentifier="24HourClock"/>
                         <TextBlock x:Uid="/DeparturesWindow/Track"
                                    Text="Track"
@@ -66,8 +67,17 @@
                                    FontSize="18"
                                    Margin="12 0 5 0"/>
                         <ComboBox x:Name="TrackComboBox"
-                                  VerticalAlignment="Center">
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{x:Bind DepartureBoard.TrackFilter.Tracks, Mode=OneWay}"
+                                  SelectedIndex="{x:Bind DepartureBoard.TrackFilter.SelectedIndex, Mode=TwoWay}"
+                                  SelectedItem="{x:Bind DepartureBoard.TrackFilter.SelectedTrack, Mode=TwoWay}"
+                                  SelectionChanged="{x:Bind DepartureBoard.FilterDepartures}">
                             <!-- Programatically generated -->
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:TrackViewModel">
+                                    <TextBlock Text="{x:Bind TrackNumber}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1"

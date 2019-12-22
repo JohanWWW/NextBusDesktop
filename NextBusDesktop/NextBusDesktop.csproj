@@ -134,6 +134,7 @@
     <Compile Include="Models\AccessToken.cs" />
     <Compile Include="Models\LocationList.cs" />
     <Compile Include="Models\StopLocation.cs" />
+    <Compile Include="Models\Track.cs" />
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Models\Departure.cs" />
     <Compile Include="Models\DepartureBoard.cs" />
@@ -169,6 +170,8 @@
     <Compile Include="ViewModels\NotificationBase.cs" />
     <Compile Include="ViewModels\LocationListViewModel.cs" />
     <Compile Include="ViewModels\StopLocationViewModel.cs" />
+    <Compile Include="ViewModels\TrackFilterListViewModel.cs" />
+    <Compile Include="ViewModels\TrackViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
