@@ -1,12 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NextBusDesktop.Models;
 using NextBusDesktop.ResponseModels;
 using RestSharp;
 using RestSharp.Authenticators;
+using System;
+using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace NextBusDesktop.DataProvider
@@ -20,8 +17,9 @@ namespace NextBusDesktop.DataProvider
 
         public AccessTokenProvider() => _client = new RestClient("https://api.vasttrafik.se/token");
 
-        public async Task<AccessTokenResponse> GetAccessTokenAsync()
+        public async Task<AccessToken> GetAccessTokenAsync()
         {
+            Log($"Request -> {nameof(GetAccessTokenAsync)}: Attempting to generate new access token.");
             ApplicationDataContainer localStorage = ApplicationData.Current.LocalSettings;
 
             IRestRequest request = new RestRequest();
@@ -31,12 +29,15 @@ namespace NextBusDesktop.DataProvider
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials", ParameterType.GetOrPost);
 
-            IRestResponse<AccessTokenResponse> result = await _client.ExecuteTaskAsync<AccessTokenResponse>(request, Method.POST);
+            IRestResponse<AccessTokenResponse> response = await _client.ExecuteTaskAsync<AccessTokenResponse>(request, Method.POST);
+            AccessToken accessToken = new AccessToken(response.Data);
 
-            return result.Data;
+            Log($"Response -> {nameof(GetAccessTokenAsync)} {response.StatusCode}: Generated new access token (expires {accessToken.ExpiresDateTime}).");
+
+            return accessToken;
         }
 
-        public AccessTokenResponse GetAccessToken()
+        public AccessToken GetAccessToken()
         {
             ApplicationDataContainer localStorage = ApplicationData.Current.LocalSettings;
 
@@ -49,7 +50,9 @@ namespace NextBusDesktop.DataProvider
 
             IRestResponse<AccessTokenResponse> response = _client.Execute<AccessTokenResponse>(request, Method.POST);
 
-            return response.Data;
+            return new AccessToken(response.Data);
         }
+
+        private void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(AccessTokenProvider)}: {message}");
     }
 }

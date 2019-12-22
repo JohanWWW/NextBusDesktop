@@ -18,10 +18,10 @@ namespace NextBusDesktop.DataProvider
         private const string _timeFormat = "HH:mm";
 
         private readonly IRestClient _client;
-        private AccessTokenResponse _accessToken;
+        private AccessToken _accessToken;
 
         /// <param name="accessToken">Access token that is provided by <see cref="AccessTokenProvider"/></param>
-        public TripPlannerProvider(AccessTokenResponse accessToken)
+        public TripPlannerProvider(AccessToken accessToken)
         {
             _accessToken = accessToken;
             _client = new RestClient("https://api.vasttrafik.se/bin/rest.exe/v2/");
@@ -32,7 +32,7 @@ namespace NextBusDesktop.DataProvider
         public DepartureBoard GetDepartureBoard(string stopId, DateTime dateTime)
         {
             IRestRequest request = new RestRequest("/departureBoard");
-            request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
+            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddParameter("id", stopId);
             request.AddParameter("date", dateTime.ToString(_dateFormat));
             request.AddParameter("time", dateTime.ToString(_timeFormat));
@@ -47,8 +47,9 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
         {
+            Log($"Request -> {nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}.");
             IRestRequest request = new RestRequest("/departureBoard");
-            request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
+            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddParameter("id", stopId);
             request.AddParameter("date", dateTime.ToString(_dateFormat));
             request.AddParameter("time", dateTime.ToString(_timeFormat));
@@ -56,6 +57,7 @@ namespace NextBusDesktop.DataProvider
 
             //await Task.Delay(5000);
             IRestResponse<DepartureBoardResponseContainer> response = await _client.ExecuteTaskAsync<DepartureBoardResponseContainer>(request, Method.GET);
+            Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
 
             return new DepartureBoard(response.Data.DepartureBoard);
         }
@@ -63,7 +65,7 @@ namespace NextBusDesktop.DataProvider
         public LocationList GetLocationList(string query)
         {
             IRestRequest request = new RestRequest("/location.name");
-            request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
+            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddQueryParameter("input", query);
             request.AddQueryParameter("format", "json");
 
@@ -74,15 +76,20 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<LocationList> GetLocationListAsync(string query)
         {
+            Log($"Request -> {nameof(GetLocationListAsync)}: Requesting location list for query '{query}'.");
+
             IRestRequest request = new RestRequest("/location.name");
-            request.AddHeader("Authorization", $"{_accessToken.TokenType} {_accessToken.Token}");
+            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddQueryParameter("input", query);
             request.AddQueryParameter("format", "json");
 
             //await Task.Delay(5000);
             IRestResponse<LocationListResponseContainer> response = await _client.ExecuteTaskAsync<LocationListResponseContainer>(request, Method.GET);
+            Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
 
             return new LocationList(response.Data.LocationList);
         }
+
+        private void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProvider)}: {message}");
     }
 }

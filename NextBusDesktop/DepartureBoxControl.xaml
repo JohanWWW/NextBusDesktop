@@ -18,23 +18,23 @@
             <ColumnDefinition Width="30*"/>
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="LineLogo"
+        <StackPanel x:Name="LineLogoStackPanel"
                     Orientation="Vertical"
                     Background="#0071C1"
                     Height="60"
                     CornerRadius="10"
                     Grid.Column="0">
-            <TextBlock x:Name="LineNumber" 
+            <TextBlock x:Name="LineNumberTextBlock"
+                       Text="[line]"
                        FontSize="24"
                        Foreground="White"
-                       Text="[line]"
                        HorizontalAlignment="Center"
                        Margin="0 13 0 0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
                     Margin="10 0 0 0"
                     Grid.Column="1">
-            <TextBlock x:Name="Direction"
+            <TextBlock x:Name="DirectionTextBlock"
                        Text="[direction]"
                        FontSize="18"
                        Foreground="White"
@@ -43,20 +43,19 @@
         <StackPanel Orientation="Horizontal"
                     Margin="10 0 0 0"
                     Grid.Column="2">
-            <TextBlock x:Name="DepartureTime"
+            <TextBlock x:Name="DepartureTimeTextBlock"
                        Text="[departure time]"
                        FontSize="18"
-                       Foreground="Yellow"
+                       Foreground="White"
                        VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel x:Name="StatusIndicator"
+        <StackPanel x:Name="StatusIndicatorStackPanel"
                     Grid.Column="3" 
-                    Background="Yellow"
                     CornerRadius="3"/>
         <StackPanel Orientation="Horizontal"
                     Margin="10 0 0 0"
                     Grid.Column="4">
-            <TextBlock x:Name="TimeLeft" 
+            <TextBlock x:Name="TimeLeftTextBlock" 
                        Text="[time left]"
                        FontSize="18"
                        Foreground="White"
@@ -65,7 +64,7 @@
         <StackPanel Orientation="Horizontal"
                     Margin="10 0 0 0"
                     Grid.Column="5">
-            <TextBlock x:Name="TrackNumber" 
+            <TextBlock x:Name="TrackNumberTextBlock" 
                        Text="[track]"
                        FontSize="18"
                        Foreground="White"

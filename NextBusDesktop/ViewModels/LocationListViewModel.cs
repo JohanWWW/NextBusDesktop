@@ -11,6 +11,13 @@ namespace NextBusDesktop.ViewModels
 {
     public class LocationListViewModel : NotificationBase
     {
+        private bool _errorOnGetLocationList;
+        public bool ErrorOnGetLocationList
+        {
+            get => _errorOnGetLocationList;
+            set => SetProperty(ref _errorOnGetLocationList, value);
+        }
+
         private ObservableCollection<StopLocationViewModel> _stopLocations;
         public ObservableCollection<StopLocationViewModel> StopLocations
         {
@@ -45,21 +52,9 @@ namespace NextBusDesktop.ViewModels
 
         public LocationListViewModel()
         {
-           
             StopLocations = new ObservableCollection<StopLocationViewModel>();
             _isVisible = false;
             _selectedIndex = -1;
-        }
-
-        public async Task GetLocationList(string query)
-        {
-            LocationList list = await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(query);
-            StopLocations.Clear();
-            foreach (var stopLocation in list.StopLocations)
-            {
-                StopLocations.Add(new StopLocationViewModel(stopLocation));
-            }
-            IsVisible = true;
         }
 
         public void Add(StopLocationViewModel stopLocation)

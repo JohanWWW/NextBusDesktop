@@ -23,82 +23,57 @@ namespace NextBusDesktop
 {
     public sealed partial class DepartureBoxControl : UserControl
     {
-        private string _line;
         public string Line
         {
-            get => _line;
-            set
-            {
-                _line = value;
-                LineNumber.Text = value;
-            }
+            get => LineNumberTextBlock.Text;
+            set => LineNumberTextBlock.Text = value;
         }
 
-        private string _directionInfo;
         public string DirectionInfo
         {
-            get => _directionInfo;
-            set
-            {
-                _directionInfo = value;
-                Direction.Text = value;
-            }
+            get => DirectionTextBlock.Text;
+            set => DirectionTextBlock.Text = value;
         }
 
-        private string _departureTimeInfo;
         public string DepartureTimeInfo
         {
-            get => _departureTimeInfo;
-            set
-            {
-                _departureTimeInfo = value;
-                DepartureTime.Text = value;
-            }
+            get => DepartureTimeTextBlock.Text;
+            set => DepartureTimeTextBlock.Text = value;
         }
 
-        private Brush _statusIndicatorColor;
+        public Brush LineLogoBackground
+        {
+            get => LineLogoStackPanel.Background;
+            set => LineLogoStackPanel.Background = value;
+        }
+
+        public Brush LineLogoForeground
+        {
+            get => LineNumberTextBlock.Foreground;
+            set => LineNumberTextBlock.Foreground = value;
+        }
+
         public Brush StatusIndicatorColor
         {
-            get => _statusIndicatorColor;
-            set
-            {
-                _statusIndicatorColor = value;
-                StatusIndicator.Background = value;
-            }
+            get => StatusIndicatorStackPanel.Background;
+            set => StatusIndicatorStackPanel.Background = value;
         }
 
-        private string _timeLeftInfo;
         public string TimeLeftInfo
         {
-            get => _timeLeftInfo;
-            set
-            {
-                _timeLeftInfo = value;
-                TimeLeft.Text = value;
-            }
+            get => TimeLeftTextBlock.Text;
+            set => TimeLeftTextBlock.Text = value;
         }
 
-        private string _track;
         public string Track
         {
-            get => _track;
-            set
-            {
-                _track = value;
-                TrackNumber.Text = value;
-            }
+            get => TrackNumberTextBlock.Text;
+            set => TrackNumberTextBlock.Text = value;
         }
 
         public DepartureBoxControl()
         {
             InitializeComponent();
-
-            _line = LineNumber.Text;
-            _directionInfo = Direction.Text;
-            _departureTimeInfo = DepartureTime.Text;
-            _statusIndicatorColor = StatusIndicator.Background;
-            _timeLeftInfo = TimeLeft.Text;
-            _track = TrackNumber.Text;
         }
 
         private Color ColorHelper(string value) =>

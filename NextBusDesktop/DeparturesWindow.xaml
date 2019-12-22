@@ -15,12 +15,13 @@
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox"
                  x:Uid="/DeparturesWindow/SearchForStop"
-                 Text="{x:Bind DepartureBoard.SearchQuery, Mode=TwoWay}"
+                 Text="{x:Bind DepartureBoard.SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="0" Grid.Row="0"
                  Grid.ColumnSpan="2"
                  FontSize="24"
                  BorderThickness="0"
-                 PlaceholderText="Search for stop"/>
+                 PlaceholderText="Search for stop"
+                 KeyDown="OnSearchTextBoxKeyDown"/>
 
         <SplitView x:Name="MainSplitView"
                    IsPaneOpen="{x:Bind DepartureBoard.SearchResultPaneIsOpen, Mode=OneWay}"
@@ -65,8 +66,7 @@
                                    FontSize="18"
                                    Margin="12 0 5 0"/>
                         <ComboBox x:Name="TrackComboBox"
-                                  VerticalAlignment="Center"
-                                  SelectionChanged="OnTrackChanged">
+                                  VerticalAlignment="Center">
                             <!-- Programatically generated -->
                         </ComboBox>
                     </StackPanel>
@@ -131,7 +131,6 @@
                              ItemsSource="{x:Bind DepartureBoard.Departures, Mode=OneWay}"
                              Grid.Row="2" 
                              Background="#222222">
-                        
                         <!-- Programatically generated -->
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
@@ -140,13 +139,18 @@
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate x:DataType="viewModels:DepartureViewModel">
-                                <local:DepartureBoxControl Line="{x:Bind ShortName}"
-                                                           DirectionInfo="{x:Bind DirectionInfo}"
-                                                           DepartureTimeInfo="{x:Bind DepartureTimeInfo}"
-                                                           TimeLeftInfo="{x:Bind TimeLeftInfo}"
-                                                           Track="{x:Bind Track}"/>
+                                <local:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
+                                                           TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=OneTime}"
+                                                           Track="{x:Bind Track, Mode=OneTime}"
+                                                           LineLogoBackground="{x:Bind LineLogoForeground, Mode=OneTime}"
+                                                           LineLogoForeground="{x:Bind LineLogoBackground, Mode=OneTime}"
+                                                           DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
+                                                           DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
+                                                           StatusIndicatorColor="{x:Bind StatusIndicatorColor, Mode=OneTime}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+
+
                     </ListBox>
                 </Grid>
             </SplitView.Content>

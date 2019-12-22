@@ -36,6 +36,7 @@ namespace NextBusDesktop
             _translator = new Translator(nameof(MainPage));
             InitializeTripPlannerProvider();
 
+
             UtilitiyListBox.SelectedIndex = 0;
             MainContentFrame.Navigate(typeof(HomeWindow));
         }

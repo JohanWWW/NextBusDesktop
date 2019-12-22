@@ -26,19 +26,17 @@ namespace NextBusDesktop
     {
         public DepartureBoardViewModel DepartureBoard { get; set; }
 
-
         public DeparturesWindow()
         {
             InitializeComponent();
             DepartureBoard = new DepartureBoardViewModel();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void OnSearchTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
         {
-        }
-
-        private void OnTrackChanged(object sender, SelectionChangedEventArgs e)
-        {
+            // Unfocus search box in order to update DepartureBoard.Query before user releases enter button.
+            if (e.Key == Windows.System.VirtualKey.Enter)
+                DepartureBoard.GetLocationList();
         }
     }
 }

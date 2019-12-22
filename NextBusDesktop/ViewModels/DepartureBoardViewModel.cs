@@ -11,15 +11,25 @@ namespace NextBusDesktop.ViewModels
 {
     public class DepartureBoardViewModel : NotificationBase
     {
+        private bool _errorOnGetLocationList;
+        public bool ErrorOnGetLocationList
+        {
+            get => _errorOnGetLocationList;
+            set => SetProperty(ref _errorOnGetLocationList, value);
+        }
+
+        private bool _errorOnGetDepartureBoard;
+        public bool ErrorOnGetDepartureBoard
+        {
+            get => _errorOnGetDepartureBoard;
+            set => SetProperty(ref _errorOnGetDepartureBoard, value);
+        }
+
         private string _searchQuery;
         public string SearchQuery
         {
             get => _searchQuery;
-            set
-            {
-                if(SetProperty(ref _searchQuery, value))
-                    GetLocationList();
-            }
+            set => SetProperty(ref _searchQuery, value);
         }
 
         private ObservableCollection<StopLocationViewModel> _stopLocations;
@@ -79,10 +89,12 @@ namespace NextBusDesktop.ViewModels
         public async void GetLocationList()
         {
             LocationList locations = await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(_searchQuery);
+            ErrorOnGetLocationList = locations?.ErrorMessage != null;
             if (locations.StopLocations is null)
                 return;
 
             StopLocations.Clear();
+
             foreach (var stopLocation in locations.StopLocations)
             {
                 var viewModel = new StopLocationViewModel(stopLocation);
@@ -93,11 +105,19 @@ namespace NextBusDesktop.ViewModels
 
         public async void GetDepartures()
         {
+            if (_selectedStopLocation is null)
+                return;
+
+            SearchQuery = _selectedStopLocation.Name;
+            SearchResultPaneIsOpen = false;
+
             DepartureBoard departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, DateTime.Now);
+            ErrorOnGetDepartureBoard = departureBoard?.ErrorMessage != null;
             if (departureBoard.Departures is null)
                 return;
 
             Departures.Clear();
+
             foreach (var departure in departureBoard.Departures)
             {
                 var viewModel = new DepartureViewModel(departure);

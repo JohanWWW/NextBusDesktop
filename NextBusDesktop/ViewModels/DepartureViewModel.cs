@@ -13,11 +13,12 @@ namespace NextBusDesktop.ViewModels
 
         public string FullName => This.FullName;
         public string ShortName => This.ShortName;
-        public string Track => This.Track;
+        public string Track => This.Track ?? "-";
         public string DirectionInfo => GetDirectionMessage();
         public string DepartureTimeInfo => GetDepartureTimeMessage();
         public bool IsRescheduled => This.RealisticDeparture != null && This.ScheduledDeparture != This.RealisticDeparture;
         public string TimeLeftInfo => GetTimeLeftMessage();
+        public string StatusIndicatorColor => IsRescheduled ? "Yellow" : null;
         public string LineLogoBackground => This.LineLogoBackgroundColor;
         public string LineLogoForeground => This.LineLogoTextColor;
 
@@ -33,7 +34,7 @@ namespace NextBusDesktop.ViewModels
             DateTime scheduledDeparture = This.ScheduledDeparture;
             DateTime? realisticDeparture = This.RealisticDeparture;
             string message;
-            if (realisticDeparture != null && scheduledDeparture != realisticDeparture)
+            if (IsRescheduled)
                 message = string.Format("{0} {1}", realisticDeparture?.ToString("HH:mm"), _translator["NewTime"]);
             else
                 message = scheduledDeparture.ToString("HH:mm");
@@ -44,7 +45,7 @@ namespace NextBusDesktop.ViewModels
         private string GetTimeLeftMessage()
         {
             TimeSpan timeLeft;
-            if (This.RealisticDeparture != null && This.ScheduledDeparture != This.RealisticDeparture)
+            if (IsRescheduled)
                 timeLeft = (DateTime)This.RealisticDeparture - DateTime.Now;
             else
                 timeLeft = This.ScheduledDeparture - DateTime.Now;

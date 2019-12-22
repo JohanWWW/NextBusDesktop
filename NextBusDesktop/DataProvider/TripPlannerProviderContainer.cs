@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.ResponseModels;
+using NextBusDesktop.Models;
 using System.Xml;
+using Windows.Storage;
 
 namespace NextBusDesktop.DataProvider
 {
@@ -20,57 +22,74 @@ namespace NextBusDesktop.DataProvider
 
         public static async Task Initialize()
         {
-            // TODO: Make less ugly
+            Log("Initializing TripPlannerProvider");
             IAccessTokenProviderAsync accessTokenProvider = new AccessTokenProvider();
-            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile accessTokenFile;
+            bool fileIsEmpty;
+
             if (!File.Exists(storageFolder.Path + "\\CurrentAccessToken.txt"))
             {
-                Windows.Storage.StorageFile newFile = await storageFolder.CreateFileAsync("CurrentAccessToken.txt", Windows.Storage.CreationCollisionOption.FailIfExists);
-                AccessTokenResponse newAccessToken = await accessTokenProvider.GetAccessTokenAsync();
-                newAccessToken.CreatedDateTime = DateTime.Now;
-                string serialized = Serialize(newAccessToken);
-                await Windows.Storage.FileIO.WriteTextAsync(newFile, serialized);
-                _tripPlannerProvider = new TripPlannerProvider(newAccessToken);
+                fileIsEmpty = true;
+                accessTokenFile = await storageFolder.CreateFileAsync("CurrentAccessToken.txt", CreationCollisionOption.FailIfExists);
+                Log("Write -> Created new access token file.");
             }
             else
             {
-                Windows.Storage.StorageFile retrievedFile = await storageFolder.GetFileAsync("CurrentAccessToken.txt");
-                var data = await Windows.Storage.FileIO.ReadLinesAsync(retrievedFile);
-                string[] lines = data.ToArray();
-
-                AccessTokenResponse lastSessionAccessToken = Deserialize(lines);
-                if (lastSessionAccessToken.ExpiresDateTime < DateTime.Now)
-                {
-                    AccessTokenResponse newAccessToken = await accessTokenProvider.GetAccessTokenAsync();
-                    newAccessToken.CreatedDateTime = DateTime.Now;
-                    string serialized = Serialize(newAccessToken);
-                    await Windows.Storage.FileIO.WriteTextAsync(retrievedFile, serialized);
-                    _tripPlannerProvider = new TripPlannerProvider(newAccessToken);
-                }
-                else
-                {
-                    _tripPlannerProvider = new TripPlannerProvider(lastSessionAccessToken);
-                }
+                fileIsEmpty = false;
+                accessTokenFile = await storageFolder.GetFileAsync("CurrentAccessToken.txt");
+                Log("Read -> Load access token from file.");
             }
+
+            AccessToken token;
+
+            Func<Task<AccessToken>> createNewToken = async () =>
+            {
+                AccessToken newAccessToken = await accessTokenProvider.GetAccessTokenAsync();
+                string serialized = Serialize(newAccessToken);
+                await FileIO.WriteTextAsync(accessTokenFile, serialized);
+                Log("Write -> Save access token to file.");
+                return newAccessToken;
+            };
+
+            if (fileIsEmpty) // File is empty because the file was just created.
+            {
+                token = await createNewToken();
+                Log("Could not find access token on file. Requesting new access token.");
+            }
+            else
+            {
+                var data = await FileIO.ReadLinesAsync(accessTokenFile);
+                string[] serializedRetrieved = data.ToArray();
+                AccessToken retrievedAccessToken = Deserialize(serializedRetrieved);
+                if (retrievedAccessToken.ExpiresDateTime < DateTime.Now)
+                    token = await createNewToken();
+                else
+                    token = retrievedAccessToken;
+            }
+
+            _tripPlannerProvider = new TripPlannerProvider(token);
+
+            Log("Initializing complete.");
         }
 
-        private static string Serialize(AccessTokenResponse accessToken)
+        private static string Serialize(AccessToken accessToken)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"{nameof(accessToken.Scope)}: {accessToken.Scope}");
-            stringBuilder.AppendLine($"{nameof(accessToken.TokenType)}: {accessToken.TokenType}");
-            stringBuilder.AppendLine($"{nameof(accessToken.Expires)}: {accessToken.Expires}");
+            stringBuilder.AppendLine($"{nameof(accessToken.Type)}: {accessToken.Type}");
             stringBuilder.AppendLine($"{nameof(accessToken.Token)}: {accessToken.Token}");
             stringBuilder.AppendLine($"{nameof(accessToken.CreatedDateTime)}: {accessToken.CreatedDateTime.ToString("yyyyMMddHHmmss")}");
+            stringBuilder.AppendLine($"{nameof(accessToken.ExpiresDateTime)}: {accessToken.ExpiresDateTime.ToString("yyyyMMddHHmmss")}");
             return stringBuilder.ToString();
         }
 
-        private static AccessTokenResponse Deserialize(string[] values)
+        private static AccessToken Deserialize(string[] values)
         {
             if (values is null || values.Count() is 0)
                 return null;
 
-            AccessTokenResponse accessToken = new AccessTokenResponse();
+            AccessToken accessToken = new AccessToken();
             foreach (string kvp in values)
             {
                 string[] keyValuePair = kvp.Split(':').Select(v => v.Trim()).ToArray();
@@ -81,11 +100,8 @@ namespace NextBusDesktop.DataProvider
                     case "Scope":
                         accessToken.Scope = value;
                         break;
-                    case "TokenType":
-                        accessToken.TokenType = value;
-                        break;
-                    case "Expires":
-                        accessToken.Expires = int.Parse(value);
+                    case "Type":
+                        accessToken.Type = value;
                         break;
                     case "Token":
                         accessToken.Token = Guid.Parse(value);
@@ -93,11 +109,16 @@ namespace NextBusDesktop.DataProvider
                     case "CreatedDateTime":
                         accessToken.CreatedDateTime = DateTime.ParseExact(value, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
                         break;
+                    case "ExpiresDateTime":
+                        accessToken.ExpiresDateTime = DateTime.ParseExact(value, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
             }
             return accessToken;
         }
+
+        private static void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProviderContainer)}: {message}");
     }
 }

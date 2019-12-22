@@ -131,6 +131,7 @@
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccessToken.cs" />
     <Compile Include="Models\LocationList.cs" />
     <Compile Include="Models\StopLocation.cs" />
     <Compile Include="Models\Vehicle.cs" />
