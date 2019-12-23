@@ -6,12 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.Models;
 using NextBusDesktop.DataProvider;
+using Windows.UI.Xaml;
 
 namespace NextBusDesktop.ViewModels
 {
     public class DepartureBoardViewModel : ViewModelBase
     {
         private Translator _translator;
+        private DispatcherTimer _timer;
 
         private bool _errorOnGetLocationList;
         public bool ErrorOnGetLocationList
@@ -95,23 +97,38 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _searchResultPaneIsOpen, value);
         }
 
+        private bool _selectTrackEnabled;
+        public bool SelectTrackEnabled
+        {
+            get => _selectTrackEnabled;
+            set => SetProperty(ref _selectTrackEnabled, value);
+        }
+
         public DepartureBoardViewModel()
         {
+            EnableLogging = true;
             _translator = new Translator("DeparturesWindow");
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
             _departures = new ObservableCollection<DepartureViewModel>();
             _selectedStopLocationIndex = -1;
             _selectedStopLocation = null;
             _searchResultPaneIsOpen = false;
+            _selectTrackEnabled = false;
             DateTime now = DateTime.Now;
             DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
             _trackFilter = new TrackFilterListViewModel();
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1f) };
+            _timer.Tick += OnTimerTick;
+            _timer.Start();
         }
 
         protected override void Deconstruct()
         {
             if (_cachedDepartures != null)
                 DeconstructDepartures();
+
+            _timer.Stop();
+            _timer.Tick -= OnTimerTick;
         }
 
         public async void GetLocationList()
@@ -129,6 +146,7 @@ namespace NextBusDesktop.ViewModels
                 StopLocations.Add(viewModel);
             }
             SearchResultPaneIsOpen = true;
+            SelectTrackEnabled = false;
         }
 
         public async void GetDepartures()
@@ -139,6 +157,7 @@ namespace NextBusDesktop.ViewModels
 
             SearchQuery = _selectedStopLocation.Name;
             SearchResultPaneIsOpen = false;
+            SelectTrackEnabled = true;
 
             DateTime today = DateTime.Today;
             DepartureBoard departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
@@ -148,6 +167,7 @@ namespace NextBusDesktop.ViewModels
             _cachedDepartures = departureBoard.Departures?.Select(d => new DepartureViewModel(d)).ToList();
 
             TrackFilter.Add(new TrackViewModel(_translator["All"], "*"));
+            TrackFilter.SelectedIndex = 0;
             foreach (var track in _cachedDepartures.Select(d => d.Track).Distinct().OrderBy(t => t))
             {
                 TrackViewModel viewModel = new TrackViewModel(track);
@@ -186,6 +206,7 @@ namespace NextBusDesktop.ViewModels
         {
             foreach (var departureVm in _cachedDepartures)
                 departureVm.OnViewLeave();
+            System.Diagnostics.Debug.WriteLine($"Deconstruct -> departures", "Info");
         }
 
         private void PopulateDepartureBoard(Func<DepartureViewModel, bool> selector)
@@ -198,5 +219,32 @@ namespace NextBusDesktop.ViewModels
         }
 
         private void PopulateDepartureBoard() => PopulateDepartureBoard(departure => true);
+
+        private async Task RefreshBoard()
+        {
+            System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} attempting to refresh board", "Info");
+            if (_selectedStopLocation is null)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} could not refresh board because current stop is not specified", "Error");
+                return;
+            }
+
+            DateTime now = DateTime.Now;
+            DepartureBoard departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, now);
+
+            // Update time picker.
+            //DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
+
+            if (_cachedDepartures != null)
+                DeconstructDepartures();
+
+            _cachedDepartures = departureBoard.Departures.Select(departure => new DepartureViewModel(departure)).ToList();
+
+            Departures.Clear();
+            FilterDepartures();
+            System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} refreshed departure board", "Info");
+        }
+
+        private async void OnTimerTick(object sender, object e) => await RefreshBoard();
     }
 }

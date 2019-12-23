@@ -11,7 +11,7 @@ namespace NextBusDesktop.ViewModels
     /// </summary>
     public class ViewModelBase : NotificationBase
     {
-        public bool EnableLogging = true;
+        public bool EnableLogging = false;
 
         /// <summary>
         /// Cleans resources or anything that might be running when this instance is no longer in use.
@@ -36,7 +36,7 @@ namespace NextBusDesktop.ViewModels
     /// <typeparam name="T">Model which the ViewModel represents</typeparam>
     public class ViewModelBase<T> : NotificationBase<T> where T : class, new()
     {
-        public bool EnableLogging = true;
+        public bool EnableLogging = false;
 
         public ViewModelBase(T value = default) : base(value)
         {
