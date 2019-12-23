@@ -36,10 +36,10 @@ namespace NextBusDesktop.ViewModels
 
     public class NotificationBase<T> : NotificationBase where T : class, new()
     {
-        protected T This;
+        protected T Model;
 
-        public NotificationBase(T value = null) => This = value is null ? new T() : value;
+        public NotificationBase(T value = null) => Model = value is null ? new T() : value;
 
-        public static implicit operator T(NotificationBase<T> value) => value.This;
+        public static implicit operator T(NotificationBase<T> value) => value.Model;
     }
 }

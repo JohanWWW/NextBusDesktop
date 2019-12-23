@@ -9,7 +9,7 @@ using NextBusDesktop.DataProvider;
 
 namespace NextBusDesktop.ViewModels
 {
-    public class DepartureBoardViewModel : NotificationBase
+    public class DepartureBoardViewModel : ViewModelBase
     {
         private Translator _translator;
 
@@ -108,6 +108,12 @@ namespace NextBusDesktop.ViewModels
             _trackFilter = new TrackFilterListViewModel();
         }
 
+        protected override void Deconstruct()
+        {
+            if (_cachedDepartures != null)
+                DeconstructDepartures();
+        }
+
         public async void GetLocationList()
         {
             LocationList locations = await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(_searchQuery);
@@ -136,7 +142,10 @@ namespace NextBusDesktop.ViewModels
 
             DateTime today = DateTime.Today;
             DepartureBoard departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
-            _cachedDepartures = departureBoard.Departures?.Select(d => new DepartureViewModel(d));
+
+            if (_cachedDepartures != null)
+                DeconstructDepartures(); // deconstruct existing departures before creating new ones.
+            _cachedDepartures = departureBoard.Departures?.Select(d => new DepartureViewModel(d)).ToList();
 
             TrackFilter.Add(new TrackViewModel(_translator["All"], "*"));
             foreach (var track in _cachedDepartures.Select(d => d.Track).Distinct().OrderBy(t => t))
@@ -173,11 +182,17 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
-        private void PopulateDepartureBoard(Func<DepartureViewModel, bool> where)
+        private void DeconstructDepartures()
+        {
+            foreach (var departureVm in _cachedDepartures)
+                departureVm.OnViewLeave();
+        }
+
+        private void PopulateDepartureBoard(Func<DepartureViewModel, bool> selector)
         {
             foreach (var departure in _cachedDepartures)
             {
-                if (where(departure))
+                if (selector(departure))
                     Departures.Add(departure);
             }
         }

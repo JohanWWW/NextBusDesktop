@@ -1,38 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32.SafeHandles;
 using NextBusDesktop.Models;
+using Windows.UI.Xaml;
 
 namespace NextBusDesktop.ViewModels
 {
-    public class DepartureViewModel : NotificationBase<Departure>
+    public class DepartureViewModel : ViewModelBase<Departure>
     {
-        private Translator _translator;
+        private readonly Translator _translator;
+        private readonly DispatcherTimer _timer;
 
-        public string FullName => This.FullName;
-        public string ShortName => This.ShortName;
-        public string Track => This.Track ?? "-";
+        public string FullName => Model.FullName;
+        public string ShortName => Model.ShortName;
+        public string Track => Model.Track ?? "-";
         public string DirectionInfo => GetDirectionMessage();
         public string DepartureTimeInfo => GetDepartureTimeMessage();
-        public bool IsRescheduled => This.RealisticDeparture != null && This.ScheduledDeparture != This.RealisticDeparture;
-        public string TimeLeftInfo => GetTimeLeftMessage();
+        public bool IsRescheduled => Model.RealisticDeparture != null && Model.ScheduledDeparture != Model.RealisticDeparture;
+
+        private string _timeLeftInfo;
+        public string TimeLeftInfo
+        {
+            get => _timeLeftInfo;
+            set => SetProperty(ref _timeLeftInfo, value);
+        }
+
         public string StatusIndicatorColor => IsRescheduled ? "Yellow" : null;
-        public string LineLogoBackground => This.LineLogoBackgroundColor;
-        public string LineLogoForeground => This.LineLogoTextColor;
+        public string LineLogoBackground => Model.LineLogoBackgroundColor;
+        public string LineLogoForeground => Model.LineLogoTextColor;
 
         public DepartureViewModel(Departure departure) : base(departure)
         {
             _translator = new Translator("DeparturesWindow");
+            _timeLeftInfo = GetTimeLeftMessage();
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1f) };
+            _timer.Tick += OnTimerTick;
+            _timer.Start();
         }
 
-        private string GetDirectionMessage() => _translator["DirectionOf", This.Direction];
+        protected override void Deconstruct()
+        {
+            _timer.Stop();
+            _timer.Tick -= OnTimerTick;
+        }
+
+        private string GetDirectionMessage() => _translator["DirectionOf", Model.Direction];
 
         private string GetDepartureTimeMessage()
         {
-            DateTime scheduledDeparture = This.ScheduledDeparture;
-            DateTime? realisticDeparture = This.RealisticDeparture;
+            DateTime scheduledDeparture = Model.ScheduledDeparture;
+            DateTime? realisticDeparture = Model.RealisticDeparture;
             string message;
             if (IsRescheduled)
                 message = string.Format("{0} {1}", realisticDeparture?.ToString("HH:mm"), _translator["NewTime"]);
@@ -46,9 +67,9 @@ namespace NextBusDesktop.ViewModels
         {
             TimeSpan timeLeft;
             if (IsRescheduled)
-                timeLeft = (DateTime)This.RealisticDeparture - DateTime.Now;
+                timeLeft = (DateTime)Model.RealisticDeparture - DateTime.Now;
             else
-                timeLeft = This.ScheduledDeparture - DateTime.Now;
+                timeLeft = Model.ScheduledDeparture - DateTime.Now;
 
             string format;
             if (timeLeft.TotalMinutes < 1)
@@ -60,7 +81,19 @@ namespace NextBusDesktop.ViewModels
             else
                 format = @"dd\ \d";
 
+            // Debug
+            //format = "hh\\:mm\\:ss";
+
             return timeLeft.ToString(format).TrimStart('0');
+            //return timeLeft.ToString(format);
+        }
+
+        private int _tickGeneration = 0;
+        private void OnTimerTick(object sender, object e)
+        {
+            //System.Diagnostics.Debug.WriteLine($"[{DateTime.Now}] {FullName} is still alive. Tick generation: {_tickGeneration}");
+            _tickGeneration++;
+            TimeLeftInfo = GetTimeLeftMessage();
         }
     }
 }

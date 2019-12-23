@@ -172,6 +172,7 @@
     <Compile Include="ViewModels\StopLocationViewModel.cs" />
     <Compile Include="ViewModels\TrackFilterListViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

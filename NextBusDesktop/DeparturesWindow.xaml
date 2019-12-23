@@ -7,7 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Unloaded="{x:Bind DepartureBoard.OnViewLeave}">
     <Grid Background="#222222">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
@@ -150,7 +151,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate x:DataType="viewModels:DepartureViewModel">
                                 <local:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
-                                                           TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=OneTime}"
+                                                           TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                            Track="{x:Bind Track, Mode=OneTime}"
                                                            LineLogoBackground="{x:Bind LineLogoForeground, Mode=OneTime}"
                                                            LineLogoForeground="{x:Bind LineLogoBackground, Mode=OneTime}"

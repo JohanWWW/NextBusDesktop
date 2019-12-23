@@ -59,6 +59,8 @@ namespace NextBusDesktop
             set => StatusIndicatorStackPanel.Background = value;
         }
 
+        public static DependencyProperty TimeLeftInfoProperty = DependencyProperty.Register("TimeLeftInfo", typeof(string), typeof(DepartureBoxControl), null);
+
         public string TimeLeftInfo
         {
             get => TimeLeftTextBlock.Text;

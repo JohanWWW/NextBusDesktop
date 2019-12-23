@@ -8,7 +8,7 @@ using NextBusDesktop.Models;
 
 namespace NextBusDesktop.ViewModels
 {
-    public class TrackFilterListViewModel : NotificationBase
+    public class TrackFilterListViewModel : ViewModelBase
     {
         private ObservableCollection<TrackViewModel> _tracks;
         public ObservableCollection<TrackViewModel> Tracks
@@ -27,8 +27,6 @@ namespace NextBusDesktop.ViewModels
 
                 if (value is -1) SelectedTrack = null;
                 else SelectedTrack = _tracks.ElementAt(value);
-
-                System.Diagnostics.Debug.WriteLine($"Selected index: {_selectedIndex}");
             }
         }
 
@@ -36,12 +34,7 @@ namespace NextBusDesktop.ViewModels
         public TrackViewModel SelectedTrack
         {
             get => _selectedTrack;
-            set
-            {
-                SetProperty(ref _selectedTrack, value);
-
-                System.Diagnostics.Debug.WriteLine($"Selected track: {_selectedTrack?.TrackNumber}");
-            }
+            set => SetProperty(ref _selectedTrack, value);
         }
 
         public TrackFilterListViewModel()

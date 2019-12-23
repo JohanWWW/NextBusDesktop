@@ -7,24 +7,24 @@ using NextBusDesktop.Models;
 
 namespace NextBusDesktop.ViewModels
 {
-    public class StopLocationViewModel : NotificationBase<StopLocation>
+    public class StopLocationViewModel : ViewModelBase<StopLocation>
     {
         public string Name
         {
-            get => This.Name;
-            set => SetProperty(This.Name, value, () => This.Name = value);
+            get => Model.Name;
+            set => SetProperty(Model.Name, value, () => Model.Name = value);
         }
 
         public string Id
         {
-            get => This.Id;
-            set => SetProperty(This.Id, value, () => This.Id = value);
+            get => Model.Id;
+            set => SetProperty(Model.Id, value, () => Model.Id = value);
         }
 
         public int Index
         {
-            get => This.Index;
-            set => SetProperty(This.Index, value, () => This.Index = value);
+            get => Model.Index;
+            set => SetProperty(Model.Index, value, () => Model.Index = value);
         }
 
         public StopLocationViewModel(StopLocation stopLocation) : base(stopLocation)
