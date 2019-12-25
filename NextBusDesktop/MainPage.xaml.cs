@@ -34,8 +34,15 @@ namespace NextBusDesktop
             InitializeComponent();
 
             _translator = new Translator(nameof(MainPage));
-            InitializeTripPlannerProvider();
 
+            try
+            {
+                InitializeTripPlannerProvider();
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(MainPage)} an error occurred: {e.Message}", "Error");
+            }
 
             UtilitiyListBox.SelectedIndex = 0;
             MainContentFrame.Navigate(typeof(HomeWindow));

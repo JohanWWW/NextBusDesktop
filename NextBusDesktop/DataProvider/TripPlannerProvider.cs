@@ -55,7 +55,6 @@ namespace NextBusDesktop.DataProvider
             request.AddParameter("time", dateTime.ToString(_timeFormat));
             request.AddParameter("format", "json");
 
-            //await Task.Delay(5000);
             IRestResponse<DepartureBoardResponseContainer> response = await _client.ExecuteTaskAsync<DepartureBoardResponseContainer>(request, Method.GET);
             Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
 
@@ -83,7 +82,6 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("input", query);
             request.AddQueryParameter("format", "json");
 
-            //await Task.Delay(5000);
             IRestResponse<LocationListResponseContainer> response = await _client.ExecuteTaskAsync<LocationListResponseContainer>(request, Method.GET);
             Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
 
