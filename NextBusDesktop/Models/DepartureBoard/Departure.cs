@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NextBusDesktop.ResponseModels;
+using NextBusDesktop.ResponseModels.DepartureBoard;
 
-namespace NextBusDesktop.Models
+namespace NextBusDesktop.Models.DepartureBoard
 {
     public class Departure
     {
         public string FullName { get; set; }
         public string ShortName { get; set; }
         public string Track { get; set; }
-        public Vehicle VehicleType { get; set; }
+        public VehicleType VehicleType { get; set; }
         public string JourneyNumber { get; set; }
         public string JourneyId { get; set; }
         public string StopName { get; set; }
@@ -34,24 +34,24 @@ namespace NextBusDesktop.Models
             switch (departureResponseModel.Type)
             {
                 case "BUS":
-                    VehicleType = Vehicle.Bus;
+                    VehicleType = VehicleType.Bus;
                     break;
                 case "VAS": // Västtåg
                 case "LDT": // Long Distance Train
                 case "REG": // Regional Train
-                    VehicleType = Vehicle.Train;
+                    VehicleType = VehicleType.Train;
                     break;
                 case "BOAT":
-                    VehicleType = Vehicle.Boat;
+                    VehicleType = VehicleType.Boat;
                     break;
                 case "TRAM":
-                    VehicleType = Vehicle.Tram;
+                    VehicleType = VehicleType.Tram;
                     break;
                 case "TAXI":
-                    VehicleType = Vehicle.Taxi;
+                    VehicleType = VehicleType.Taxi;
                     break;
                 default:
-                    VehicleType = Vehicle.Unknown;
+                    VehicleType = VehicleType.Unknown;
                     break;
             }
             JourneyNumber = departureResponseModel.JourneyNumber;

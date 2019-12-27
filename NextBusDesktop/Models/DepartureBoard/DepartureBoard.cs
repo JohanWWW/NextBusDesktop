@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NextBusDesktop.ResponseModels;
+using NextBusDesktop.ResponseModels.DepartureBoard;
 
-namespace NextBusDesktop.Models
+namespace NextBusDesktop.Models.DepartureBoard
 {
     public class DepartureBoard
     {

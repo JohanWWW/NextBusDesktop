@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
-using NextBusDesktop.Models;
+using NextBusDesktop.Models.DepartureBoard;
 using Windows.UI.Xaml;
 
 namespace NextBusDesktop.ViewModels

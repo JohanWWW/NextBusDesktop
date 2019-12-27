@@ -73,6 +73,9 @@ namespace NextBusDesktop
                     TripPlannerText.Text = _translator["TripPlanner.Text"];
                     SettingsText.Text = _translator["Settings.Text"];
                 }));
+
+            if (TripPlannerListItem.IsSelected)
+                MainContentFrame.Navigate(typeof(TripPlannerWindow));
         }
     }
 }

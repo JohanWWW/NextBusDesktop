@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp.Deserializers;
 
-namespace NextBusDesktop.ResponseModels
+namespace NextBusDesktop.ResponseModels.DepartureBoard
 {
     public class DepartureBoardResponseContainer
     {

@@ -10,7 +10,9 @@ namespace NextBusDesktop.DataProvider
     public interface ITripPlannerProviderAsync
     {
         Task<LocationList> GetLocationListAsync(string query);
-        Task<DepartureBoard> GetDepartureBoardAsync(string stopId);
-        Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime);
+        Task<Models.DepartureBoard.DepartureBoard> GetDepartureBoardAsync(string stopId);
+        Task<Models.DepartureBoard.DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime);
+        Task<Models.TripPlanner.TripList> GetTripListAsync(string originStopId, string destinationStopId);
+        Task<Models.TripPlanner.TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime);
     }
 }

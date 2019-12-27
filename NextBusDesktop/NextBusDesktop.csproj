@@ -135,13 +135,22 @@
     <Compile Include="Models\LocationList.cs" />
     <Compile Include="Models\StopLocation.cs" />
     <Compile Include="Models\Track.cs" />
-    <Compile Include="Models\Vehicle.cs" />
-    <Compile Include="Models\Departure.cs" />
-    <Compile Include="Models\DepartureBoard.cs" />
+    <Compile Include="Models\TripPlanner\Destination.cs" />
+    <Compile Include="Models\LocationType.cs" />
+    <Compile Include="Models\TripPlanner\IPointBase.cs" />
+    <Compile Include="Models\TripPlanner\Origin.cs" />
+    <Compile Include="Models\TripPlanner\PointBase.cs" />
+    <Compile Include="Models\TripPlanner\Step.cs" />
+    <Compile Include="Models\TripPlanner\Trip.cs" />
+    <Compile Include="Models\TripPlanner\TripList.cs" />
+    <Compile Include="Models\VehicleType.cs" />
+    <Compile Include="Models\DepartureBoard\Departure.cs" />
+    <Compile Include="Models\DepartureBoard\DepartureBoard.cs" />
     <Compile Include="ResponseModels\AccessTokenResponse.cs" />
-    <Compile Include="ResponseModels\DepartureResponse.cs" />
-    <Compile Include="ResponseModels\DepartureBoardResponse.cs" />
-    <Compile Include="ResponseModels\DepartureBoardResponseContainer.cs" />
+    <Compile Include="ResponseModels\DepartureBoard\DepartureResponse.cs" />
+    <Compile Include="ResponseModels\DepartureBoard\DepartureBoardResponse.cs" />
+    <Compile Include="ResponseModels\DepartureBoard\DepartureBoardResponseContainer.cs" />
+    <Compile Include="ResponseModels\TripPlanner\LegResponse.cs" />
     <Compile Include="ResponseModels\LocationListResponse.cs" />
     <Compile Include="ResponseModels\LocationListResponseContainer.cs" />
     <Compile Include="ResponseModels\StopLocationResponse.cs" />
@@ -161,10 +170,17 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseModels\TripPlanner\PointResponse.cs" />
+    <Compile Include="ResponseModels\TripPlanner\TripListContainer.cs" />
+    <Compile Include="ResponseModels\TripPlanner\TripResponse.cs" />
+    <Compile Include="ResponseModels\TripPlanner\TripListResponse.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Translator.cs" />
+    <Compile Include="TripPlannerWindow.xaml.cs">
+      <DependentUpon>TripPlannerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DepartureBoardViewModel.cs" />
     <Compile Include="ViewModels\DepartureViewModel.cs" />
     <Compile Include="ViewModels\NotificationBase.cs" />
@@ -172,6 +188,8 @@
     <Compile Include="ViewModels\StopLocationViewModel.cs" />
     <Compile Include="ViewModels\TrackFilterListViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />
+    <Compile Include="ViewModels\TripPlannerViewModel.cs" />
+    <Compile Include="ViewModels\TripViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +240,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TripPlannerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -255,6 +277,7 @@
   <ItemGroup>
     <PRIResource Include="Strings\sv-SE\ErrorWindow.resw" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

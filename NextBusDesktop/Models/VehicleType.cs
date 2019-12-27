@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NextBusDesktop.Models
 {
-    public enum Vehicle
+    public enum VehicleType
     {
         Unknown = 0,
         Bus,
@@ -14,5 +14,8 @@ namespace NextBusDesktop.Models
         Tram,
         Boat,
         Taxi,
+        Walk,
+        Bicycle,
+        Car
     }
 }
