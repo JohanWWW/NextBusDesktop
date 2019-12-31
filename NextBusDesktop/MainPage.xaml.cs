@@ -48,8 +48,17 @@ namespace NextBusDesktop
             MainContentFrame.Navigate(typeof(HomeWindow));
         }
 
-        private async void InitializeTripPlannerProvider() =>
-            await TripPlannerProviderContainer.Initialize();
+        private async void InitializeTripPlannerProvider()
+        {
+            try
+            {
+                await TripPlannerProviderContainer.Initialize();
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(MainPage)} an error occurred: {e.Message}", "Error");
+            }
+        }
 
         private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;
 

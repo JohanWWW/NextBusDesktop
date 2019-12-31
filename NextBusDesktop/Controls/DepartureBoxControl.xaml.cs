@@ -19,14 +19,14 @@ using NextBusDesktop.ViewModels;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace NextBusDesktop
+namespace NextBusDesktop.Controls
 {
     public sealed partial class DepartureBoxControl : UserControl
     {
         public string Line
         {
-            get => LineNumberTextBlock.Text;
-            set => LineNumberTextBlock.Text = value;
+            get => LineLogo.LineNumberText;
+            set => LineLogo.LineNumberText = value;
         }
 
         public string DirectionInfo
@@ -43,14 +43,14 @@ namespace NextBusDesktop
 
         public Brush LineLogoBackground
         {
-            get => LineLogoStackPanel.Background;
-            set => LineLogoStackPanel.Background = value;
+            get => LineLogo.LineNumberBackground;
+            set => LineLogo.LineNumberBackground = value;
         }
 
         public Brush LineLogoForeground
         {
-            get => LineNumberTextBlock.Foreground;
-            set => LineNumberTextBlock.Foreground = value;
+            get => LineLogo.LineNumberForeground;
+            set => LineLogo.LineNumberForeground = value;
         }
 
         public Brush StatusIndicatorColor

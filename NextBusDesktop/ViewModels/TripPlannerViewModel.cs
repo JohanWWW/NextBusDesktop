@@ -16,6 +16,35 @@ namespace NextBusDesktop.ViewModels
         private Translator _translator;
         private DispatcherTimer _timer;
 
+        /// <summary>
+        /// Compares current and previous query and returns true if they are equal.
+        /// </summary>
+        private bool OriginSearchQueryIsDuplicate
+        {
+            get
+            {
+                bool isDuplicate = _originSearchQuery != _cachedOriginSearchQuery;
+                if (isDuplicate) _cachedOriginSearchQuery = _originSearchQuery; // Update
+                return isDuplicate;
+            }
+        }
+
+        /// <summary>
+        /// Compares current and previous query and returns true if they are equal.
+        /// </summary>
+        private bool DestinationSearchQueryIsDuplicate
+        {
+            get
+            {
+                bool isDuplicate = _destinationSearchQuery != _cachedDestinationSearchQuery;
+                if (isDuplicate) _cachedDestinationSearchQuery = _destinationSearchQuery; // Update
+                return isDuplicate;
+            }
+        }
+
+        private string _cachedOriginSearchQuery = string.Empty;
+        private string _cachedDestinationSearchQuery = string.Empty;
+
         private bool _errorOccurred;
         public bool ErrorOccurred
         {
@@ -64,7 +93,11 @@ namespace NextBusDesktop.ViewModels
                 SetProperty(ref _selectedOriginIndex, value);
 
                 if (value is -1) _selectedOrigin = null;
-                else _selectedOrigin = _originStopLocations.ElementAt(value);
+                else
+                {
+                    _selectedOrigin = _originStopLocations.ElementAt(value);
+                    OriginSearchQuery = _cachedOriginSearchQuery = _selectedOrigin.Name;
+                }
             }
         }
 
@@ -95,14 +128,18 @@ namespace NextBusDesktop.ViewModels
                 SetProperty(ref _selectedDestinationIndex, value);
 
                 if (value is -1) _selectedDestination = null;
-                else _selectedDestination = _destinationStopLocations.ElementAt(value);
+                else
+                {
+                    _selectedDestination = _destinationStopLocations.ElementAt(value);
+                    DestinationSearchQuery = _cachedDestinationSearchQuery = _selectedDestination.Name;
+                }
             }
         }
 
-        private IEnumerable<Trip> _cachedTrips;
+        private IEnumerable<TripViewModel> _cachedTrips;
 
-        private ObservableCollection<Trip> _trips;
-        public ObservableCollection<Trip> Trips
+        private ObservableCollection<TripViewModel> _trips;
+        public ObservableCollection<TripViewModel> Trips
         {
             get => _trips;
             set => SetProperty(ref _trips, value);
@@ -116,7 +153,7 @@ namespace NextBusDesktop.ViewModels
             _destinationStopLocations = new ObservableCollection<StopLocationViewModel>();
             _selectedOriginIndex = -1;
             _selectedDestinationIndex = -1;
-            _trips = new ObservableCollection<Trip>();
+            _trips = new ObservableCollection<TripViewModel>();
         }
 
         protected override void Deconstruct()
@@ -125,6 +162,11 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetOriginLocationList()
         {
+            if (!OriginSearchQueryIsDuplicate)
+                return;
+
+            OriginStopLocations.Clear();
+
             var locationList = await GetLocationList(_originSearchQuery);
             
             foreach (var stop in locationList.StopLocations.ToList())
@@ -136,7 +178,13 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetDestinationLocationList()
         {
+            if (!DestinationSearchQueryIsDuplicate)
+                return;
+
+            DestinationStopLocations.Clear();
+
             var locationList = await GetLocationList(_destinationSearchQuery);
+
             foreach (var stop in locationList.StopLocations.ToList())
             {
                 var stopLocationVm = new StopLocationViewModel(stop);
@@ -160,15 +208,22 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
-            _cachedTrips = tripList.Trips.ToList();
+            _cachedTrips = tripList.Trips.Select(trip => new TripViewModel(trip)).ToList();
 
             PopulateTripList();
+        }
+
+        public void SwapSearchQueries()
+        {
+            string swap = OriginSearchQuery;
+            OriginSearchQuery = DestinationSearchQuery;
+            DestinationSearchQuery = swap;
         }
 
         private async Task<LocationList> GetLocationList(string query) =>
             await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(query);
 
-        private void PopulateTripList(Func<Trip, bool> selector)
+        private void PopulateTripList(Func<TripViewModel, bool> selector)
         {
             foreach (var trip in _cachedTrips)
             {

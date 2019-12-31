@@ -30,5 +30,21 @@ namespace NextBusDesktop
             InitializeComponent();
             TripPlanner = new TripPlannerViewModel();
         }
+
+        private void OnOriginTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+                OriginResultsFlyout.ShowAt(OriginTextBox);
+        }
+
+        private void OnDestinationTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+                DestinationResultsFlyout.ShowAt(DestinationTextBox);
+        }
+
+        private void OnOriginSelectionChanged(object sender, SelectionChangedEventArgs e) => OriginResultsFlyout.Hide();
+
+        private void OnDestinationSelectionChanged(object sender, SelectionChangedEventArgs e) => DestinationResultsFlyout.Hide();
     }
 }

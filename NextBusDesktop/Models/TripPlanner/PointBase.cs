@@ -20,7 +20,7 @@ namespace NextBusDesktop.Models.TripPlanner
         DateTime? IPointBase.RealisticActionDateTime { get; set; }
 
         /// <summary>
-        /// Returns the interface instance of derived type
+        /// Returns the interface instance of the derived type
         /// </summary>
         protected IPointBase IBase => this;
 

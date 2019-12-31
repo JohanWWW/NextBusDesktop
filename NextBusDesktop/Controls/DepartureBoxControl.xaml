@@ -1,8 +1,8 @@
 ﻿<UserControl
-    x:Class="NextBusDesktop.DepartureBoxControl"
+    x:Class="NextBusDesktop.Controls.DepartureBoxControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:NextBusDesktop"
+    xmlns:local="using:NextBusDesktop.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -18,7 +18,7 @@
             <ColumnDefinition Width="30*"/>
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="LineLogoStackPanel"
+        <!--<StackPanel x:Name="LineLogoStackPanel"
                     Orientation="Vertical"
                     Background="#0071C1"
                     Height="60"
@@ -30,7 +30,10 @@
                        Foreground="White"
                        HorizontalAlignment="Center"
                        Margin="0 13 0 0"/>
-        </StackPanel>
+        </StackPanel>-->
+        <local:LineLogoControl x:Name="LineLogo"
+                               Grid.Column="0"/>
+
         <StackPanel Orientation="Horizontal"
                     Margin="10 0 0 0"
                     Grid.Column="1">

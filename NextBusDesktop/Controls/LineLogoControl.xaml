@@ -1,0 +1,26 @@
+﻿<UserControl
+    x:Class="NextBusDesktop.Controls.LineLogoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NextBusDesktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="60"
+    d:DesignWidth="100"
+    MinHeight="60"
+    MinWidth="100">
+
+    <StackPanel x:Name="LineLogoStackPanel"
+                Orientation="Vertical"
+                Background="#0071C1"
+                CornerRadius="10">
+        <TextBlock x:Name="LineNumberTextBlock"
+                   Text="[line]"
+                   FontSize="24"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Padding="0 13 0 0"/>
+    </StackPanel>
+    
+</UserControl>

@@ -3,12 +3,115 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:NextBusDesktop"
+    xmlns:controls="using:NextBusDesktop.Controls"
+    xmlns:viewModels="using:NextBusDesktop.ViewModels"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Background="#222222">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
+            <TextBox x:Name="OriginTextBox"
+                     Text="{x:Bind TripPlanner.OriginSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     PlaceholderText="From"
+                     FontSize="24"
+                     Grid.Column="0"
+                     BorderThickness="0"
+                     KeyDown="OnOriginTextBoxKeyDown">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout x:Name="OriginResultsFlyout" 
+                            Placement="BottomEdgeAlignedLeft"
+                            Opening="{x:Bind TripPlanner.GetOriginLocationList}">
+                        <ListBox x:Name="OriginSearchResultsListBox"
+                                 ItemsSource="{x:Bind TripPlanner.OriginStopLocations}"
+                                 SelectedIndex="{x:Bind TripPlanner.SelectedOriginIndex, Mode=TwoWay}"
+                                 SelectedItem="{x:Bind TripPlanner.SelectedOrigin, Mode=OneWay}"
+                                 SelectionChanged="OnOriginSelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:StopLocationViewModel">
+                                    <TextBlock Text="{x:Bind Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </TextBox>
+            <Button Content="&#xF1CB;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="24"
+                    Foreground="White"
+                    Background="#0000"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Click="{x:Bind TripPlanner.SwapSearchQueries}">
+            </Button>
+            <TextBox x:Name="DestinationTextBox"
+                     Text="{x:Bind TripPlanner.DestinationSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     PlaceholderText="To"
+                     FontSize="24"
+                     Grid.Column="2"
+                     BorderThickness="0"
+                     KeyDown="OnDestinationTextBoxKeyDown">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout x:Name="DestinationResultsFlyout" 
+                            Placement="BottomEdgeAlignedLeft"
+                            Opening="{x:Bind TripPlanner.GetDestinationLocationList}">
+                        <ListBox x:Name="DestinationSearchResultListBox"
+                                 ItemsSource="{x:Bind TripPlanner.DestinationStopLocations}"
+                                 SelectedIndex="{x:Bind TripPlanner.SelectedDestinationIndex, Mode=TwoWay}"
+                                 SelectedItem="{x:Bind TripPlanner.SelectedDestination, Mode=OneWay}"
+                                 SelectionChanged="OnDestinationSelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:StopLocationViewModel">
+                                    <TextBlock Text="{x:Bind Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </TextBox>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Content="Search"
+                    Foreground="White"
+                    FontSize="18"
+                    Click="{x:Bind TripPlanner.GetTripList}"/>
+        </Grid>
+        <ListBox Grid.Row="2"
+                 Background="#222222"
+                 ItemsSource="{x:Bind TripPlanner.Trips}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="viewModels:TripViewModel">
+                    <controls:TripBoxControl Trip="{x:Bind This}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Page>

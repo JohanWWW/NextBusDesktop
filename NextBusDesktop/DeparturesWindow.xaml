@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:NextBusDesktop"
+    xmlns:controls="using:NextBusDesktop.Controls"
     xmlns:viewModels="using:NextBusDesktop.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -151,18 +152,21 @@
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate x:DataType="viewModels:DepartureViewModel">
-                                <local:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
-                                                           TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                           Track="{x:Bind Track, Mode=OneTime}"
-                                                           LineLogoBackground="{x:Bind LineLogoForeground, Mode=OneTime}"
-                                                           LineLogoForeground="{x:Bind LineLogoBackground, Mode=OneTime}"
-                                                           DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
-                                                           DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
-                                                           StatusIndicatorColor="{x:Bind StatusIndicatorColor, Mode=OneTime}"/>
+                                <controls:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
+                                                              TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                              Track="{x:Bind Track, Mode=OneTime}"
+                                                              LineLogoBackground="{x:Bind LineLogoForeground, Mode=OneTime}"
+                                                              LineLogoForeground="{x:Bind LineLogoBackground, Mode=OneTime}"
+                                                              DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
+                                                              DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
+                                                              StatusIndicatorColor="{x:Bind StatusIndicatorColor, Mode=OneTime}"
+                                                              Margin="0 1 0 0"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
 
-
+                        <ListBoxItem>
+                            <controls:DepartureBoxControl Margin="0 1 0 0"/>
+                        </ListBoxItem>
                     </ListBox>
                 </Grid>
             </SplitView.Content>
