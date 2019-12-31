@@ -208,6 +208,7 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
+            Trips.Clear();
             _cachedTrips = tripList.Trips.Select(trip => new TripViewModel(trip)).ToList();
 
             PopulateTripList();
@@ -218,6 +219,10 @@ namespace NextBusDesktop.ViewModels
             string swap = OriginSearchQuery;
             OriginSearchQuery = DestinationSearchQuery;
             DestinationSearchQuery = swap;
+
+            StopLocation swapStopLocation = _selectedOrigin;
+            SelectedOrigin = SelectedDestination;
+            SelectedDestination = swapStopLocation;
         }
 
         private async Task<LocationList> GetLocationList(string query) =>

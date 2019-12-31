@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NextBusDesktop.Models.TripPlanner
+namespace NextBusDesktop.Models
 {
     public interface IPointBase
     {

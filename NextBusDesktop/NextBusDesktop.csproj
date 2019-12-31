@@ -143,9 +143,9 @@
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TripPlanner\Destination.cs" />
     <Compile Include="Models\LocationType.cs" />
-    <Compile Include="Models\TripPlanner\IPointBase.cs" />
+    <Compile Include="Models\IPointBase.cs" />
     <Compile Include="Models\TripPlanner\Origin.cs" />
-    <Compile Include="Models\TripPlanner\PointBase.cs" />
+    <Compile Include="Models\PointBase.cs" />
     <Compile Include="Models\TripPlanner\Step.cs" />
     <Compile Include="Models\TripPlanner\Trip.cs" />
     <Compile Include="Models\TripPlanner\TripList.cs" />

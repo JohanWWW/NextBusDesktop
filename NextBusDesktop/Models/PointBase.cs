@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NextBusDesktop.Models.TripPlanner
+namespace NextBusDesktop.Models
 {
     /// <summary>
     /// Represents a location point. Provides base functionality and customization for the derived type.
