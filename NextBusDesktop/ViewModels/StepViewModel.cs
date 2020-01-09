@@ -12,6 +12,15 @@ namespace NextBusDesktop.ViewModels
     {
         private Translator _translator;
 
+        private readonly Dictionary<VehicleType, string> _temp = new Dictionary<VehicleType, string>
+        {
+            [VehicleType.Bus] = "TheBus",
+            [VehicleType.Train] = "TheTrain",
+            [VehicleType.Tram] = "TheTram",
+            [VehicleType.Boat] = "TheBoat",
+            [VehicleType.Unknown] = "TheVehicle"
+        };
+
         private bool DepartureIsRescheduled => Origin.RealisticDepartureDateTime != null && Origin.RealisticDepartureDateTime != Origin.DepartureDateTime;
         private bool ArrivalIsRescheduled => Destination.RealisticArrivalDateTime != null && Destination.RealisticArrivalDateTime != Destination.ArrivalDateTime;
 
@@ -92,7 +101,8 @@ namespace NextBusDesktop.ViewModels
                 switch (VehicleType)
                 {
                     case VehicleType.Walk:
-                        message = $"Gå till hållplats {DestinationInfo}";
+                        //message = $"Gå till hållplats {DestinationInfo}";
+                        message = _translator["WalkInfoMessage", Origin.StopName, Origin.Track];
                         break;
                     case VehicleType.Train:
                         message = $"Ta tåg {JourneyNumber} mot {Direction}";
@@ -100,18 +110,24 @@ namespace NextBusDesktop.ViewModels
                     case VehicleType.Bus:
                     case VehicleType.Boat:
                     case VehicleType.Tram:
-                        message = $"Ta {FullName} mot {Direction}";
+                        //message = $"Ta {FullName} mot {Direction}";
+                        message = _translator["StepInfoMessage", Model.FullName, Model.Direction];
                         break;
                     default:
                         message = "Unknown";
                         break;
                 }
 
+                System.Diagnostics.Debug.WriteLine($"JourneyNumber: {JourneyNumber}");
+                System.Diagnostics.Debug.WriteLine($"Fullname: {FullName}");
+                System.Diagnostics.Debug.WriteLine($"Shortname: {ShortName}");
+                System.Diagnostics.Debug.WriteLine($"");
+
                 return message;
             }
         }
 
-        public string ExtraInfo
+        public string DepartureArrivalInfoMessage
         {
             get
             {
@@ -119,55 +135,48 @@ namespace NextBusDesktop.ViewModels
                     return string.Empty;
 
                 string message = "Empty";
-                var dict = new Dictionary<VehicleType, string>
-                {
-                    [VehicleType.Bus] = "Bussen",
-                    [VehicleType.Train] = "Tåget",
-                    [VehicleType.Tram] = "Spårvagnen",
-                    [VehicleType.Boat] = "Färjan"
-                };
-                
+
+                Func<double, string> timeUnit = (totalMinutes) => Math.Abs(totalMinutes) is 1 ? _translator["Minute"] : _translator["Minutes"];
+                Func<double, string> timeAxis = (totalMinutes) => totalMinutes < 0 ? _translator["Earlier"] : _translator["Later"];
 
                 if (DepartureIsRescheduled && ArrivalIsRescheduled)
                 {
                     double adjustedDepartureMinutes = Math.Round(((DateTime)Origin.RealisticDepartureDateTime - Origin.DepartureDateTime).TotalMinutes);
                     double adjustedArrivalMinutes = Math.Round(((DateTime)Destination.RealisticArrivalDateTime - Destination.ArrivalDateTime).TotalMinutes);
-                    string template = "{0} avgår från {1} {2} {3} {4} och ankommer till {5} {6} {7} {8} än vanligt";
-                    message = string.Format(template,
-                        dict[VehicleType],
+
+                    message = _translator["DepartureArrivalInfoMessage",
+                        _translator[_temp[VehicleType]],
                         Origin.StopName,
                         Math.Abs(adjustedDepartureMinutes),
-                        Math.Abs(adjustedDepartureMinutes) is 1 ? "minut" : "minuter",
-                        adjustedDepartureMinutes < 0 ? "tidigare" : "senare",
+                        timeUnit(adjustedDepartureMinutes),
+                        timeAxis(adjustedDepartureMinutes),
                         Destination.StopName,
                         Math.Abs(adjustedArrivalMinutes),
-                        Math.Abs(adjustedArrivalMinutes) is 1 ? "minut" : "minuter",
-                        adjustedArrivalMinutes < 0 ? "tidigare" : "senare"
-                    );
+                        timeUnit(adjustedArrivalMinutes),
+                        timeAxis(adjustedArrivalMinutes)
+                    ];
                 }
                 else if (DepartureIsRescheduled)
                 {
                     double adjustedDepartureMinutes = Math.Round(((DateTime)Origin.RealisticDepartureDateTime - Origin.DepartureDateTime).TotalMinutes);
-                    string template = "{0} avgår från {1} {2} {3} {4} än vanligt";
-                    message = string.Format(template,
-                        dict[VehicleType],
+                    message = _translator["DepartureInfoMessage",
+                        _translator[_temp[VehicleType]],
                         Origin.StopName,
                         Math.Abs(adjustedDepartureMinutes),
-                        Math.Abs(adjustedDepartureMinutes) is 1 ? "minut" : "minuter",
-                        adjustedDepartureMinutes < 0 ? "tidigare" : "senare"
-                    );
+                        timeUnit(adjustedDepartureMinutes),
+                        timeAxis(adjustedDepartureMinutes)
+                    ];
                 }
                 else if (ArrivalIsRescheduled)
                 {
                     double adjustedArrivalMinutes = Math.Round(((DateTime)Destination.RealisticArrivalDateTime - Destination.ArrivalDateTime).TotalMinutes);
-                    string template = "{0} ankommer till {1} {2} {3} {4} än vanligt";
-                    message = string.Format(template,
-                        dict[VehicleType],
+                    message = _translator["ArrivalInfoMessage",
+                        _translator[_temp[VehicleType]],
                         Destination.StopName,
                         Math.Abs(adjustedArrivalMinutes),
-                        Math.Abs(adjustedArrivalMinutes) is 1 ? "minut" : "minuter",
-                        adjustedArrivalMinutes < 0 ? "tidigare" : "senare"
-                    );
+                        timeUnit(adjustedArrivalMinutes),
+                        timeAxis(adjustedArrivalMinutes)
+                    ];
                 }
 
                 return message;
@@ -217,6 +226,7 @@ namespace NextBusDesktop.ViewModels
 
         public StepViewModel(Step step = null) : base(step)
         {
+            _translator = new Translator("TripPlannerResources");
         }
     }
 }

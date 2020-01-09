@@ -87,10 +87,17 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBox PlaceholderText="date"
+                         Margin="0 7 0 6"
+                         Width="150"
+                         Text="{x:Bind TripPlanner.DateTimeTextBox, Mode=TwoWay}"/>
+                <TimePicker ClockIdentifier="24HourClock"/>
+            </StackPanel>
             <Button Grid.Column="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"

@@ -52,6 +52,26 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _errorOccurred, value, nameof(ErrorOccurred));
         }
 
+        private string _dateTimeTextBox;
+        public string DateTimeTextBox
+        {
+            get => _dateTimeTextBox;
+            set => _dateTimeTextBox = value;
+        }
+
+        private DateTime _dateTime
+        {
+            get
+            {
+                if (DateTime.TryParse(_dateTimeTextBox, out DateTime parsed))
+                    return parsed;
+                else
+                    return DateTime.Now;
+            }
+
+            set => _dateTimeTextBox = value.ToString("yyyy-MM-dd");
+        }
+
         private string _originSearchQuery;
         public string OriginSearchQuery
         {
@@ -149,6 +169,7 @@ namespace NextBusDesktop.ViewModels
         {
             //_translator = new Translator(...);
             _errorOccurred = false;
+            _dateTime = DateTime.Now;
             _originStopLocations = new ObservableCollection<StopLocationViewModel>();
             _destinationStopLocations = new ObservableCollection<StopLocationViewModel>();
             _selectedOriginIndex = -1;
@@ -200,7 +221,7 @@ namespace NextBusDesktop.ViewModels
             TripList tripList = null;
             try
             {
-                tripList = await TripPlannerProviderContainer.TripPlannerProvider.GetTripListAsync(_selectedOrigin.Id, _selectedDestination.Id);
+                tripList = await TripPlannerProviderContainer.TripPlannerProvider.GetTripListAsync(_selectedOrigin.Id, _selectedDestination.Id, _dateTime);
             }
             catch (Exception e)
             {
