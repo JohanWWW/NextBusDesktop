@@ -42,7 +42,7 @@ namespace NextBusDesktop.DataProvider
             request.AddParameter("time", dateTime.ToString(_timeFormat));
             request.AddParameter("format", "json");
 
-            IRestResponse<DepartureBoardResponseContainer> response = _client.Execute<DepartureBoardResponseContainer>(request, Method.GET);
+            IRestResponse<DepartureBoardResponseRoot> response = _client.Execute<DepartureBoardResponseRoot>(request, Method.GET);
 
             return new DepartureBoard(response.Data.DepartureBoard);
         }
@@ -59,7 +59,7 @@ namespace NextBusDesktop.DataProvider
             request.AddParameter("time", dateTime.ToString(_timeFormat));
             request.AddParameter("format", "json");
 
-            IRestResponse<DepartureBoardResponseContainer> response = await _client.ExecuteTaskAsync<DepartureBoardResponseContainer>(request, Method.GET);
+            IRestResponse<DepartureBoardResponseRoot> response = await _client.ExecuteTaskAsync<DepartureBoardResponseRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
 
             return new DepartureBoard(response.Data.DepartureBoard);
@@ -72,7 +72,7 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("input", query);
             request.AddQueryParameter("format", "json");
 
-            IRestResponse<LocationListResponseContainer> response = _client.Execute<LocationListResponseContainer>(request, Method.GET);
+            IRestResponse<LocationListResponseRoot> response = _client.Execute<LocationListResponseRoot>(request, Method.GET);
 
             return new LocationList(response.Data.LocationList);
         }
@@ -86,7 +86,7 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("input", query);
             request.AddQueryParameter("format", "json");
 
-            IRestResponse<LocationListResponseContainer> response = await _client.ExecuteTaskAsync<LocationListResponseContainer>(request, Method.GET);
+            IRestResponse<LocationListResponseRoot> response = await _client.ExecuteTaskAsync<LocationListResponseRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
 
             return new LocationList(response.Data.LocationList);
@@ -106,7 +106,7 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("time", dateTime.ToString("HH:mm"));
             request.AddQueryParameter("format", "json");
 
-            IRestResponse<TripListContainer> response = _client.Execute<TripListContainer>(request, Method.GET);
+            IRestResponse<TripListRoot> response = _client.Execute<TripListRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetTripList)} {response.StatusCode}");
 
             return new TripList(response.Data.TripList);
@@ -126,7 +126,7 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("time", dateTime.ToString("HH:mm"));
             request.AddQueryParameter("format", "json");
 
-            IRestResponse<TripListContainer> response = await _client.ExecuteTaskAsync<TripListContainer>(request, Method.GET);
+            IRestResponse<TripListRoot> response = await _client.ExecuteTaskAsync<TripListRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetTripList)} {response.StatusCode}");
 
             return new TripList(response.Data.TripList);

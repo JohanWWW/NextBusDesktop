@@ -155,10 +155,10 @@
     <Compile Include="ResponseModels\AccessTokenResponse.cs" />
     <Compile Include="ResponseModels\DepartureBoard\DepartureResponse.cs" />
     <Compile Include="ResponseModels\DepartureBoard\DepartureBoardResponse.cs" />
-    <Compile Include="ResponseModels\DepartureBoard\DepartureBoardResponseContainer.cs" />
+    <Compile Include="ResponseModels\DepartureBoard\DepartureBoardResponseRoot.cs" />
     <Compile Include="ResponseModels\TripPlanner\LegResponse.cs" />
     <Compile Include="ResponseModels\LocationListResponse.cs" />
-    <Compile Include="ResponseModels\LocationListResponseContainer.cs" />
+    <Compile Include="ResponseModels\LocationListResponseRoot.cs" />
     <Compile Include="ResponseModels\StopLocationResponse.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -177,7 +177,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseModels\TripPlanner\PointResponse.cs" />
-    <Compile Include="ResponseModels\TripPlanner\TripListContainer.cs" />
+    <Compile Include="ResponseModels\TripPlanner\TripListRoot.cs" />
     <Compile Include="ResponseModels\TripPlanner\TripResponse.cs" />
     <Compile Include="ResponseModels\TripPlanner\TripListResponse.cs" />
     <Compile Include="SettingsWindow.xaml.cs">

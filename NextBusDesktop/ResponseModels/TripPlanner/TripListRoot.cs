@@ -7,7 +7,7 @@ using RestSharp.Deserializers;
 
 namespace NextBusDesktop.ResponseModels.TripPlanner
 {
-    public class TripListContainer
+    public class TripListRoot
     {
         [DeserializeAs(Name = "TripList")]
         public TripListResponse TripList { get; set; }
