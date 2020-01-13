@@ -13,7 +13,6 @@ namespace NextBusDesktop.ViewModels
     public class DepartureViewModel : ViewModelBase<Departure>
     {
         private readonly Translator _translator;
-        //private readonly DispatcherTimer _timer;
 
         public string FullName => Model.FullName;
         public string ShortName => Model.ShortName;
@@ -83,14 +82,6 @@ namespace NextBusDesktop.ViewModels
 
             return timeLeft.ToString(format).TrimStart('0');
             //return timeLeft.ToString(format);
-        }
-
-        private int _tickGeneration = 0;
-        private void OnTimerTick(object sender, object e)
-        {
-            //System.Diagnostics.Debug.WriteLine($"[{DateTime.Now}] {FullName} is still alive. Tick generation: {_tickGeneration}");
-            _tickGeneration++;
-            TimeLeftInfo = GetTimeLeftMessage();
         }
     }
 }

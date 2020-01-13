@@ -11,9 +11,6 @@ namespace NextBusDesktop.ViewModels
 {
     public class TripViewModel : ViewModelBase
     {
-        private Translator _translator;
-        //private DispatcherTimer _timer;
-
         public TripViewModel This => this;
 
         private ObservableCollection<StepViewModel> _steps;

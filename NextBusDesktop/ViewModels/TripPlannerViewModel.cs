@@ -13,9 +13,6 @@ namespace NextBusDesktop.ViewModels
 {
     public class TripPlannerViewModel : ViewModelBase
     {
-        private Translator _translator;
-        private DispatcherTimer _timer;
-
         /// <summary>
         /// Compares current and previous query and returns true if they are equal.
         /// </summary>
@@ -167,7 +164,6 @@ namespace NextBusDesktop.ViewModels
 
         public TripPlannerViewModel()
         {
-            //_translator = new Translator(...);
             _errorOccurred = false;
             _dateTime = DateTime.Now;
             _originStopLocations = new ObservableCollection<StopLocationViewModel>();

@@ -261,9 +261,6 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
-            // Update time picker.
-            //DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
-
             if (_cachedDepartures != null)
                 DeconstructDepartures();
 
@@ -273,7 +270,5 @@ namespace NextBusDesktop.ViewModels
             FilterDepartures();
             System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} refreshed departure board", "Info");
         }
-
-        //private async void OnTimerTick(object sender, object e) => await RefreshBoard();
     }
 }

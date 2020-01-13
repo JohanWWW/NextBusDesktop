@@ -124,18 +124,11 @@
     </Compile>
     <Compile Include="DataProvider\AccessTokenProvider.cs" />
     <Compile Include="DataProvider\IAccessTokenProvider.cs" />
-    <Compile Include="DataProvider\IAccessTokenProviderAsync.cs" />
-    <Compile Include="DataProvider\ITripPlannerProviderAsync.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProviderContainer.cs" />
     <Compile Include="Controls\DepartureBoxControl.xaml.cs">
       <DependentUpon>DepartureBoxControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Error.cs" />
-    <Compile Include="ErrorType.cs" />
-    <Compile Include="LoadingWindow.xaml.cs">
-      <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AccessToken.cs" />
     <Compile Include="Models\LocationList.cs" />
@@ -165,9 +158,6 @@
     </Compile>
     <Compile Include="DeparturesWindow.xaml.cs">
       <DependentUpon>DeparturesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ErrorWindow.xaml.cs">
-      <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HomeWindow.xaml.cs">
       <DependentUpon>HomeWindow.xaml</DependentUpon>
@@ -235,15 +225,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ErrorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="HomeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

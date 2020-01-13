@@ -16,7 +16,7 @@ namespace NextBusDesktop.DataProvider
     /// <summary>
     /// Provides Västtrafik's Trip planner api.
     /// </summary>
-    public class TripPlannerProvider : ITripPlannerProvider, ITripPlannerProviderAsync
+    public class TripPlannerProvider : ITripPlannerProvider
     {
         private const string _dateFormat = "yyyy-MM-dd";
         private const string _timeFormat = "HH:mm";

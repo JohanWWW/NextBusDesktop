@@ -13,8 +13,8 @@ namespace NextBusDesktop.DataProvider
 {
     public static class TripPlannerProviderContainer
     {
-        private static ITripPlannerProviderAsync _tripPlannerProvider;
-        public static ITripPlannerProviderAsync TripPlannerProvider
+        private static ITripPlannerProvider _tripPlannerProvider;
+        public static ITripPlannerProvider TripPlannerProvider
         {
             get => _tripPlannerProvider;
             private set => _tripPlannerProvider = value;
@@ -23,7 +23,7 @@ namespace NextBusDesktop.DataProvider
         public static async Task Initialize()
         {
             Log("Initializing TripPlannerProvider");
-            IAccessTokenProviderAsync accessTokenProvider = new AccessTokenProvider();
+            IAccessTokenProvider accessTokenProvider = new AccessTokenProvider();
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
             StorageFile accessTokenFile;
             bool fileIsEmpty;

@@ -68,9 +68,6 @@ namespace NextBusDesktop.ViewModels
                 StopLocations.Remove(stopLocation);
         }
 
-        public void Clear()
-        {
-            StopLocations.Clear();
-        }
+        public void Clear() => StopLocations.Clear();
     }
 }

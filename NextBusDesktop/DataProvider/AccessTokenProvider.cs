@@ -11,7 +11,7 @@ namespace NextBusDesktop.DataProvider
     /// <summary>
     /// Provides an access token for <see cref="TripPlannerProvider"/>
     /// </summary>
-    public class AccessTokenProvider : IAccessTokenProvider, IAccessTokenProviderAsync
+    public class AccessTokenProvider : IAccessTokenProvider
     {
         private readonly IRestClient _client;
 

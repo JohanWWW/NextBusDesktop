@@ -101,7 +101,6 @@ namespace NextBusDesktop.ViewModels
                 switch (VehicleType)
                 {
                     case VehicleType.Walk:
-                        //message = $"Gå till hållplats {DestinationInfo}";
                         message = _translator["WalkInfoMessage", Origin.StopName, Origin.Track];
                         break;
                     case VehicleType.Train:
@@ -110,7 +109,6 @@ namespace NextBusDesktop.ViewModels
                     case VehicleType.Bus:
                     case VehicleType.Boat:
                     case VehicleType.Tram:
-                        //message = $"Ta {FullName} mot {Direction}";
                         message = _translator["StepInfoMessage", Model.FullName, Model.Direction];
                         break;
                     default:
@@ -203,7 +201,6 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
-        private string _arrivalTimeInfo;
         public string ArrivalTimeInfo
         {
             get
