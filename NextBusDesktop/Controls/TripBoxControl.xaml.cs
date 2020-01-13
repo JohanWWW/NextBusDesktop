@@ -21,14 +21,8 @@ namespace NextBusDesktop.Controls
     public sealed partial class TripBoxControl : UserControl
     {
         public TripViewModel Trip { get; set; }
-
-        public static DependencyProperty TripProperty = DependencyProperty.Register("Trip", typeof(TripViewModel), typeof(TripBoxControl), null);
+        public static DependencyProperty TripProperty = DependencyProperty.Register(nameof(Trip), typeof(TripViewModel), typeof(TripBoxControl), null);
 
         public TripBoxControl() => InitializeComponent();
-
-        private void CreateControl()
-        {
-
-        }
     }
 }

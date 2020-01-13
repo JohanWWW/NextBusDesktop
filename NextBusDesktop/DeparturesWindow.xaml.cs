@@ -24,17 +24,46 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class DeparturesWindow : Page
     {
-        public DepartureBoardViewModel DepartureBoard { get; set; }
+        private DispatcherTimer _departureBoardRefreshTimer;
+        private DispatcherTimer _departureBoxTimer;
+
+        public readonly DepartureBoardViewModel DepartureBoard = new DepartureBoardViewModel();
 
         public DeparturesWindow()
         {
             InitializeComponent();
-            DepartureBoard = new DepartureBoardViewModel();
+
+            _departureBoardRefreshTimer = new DispatcherTimer();
+            _departureBoardRefreshTimer.Interval = TimeSpan.FromMinutes(1f);
+            _departureBoardRefreshTimer.Tick += OnDepartureBoardRefreshTimerTick;
+
+            _departureBoxTimer = new DispatcherTimer();
+            _departureBoxTimer.Interval = TimeSpan.FromSeconds(1f);
+            _departureBoxTimer.Tick += OnDepartureBoxTimerTick;
+
+            _departureBoardRefreshTimer.Start();
+            _departureBoxTimer.Start();
+
+            Unloaded += (s, e) => // Destroy timers
+            {
+                _departureBoardRefreshTimer.Stop();
+                _departureBoardRefreshTimer.Tick -= OnDepartureBoardRefreshTimerTick;
+
+                _departureBoxTimer.Stop();
+                _departureBoxTimer.Tick -= OnDepartureBoxTimerTick;
+            };
         }
+
+        private void OnDepartureBoxTimerTick(object sender, object e)
+        {
+            foreach (var departureVm in DepartureBoard.Departures)
+                departureVm.TriggerTimeUpdate();
+        }
+
+        private async void OnDepartureBoardRefreshTimerTick(object sender, object e) => await DepartureBoard.RefreshBoard();
 
         private void OnSearchTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
         {
-            // Unfocus search box in order to update DepartureBoard.Query before user releases enter button.
             if (e.Key == Windows.System.VirtualKey.Enter)
                 DepartureBoard.GetLocationList();
         }

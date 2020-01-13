@@ -136,8 +136,10 @@ namespace NextBusDesktop.ViewModels
 
                 string message = "Empty";
 
+                // Returns time unit string
                 Func<double, string> timeUnit = (totalMinutes) => Math.Abs(totalMinutes) is 1 ? _translator["Minute"] : _translator["Minutes"];
-                Func<double, string> timeAxis = (totalMinutes) => totalMinutes < 0 ? _translator["Earlier"] : _translator["Later"];
+                // Returns string that describes when something is going to occur
+                Func<double, string> timeChronology = (totalMinutes) => totalMinutes < 0 ? _translator["Earlier"] : _translator["Later"];
 
                 if (DepartureIsRescheduled && ArrivalIsRescheduled)
                 {
@@ -149,11 +151,11 @@ namespace NextBusDesktop.ViewModels
                         Origin.StopName,
                         Math.Abs(adjustedDepartureMinutes),
                         timeUnit(adjustedDepartureMinutes),
-                        timeAxis(adjustedDepartureMinutes),
+                        timeChronology(adjustedDepartureMinutes),
                         Destination.StopName,
                         Math.Abs(adjustedArrivalMinutes),
                         timeUnit(adjustedArrivalMinutes),
-                        timeAxis(adjustedArrivalMinutes)
+                        timeChronology(adjustedArrivalMinutes)
                     ];
                 }
                 else if (DepartureIsRescheduled)
@@ -164,7 +166,7 @@ namespace NextBusDesktop.ViewModels
                         Origin.StopName,
                         Math.Abs(adjustedDepartureMinutes),
                         timeUnit(adjustedDepartureMinutes),
-                        timeAxis(adjustedDepartureMinutes)
+                        timeChronology(adjustedDepartureMinutes)
                     ];
                 }
                 else if (ArrivalIsRescheduled)
@@ -175,7 +177,7 @@ namespace NextBusDesktop.ViewModels
                         Destination.StopName,
                         Math.Abs(adjustedArrivalMinutes),
                         timeUnit(adjustedArrivalMinutes),
-                        timeAxis(adjustedArrivalMinutes)
+                        timeChronology(adjustedArrivalMinutes)
                     ];
                 }
 
@@ -183,6 +185,7 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
+        private string _departureTimeInfo;
         public string DepartureTimeInfo
         {
             get
@@ -200,6 +203,7 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
+        private string _arrivalTimeInfo;
         public string ArrivalTimeInfo
         {
             get

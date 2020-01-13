@@ -14,7 +14,6 @@ namespace NextBusDesktop.ViewModels
     public class DepartureBoardViewModel : ViewModelBase
     {
         private Translator _translator;
-        private DispatcherTimer _timer;
 
         private bool _errorOccurred;
         public bool ErrorOccurred
@@ -112,9 +111,6 @@ namespace NextBusDesktop.ViewModels
             DateTime now = DateTime.Now;
             DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
             _trackFilter = new TrackFilterListViewModel();
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1f) };
-            _timer.Tick += OnTimerTick;
-            _timer.Start();
 
             PropertyChanged += (s, e) =>
             {
@@ -129,9 +125,6 @@ namespace NextBusDesktop.ViewModels
         {
             if (_cachedDepartures != null)
                 DeconstructDepartures();
-
-            _timer.Stop();
-            _timer.Tick -= OnTimerTick;
         }
 
         public async void GetLocationList()
@@ -164,7 +157,7 @@ namespace NextBusDesktop.ViewModels
             SelectTrackEnabled = false;
         }
 
-        public async void GetDepartures()
+        public async Task GetDepartures()
         {
             if (_selectedStopLocation is null)
                 return;
@@ -245,7 +238,7 @@ namespace NextBusDesktop.ViewModels
 
         private void PopulateDepartureBoard() => PopulateDepartureBoard(departure => true);
 
-        private async Task RefreshBoard()
+        public async Task RefreshBoard()
         {
             System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} attempting to refresh board", "Info");
             if (_selectedStopLocation is null)
@@ -281,6 +274,6 @@ namespace NextBusDesktop.ViewModels
             System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} refreshed departure board", "Info");
         }
 
-        private async void OnTimerTick(object sender, object e) => await RefreshBoard();
+        //private async void OnTimerTick(object sender, object e) => await RefreshBoard();
     }
 }

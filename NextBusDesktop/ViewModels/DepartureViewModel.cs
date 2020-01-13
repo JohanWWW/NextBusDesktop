@@ -13,7 +13,7 @@ namespace NextBusDesktop.ViewModels
     public class DepartureViewModel : ViewModelBase<Departure>
     {
         private readonly Translator _translator;
-        private readonly DispatcherTimer _timer;
+        //private readonly DispatcherTimer _timer;
 
         public string FullName => Model.FullName;
         public string ShortName => Model.ShortName;
@@ -37,15 +37,12 @@ namespace NextBusDesktop.ViewModels
         {
             _translator = new Translator("DeparturesWindow");
             _timeLeftInfo = GetTimeLeftMessage();
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1f) };
-            _timer.Tick += OnTimerTick;
-            _timer.Start();
         }
+
+        public void TriggerTimeUpdate() => TimeLeftInfo = GetTimeLeftMessage();
 
         protected override void Deconstruct()
         {
-            _timer.Stop();
-            _timer.Tick -= OnTimerTick;
         }
 
         private string GetDirectionMessage() => _translator["DirectionOf", Model.Direction];

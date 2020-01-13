@@ -37,6 +37,7 @@
                        Foreground="White"
                        FontSize="18"
                        FontWeight="Bold"/>
+            <TextBlock Text="{x:Bind Trip.TimeLeftInfo, Mode=OneWay}"/>
         </StackPanel>
         <StackPanel Orientation="Vertical"
                     Padding="10"
@@ -73,7 +74,7 @@
                                                                Grid.Row="0"/>
                                         <StackPanel Orientation="Vertical"
                                                     VerticalAlignment="Center"
-                                                    Margin="5 0 0 0"
+                                                    Margin="15 0 0 0"
                                                     Grid.Column="1"
                                                     Grid.RowSpan="2">
                                             <TextBlock Text="{x:Bind StepInfo}"

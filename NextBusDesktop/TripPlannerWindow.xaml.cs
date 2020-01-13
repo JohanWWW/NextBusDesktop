@@ -23,12 +23,47 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class TripPlannerWindow : Page
     {
-        public TripPlannerViewModel TripPlanner { get; set; }
+        private DispatcherTimer _tripListRefreshTimer;
+        private DispatcherTimer _tripBoxTimer;
+
+        public TripPlannerViewModel TripPlanner = new TripPlannerViewModel();
 
         public TripPlannerWindow()
         {
             InitializeComponent();
-            TripPlanner = new TripPlannerViewModel();
+
+            _tripListRefreshTimer = new DispatcherTimer();
+            _tripListRefreshTimer.Interval = TimeSpan.FromMinutes(1f);
+            _tripListRefreshTimer.Tick += OnTripListRefreshTimerTick;
+
+            _tripBoxTimer = new DispatcherTimer();
+            _tripBoxTimer.Interval = TimeSpan.FromSeconds(1f);
+            _tripBoxTimer.Tick += OnTripBoxTimerTick;
+
+            _tripListRefreshTimer.Start();
+            _tripBoxTimer.Start();
+
+            Unloaded += (s, e) => // Destroy timers
+            {
+                _tripListRefreshTimer.Stop();
+                _tripListRefreshTimer.Tick -= OnTripListRefreshTimerTick;
+
+                _tripBoxTimer.Stop();
+                _tripBoxTimer.Tick -= OnTripBoxTimerTick;
+            };
+        }
+
+        private async void OnTripListRefreshTimerTick(object sender, object e)
+        {
+            System.Diagnostics.Debug.WriteLine("Triggered refresh trip list.");
+            await TripPlanner.GetTripList();
+        }
+
+        private void OnTripBoxTimerTick(object sender, object e)
+        {
+            System.Diagnostics.Debug.WriteLine("Triggered time update.");
+            foreach (var trip in TripPlanner.Trips)
+                trip.TriggerTimeUpdate();
         }
 
         private void OnOriginTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
