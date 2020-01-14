@@ -66,6 +66,7 @@ namespace NextBusDesktop
                 trip.TriggerTimeUpdate();
         }
 
+        // TODO: Fix bug that causes flyouts to not show immediately after the enter button has been pressed the second time user searches for trips
         private void OnOriginTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)

@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using NextBusDesktop.ViewModels;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,8 +25,8 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class DeparturesWindow : Page
     {
-        private DispatcherTimer _departureBoardRefreshTimer;
-        private DispatcherTimer _departureBoxTimer;
+        private readonly DispatcherTimer _departureBoardRefreshTimer;
+        private readonly DispatcherTimer _departureBoxTimer;
 
         public readonly DepartureBoardViewModel DepartureBoard = new DepartureBoardViewModel();
 

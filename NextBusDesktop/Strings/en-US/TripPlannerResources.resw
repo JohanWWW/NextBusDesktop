@@ -132,6 +132,10 @@
   <data name="Earlier" xml:space="preserve">
     <value>earlier</value>
   </data>
+  <data name="From.PlaceholderText" xml:space="preserve">
+    <value>From</value>
+    <comment>from text box</comment>
+  </data>
   <data name="Later" xml:space="preserve">
     <value>later</value>
   </data>
@@ -140,6 +144,10 @@
   </data>
   <data name="Minutes" xml:space="preserve">
     <value>minutes</value>
+  </data>
+  <data name="Search.Content" xml:space="preserve">
+    <value>Search</value>
+    <comment>search button</comment>
   </data>
   <data name="StepInfoMessage" xml:space="preserve">
     <value>Take {0} in direction of {1}</value>
@@ -160,6 +168,10 @@
   <data name="TheVehicle" xml:space="preserve">
     <value>The vehicle</value>
     <comment>useful when vehicle type is unknown</comment>
+  </data>
+  <data name="To.PlaceholderText" xml:space="preserve">
+    <value>To</value>
+    <comment>to text box</comment>
   </data>
   <data name="WalkInfoMessage" xml:space="preserve">
     <value>Walk to {0} Track {1}</value>

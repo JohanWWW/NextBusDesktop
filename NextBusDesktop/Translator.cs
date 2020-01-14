@@ -15,8 +15,7 @@ namespace NextBusDesktop
         public string[] SupportedLanguages => ApplicationLanguages.ManifestLanguages.ToArray();
         public string CurrentLanguage => ApplicationLanguages.PrimaryLanguageOverride;
 
-        public Translator(string name) => 
-            _loader = ResourceLoader.GetForCurrentView(name);
+        public Translator(string name) => _loader = ResourceLoader.GetForCurrentView(name);
 
         public string this[string resource]
         {
@@ -35,5 +34,7 @@ namespace NextBusDesktop
                 return string.Format(translation, parameters);
             }
         }
+
+        public void SetLanguage(string language) => ApplicationLanguages.PrimaryLanguageOverride = language;
     }
 }

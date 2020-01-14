@@ -25,6 +25,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="OriginTextBox"
+                     x:Uid="/TripPlannerResources/From"
                      Text="{x:Bind TripPlanner.OriginSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      PlaceholderText="From"
                      FontSize="24"
@@ -60,6 +61,7 @@
                     Click="{x:Bind TripPlanner.SwapSearchQueries}">
             </Button>
             <TextBox x:Name="DestinationTextBox"
+                     x:Uid="/TripPlannerResources/To"
                      Text="{x:Bind TripPlanner.DestinationSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      PlaceholderText="To"
                      FontSize="24"
@@ -98,7 +100,8 @@
                          Text="{x:Bind TripPlanner.DateTimeTextBox, Mode=TwoWay}"/>
                 <TimePicker ClockIdentifier="24HourClock"/>
             </StackPanel>
-            <Button Grid.Column="2"
+            <Button x:Uid="/TripPlannerResources/Search"
+                    Grid.Column="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Content="Search"

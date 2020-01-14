@@ -179,8 +179,10 @@
     </Compile>
     <Compile Include="ViewModels\DepartureBoardViewModel.cs" />
     <Compile Include="ViewModels\DepartureViewModel.cs" />
+    <Compile Include="ViewModels\LanguageViewModel.cs" />
     <Compile Include="ViewModels\NotificationBase.cs" />
     <Compile Include="ViewModels\LocationListViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\StepViewModel.cs" />
     <Compile Include="ViewModels\StopLocationViewModel.cs" />
     <Compile Include="ViewModels\TrackFilterListViewModel.cs" />

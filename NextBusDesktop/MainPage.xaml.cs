@@ -33,7 +33,7 @@ namespace NextBusDesktop
         {
             InitializeComponent();
 
-            _translator = new Translator(nameof(MainPage));
+            _translator = new Translator("MainPage");
 
             try
             {
@@ -45,7 +45,7 @@ namespace NextBusDesktop
             }
 
             UtilitiyListBox.SelectedIndex = 0;
-            MainContentFrame.Navigate(typeof(HomeWindow));
+            MainContentFrame.Navigate(typeof(TripPlannerWindow));
         }
 
         private async void InitializeTripPlannerProvider()
@@ -66,8 +66,8 @@ namespace NextBusDesktop
 
         private void OnUtilityListBoxChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (HomeListItem.IsSelected)
-                MainContentFrame.Navigate(typeof(HomeWindow));
+            if (TripPlannerListItem.IsSelected)
+                MainContentFrame.Navigate(typeof(TripPlannerWindow));
 
             if (DeparturesListItem.IsSelected)
                 MainContentFrame.Navigate(typeof(DeparturesWindow));
@@ -76,15 +76,10 @@ namespace NextBusDesktop
                 MainContentFrame.Navigate(typeof(SettingsWindow), new Action(() => 
                 {
                     // Translate sidebar whenever the language setting is modified
-                    HomeText.Text = _translator["Home.Text"];
                     DeparturesText.Text = _translator["Departures.Text"];
-                    ArrivalsText.Text = _translator["Arrivals.Text"];
                     TripPlannerText.Text = _translator["TripPlanner.Text"];
                     SettingsText.Text = _translator["Settings.Text"];
                 }));
-
-            if (TripPlannerListItem.IsSelected)
-                MainContentFrame.Navigate(typeof(TripPlannerWindow));
         }
     }
 }

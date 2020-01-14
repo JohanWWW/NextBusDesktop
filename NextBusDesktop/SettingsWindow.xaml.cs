@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Resources;
 using Windows.Globalization;
+using NextBusDesktop.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,50 +29,53 @@ namespace NextBusDesktop
         private Translator _translator;
         private Action _translateMainPageSideBar;
 
+        public SettingsViewModel Settings { get; set; }
+
         public SettingsWindow()
         {
-            _translator = new Translator(nameof(SettingsWindow));
+            //_translator = new Translator(nameof(SettingsWindow));
 
-            this.InitializeComponent();
+            InitializeComponent();
 
-            LanguageComboBox.Items.Add(new ComboBoxItem
-            {
-                Content = new TextBlock
-                {
-                    Text = _translator["Auto"]
-                },
-                Tag = System.Globalization.CultureInfo.CurrentCulture.Name // Computer culture
-            });
+            //LanguageComboBox.Items.Add(new ComboBoxItem
+            //{
+            //    Content = new TextBlock
+            //    {
+            //        Text = _translator["Auto"]
+            //    },
+            //    Tag = System.Globalization.CultureInfo.CurrentCulture.Name // Computer culture
+            //});
 
-            foreach (string language in _translator.SupportedLanguages)
-            {
-                LanguageComboBox.Items.Add(new ComboBoxItem
-                {
-                    Content = new TextBlock
-                    {
-                        Text = _translator[language]
-                    },
-                    Tag = language
-                });
-            }
+            //foreach (string language in _translator.SupportedLanguages)
+            //{
+            //    LanguageComboBox.Items.Add(new ComboBoxItem
+            //    {
+            //        Content = new TextBlock
+            //        {
+            //            Text = _translator[language]
+            //        },
+            //        Tag = language
+            //    });
+            //}
 
-            LanguageComboBox.SelectionChanged += LanguageComboBoxSelectionChanged;
+            //LanguageComboBox.SelectionChanged += LanguageComboBoxSelectionChanged;
         }
 
-        private async void LanguageComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string selectedLanguage = ((ComboBoxItem)LanguageComboBox.SelectedItem).Tag as string;
-            ApplicationLanguages.PrimaryLanguageOverride = selectedLanguage;
+        //private async void LanguageComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    string selectedLanguage = ((ComboBoxItem)LanguageComboBox.SelectedItem).Tag as string;
+        //    ApplicationLanguages.PrimaryLanguageOverride = selectedLanguage;
 
-            await Task.Delay(100);
-            _translateMainPageSideBar();
+        //    await Task.Delay(100);
+        //    _translateMainPageSideBar();
 
-            Frame.Navigate(GetType(), _translateMainPageSideBar);
-        }
+        //    Frame.Navigate(GetType(), _translateMainPageSideBar);
+        //}
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _translateMainPageSideBar = e.Parameter as Action; 
+            _translateMainPageSideBar = e.Parameter as Action;
+            Settings = new SettingsViewModel(_translateMainPageSideBar);
         }
     }
 }

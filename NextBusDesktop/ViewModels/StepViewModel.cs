@@ -8,6 +8,8 @@ using NextBusDesktop.Models.TripPlanner;
 
 namespace NextBusDesktop.ViewModels
 {
+    // TODO: In trip "header" include departure time, arrival time and realistic duration
+    // TODO: Add ability to specify whether the time represents departure or arrival time
     public class StepViewModel : ViewModelBase<Step>
     {
         private Translator _translator;
@@ -91,8 +93,8 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(Model.Destination, value, () => Model.Destination = value);
         }
 
-        public string OriginInfo => $"{Origin.StopName} Läge {Origin.Track}";
-        public string DestinationInfo => $"{Destination.StopName} Läge {Destination.Track}";
+        public string OriginInfo => $"{Origin.StopName} Läge {Origin.Track}"; // TODO: Localize
+        public string DestinationInfo => $"{Destination.StopName} Läge {Destination.Track}"; // TODO: Localize
         public string StepInfo
         {
             get
@@ -104,15 +106,15 @@ namespace NextBusDesktop.ViewModels
                         message = _translator["WalkInfoMessage", Origin.StopName, Origin.Track];
                         break;
                     case VehicleType.Train:
-                        message = $"Ta tåg {JourneyNumber} mot {Direction}";
+                        message = $"Ta tåg {JourneyNumber} mot {Direction}"; // TODO: Localize this string
                         break;
                     case VehicleType.Bus:
                     case VehicleType.Boat:
                     case VehicleType.Tram:
-                        message = _translator["StepInfoMessage", Model.FullName, Model.Direction];
+                        message = _translator["StepInfoMessage", Model.FullName, Model.Direction]; // TODO: If track is is not specified, do not print "Track" or "Läge"
                         break;
                     default:
-                        message = "Unknown";
+                        message = "Unknown"; // TODO: Localize this string
                         break;
                 }
 

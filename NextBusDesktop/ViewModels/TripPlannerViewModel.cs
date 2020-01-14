@@ -50,7 +50,7 @@ namespace NextBusDesktop.ViewModels
         }
 
         private string _dateTimeTextBox;
-        public string DateTimeTextBox
+        public string DateTimeTextBox // TODO: Change to date picker
         {
             get => _dateTimeTextBox;
             set => _dateTimeTextBox = value;

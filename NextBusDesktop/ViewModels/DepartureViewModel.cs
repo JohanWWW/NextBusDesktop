@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 using NextBusDesktop.Models.DepartureBoard;
+using Windows.UI;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace NextBusDesktop.ViewModels
 {
@@ -28,7 +30,14 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _timeLeftInfo, value);
         }
 
+        //private SolidColorBrush _statusIndicatorColor;
         public string StatusIndicatorColor => IsRescheduled ? "Yellow" : null;
+        //public SolidColorBrush StatusIndicatorColor
+        //{
+        //    get => _statusIndicatorColor;
+        //    set => SetProperty(ref _statusIndicatorColor, value);
+        //}
+
         public string LineLogoBackground => Model.LineLogoBackgroundColor;
         public string LineLogoForeground => Model.LineLogoTextColor;
 
@@ -36,6 +45,7 @@ namespace NextBusDesktop.ViewModels
         {
             _translator = new Translator("DeparturesWindow");
             _timeLeftInfo = GetTimeLeftMessage();
+            //_statusIndicatorColor = IsRescheduled ? new SolidColorBrush(Color.FromArgb(255, 255, 255, 0)) : null;
         }
 
         public void TriggerTimeUpdate() => TimeLeftInfo = GetTimeLeftMessage();
@@ -67,9 +77,10 @@ namespace NextBusDesktop.ViewModels
             else
                 timeLeft = Model.ScheduledDeparture - DateTime.Now;
 
+            // TODO: Localize time unit
             string format;
             if (timeLeft.TotalMinutes < 1)
-                format = @"\n\o\w";
+                format = @"\n\o\w"; // TODO: Come up with a better solution than this
             else if (timeLeft.TotalMinutes < 60)
                 format = @"mm\ \m\i\n";
             else if (timeLeft.TotalHours < 24)

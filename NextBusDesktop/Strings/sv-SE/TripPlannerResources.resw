@@ -132,6 +132,10 @@
   <data name="Earlier" xml:space="preserve">
     <value>tidigare</value>
   </data>
+  <data name="From.PlaceholderText" xml:space="preserve">
+    <value>Från</value>
+    <comment>from text box</comment>
+  </data>
   <data name="Later" xml:space="preserve">
     <value>senare</value>
   </data>
@@ -140,6 +144,10 @@
   </data>
   <data name="Minutes" xml:space="preserve">
     <value>minuter</value>
+  </data>
+  <data name="Search.Content" xml:space="preserve">
+    <value>Sök</value>
+    <comment>search button</comment>
   </data>
   <data name="StepInfoMessage" xml:space="preserve">
     <value>Ta {0} mot {1}</value>
@@ -160,6 +168,10 @@
   <data name="TheVehicle" xml:space="preserve">
     <value>Fordonet</value>
     <comment>useful when vehicle type is unknown</comment>
+  </data>
+  <data name="To.PlaceholderText" xml:space="preserve">
+    <value>Till</value>
+    <comment>to text box</comment>
   </data>
   <data name="WalkInfoMessage" xml:space="preserve">
     <value>Gå till hållplats {0} Läge {1}</value>

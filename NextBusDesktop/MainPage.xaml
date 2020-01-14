@@ -21,15 +21,14 @@
                          PointerEntered="OnPointerEnterMainSplitViewPane"
                          PointerExited="OnPointerExitMainSplitViewPane"
                          SelectionChanged="OnUtilityListBoxChanged">
-                    <ListBoxItem x:Name="HomeListItem">
+                    <ListBoxItem x:Name="TripPlannerListItem">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="24" 
                                        FontFamily="Segoe MDL2 Assets" 
                                        Foreground="White"
-                                       Text="&#xEA8A;"></TextBlock>
-                            <TextBlock x:Name="HomeText"
-                                       x:Uid="/MainPage/Home"
-                                       Text="Home"
+                                       Text="&#xE816;"></TextBlock>
+                            <TextBlock x:Name="TripPlannerText" x:Uid="/MainPage/TripPlanner"
+                                       Text="Trip Planner" 
                                        Foreground="White"
                                        Margin="20 0 0 0"/>
                         </StackPanel>
@@ -39,35 +38,10 @@
                             <TextBlock FontSize="24" 
                                        FontFamily="Segoe MDL2 Assets" 
                                        Foreground="White"
-                                       Text="&#xF0AF;"></TextBlock>
+                                       Text="&#xF0AF;"/>
                             <TextBlock x:Name="DeparturesText"
                                        x:Uid="/MainPage/Departures"
                                        Text="Departures" 
-                                       Foreground="White"
-                                       Margin="20 0 0 0"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                    <ListBoxItem x:Name="ArrivalsListItem">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="24" 
-                                       FontFamily="Segoe MDL2 Assets" 
-                                       Foreground="White"
-                                       Text="&#xF0B0;"></TextBlock>
-                            <TextBlock x:Name="ArrivalsText"
-                                       x:Uid="/MainPage/Arrivals"
-                                       Text="Arrivals" 
-                                       Foreground="White"
-                                       Margin="20 0 0 0"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                    <ListBoxItem x:Name="TripPlannerListItem">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="24" 
-                                       FontFamily="Segoe MDL2 Assets" 
-                                       Foreground="White"
-                                       Text="&#xE816;"></TextBlock>
-                            <TextBlock x:Name="TripPlannerText" x:Uid="/MainPage/TripPlanner"
-                                       Text="Trip Planner" 
                                        Foreground="White"
                                        Margin="20 0 0 0"/>
                         </StackPanel>
