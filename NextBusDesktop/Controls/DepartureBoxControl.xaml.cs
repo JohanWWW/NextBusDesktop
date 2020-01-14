@@ -59,13 +59,15 @@ namespace NextBusDesktop.Controls
             set => StatusIndicatorStackPanel.Background = value;
         }
 
-        public static DependencyProperty TimeLeftInfoProperty = DependencyProperty.Register("TimeLeftInfo", typeof(string), typeof(DepartureBoxControl), null);
+        public static DependencyProperty StatusIndicatorColorProperty = DependencyProperty.Register(nameof(StatusIndicatorColor), typeof(Brush), typeof(DepartureBoxControl), null);
 
         public string TimeLeftInfo
         {
             get => TimeLeftTextBlock.Text;
             set => TimeLeftTextBlock.Text = value;
         }
+
+        public static DependencyProperty TimeLeftInfoProperty = DependencyProperty.Register(nameof(TimeLeftInfo), typeof(string), typeof(DepartureBoxControl), null);
 
         public string Track
         {

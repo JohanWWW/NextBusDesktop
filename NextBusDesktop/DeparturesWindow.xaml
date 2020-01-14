@@ -158,7 +158,7 @@
                                                               LineLogoForeground="{x:Bind LineLogoBackground, Mode=OneTime}"
                                                               DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
                                                               DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
-                                                              StatusIndicatorColor="{x:Bind StatusIndicatorColor, Mode=OneTime}"
+                                                              StatusIndicatorColor="{x:Bind StatusIndicatorBrush, Mode=OneWay}"
                                                               Margin="0 1 0 0"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

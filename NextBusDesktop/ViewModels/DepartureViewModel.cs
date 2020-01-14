@@ -30,13 +30,24 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _timeLeftInfo, value);
         }
 
-        //private SolidColorBrush _statusIndicatorColor;
-        public string StatusIndicatorColor => IsRescheduled ? "Yellow" : null;
-        //public SolidColorBrush StatusIndicatorColor
-        //{
-        //    get => _statusIndicatorColor;
-        //    set => SetProperty(ref _statusIndicatorColor, value);
-        //}
+        private Color _statusIndicatorColor;
+        public Color StatusIndicatorColor
+        {
+            get => _statusIndicatorColor;
+            set
+            {
+                SetProperty(ref _statusIndicatorColor, value);
+                StatusIndicatorBrush = new SolidColorBrush(value);
+            }
+        }
+
+        private SolidColorBrush _statusIndicatorBrush;
+        //public string StatusIndicatorColor => IsRescheduled ? "Yellow" : null;
+        public SolidColorBrush StatusIndicatorBrush
+        {
+            get => _statusIndicatorBrush;
+            set => SetProperty(ref _statusIndicatorBrush, value);
+        }
 
         public string LineLogoBackground => Model.LineLogoBackgroundColor;
         public string LineLogoForeground => Model.LineLogoTextColor;
