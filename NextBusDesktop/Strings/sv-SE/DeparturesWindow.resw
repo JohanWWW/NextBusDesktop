@@ -126,6 +126,9 @@
   <data name="Days" xml:space="preserve">
     <value>dagar</value>
   </data>
+  <data name="DaysAbbr" xml:space="preserve">
+    <value>d</value>
+  </data>
   <data name="DepartsIn" xml:space="preserve">
     <value>Avgår {0} om {1} {2}</value>
     <comment>Insert time, span and time unit</comment>
@@ -146,14 +149,23 @@
   <data name="Hours" xml:space="preserve">
     <value>timmar</value>
   </data>
+  <data name="HoursAbbr" xml:space="preserve">
+    <value>t</value>
+  </data>
   <data name="Line.Text" xml:space="preserve">
     <value>Linje</value>
   </data>
   <data name="Minutes" xml:space="preserve">
     <value>minuter</value>
   </data>
+  <data name="MinutesAbbr" xml:space="preserve">
+    <value>min</value>
+  </data>
   <data name="NewTime" xml:space="preserve">
     <value>Ny tid</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>nu</value>
   </data>
   <data name="Remaining.Text" xml:space="preserve">
     <value>Återstående</value>
@@ -163,6 +175,9 @@
   </data>
   <data name="Seconds" xml:space="preserve">
     <value>sekunder</value>
+  </data>
+  <data name="SecondsAbbr" xml:space="preserve">
+    <value>s</value>
   </data>
   <data name="Track.Text" xml:space="preserve">
     <value>Läge</value>

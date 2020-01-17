@@ -31,22 +31,6 @@ namespace NextBusDesktop.DataProvider
             _client = new RestClient("https://api.vasttrafik.se/bin/rest.exe/v2/");
         }
 
-        public DepartureBoard GetDepartureBoard(string stopId) => GetDepartureBoard(stopId, DateTime.Now);
-
-        public DepartureBoard GetDepartureBoard(string stopId, DateTime dateTime)
-        {
-            IRestRequest request = new RestRequest("/departureBoard");
-            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
-            request.AddParameter("id", stopId);
-            request.AddParameter("date", dateTime.ToString(_dateFormat));
-            request.AddParameter("time", dateTime.ToString(_timeFormat));
-            request.AddParameter("format", "json");
-
-            IRestResponse<DepartureBoardResponseRoot> response = _client.Execute<DepartureBoardResponseRoot>(request, Method.GET);
-
-            return new DepartureBoard(response.Data.DepartureBoard);
-        }
-
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId) => await GetDepartureBoardAsync(stopId, DateTime.Now);
 
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
@@ -65,18 +49,6 @@ namespace NextBusDesktop.DataProvider
             return new DepartureBoard(response.Data.DepartureBoard);
         }
 
-        public LocationList GetLocationList(string query)
-        {
-            IRestRequest request = new RestRequest("/location.name");
-            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
-            request.AddQueryParameter("input", query);
-            request.AddQueryParameter("format", "json");
-
-            IRestResponse<LocationListResponseRoot> response = _client.Execute<LocationListResponseRoot>(request, Method.GET);
-
-            return new LocationList(response.Data.LocationList);
-        }
-
         public async Task<LocationList> GetLocationListAsync(string query)
         {
             Log($"Request -> {nameof(GetLocationListAsync)}: Requesting location list for query '{query}'.");
@@ -92,29 +64,9 @@ namespace NextBusDesktop.DataProvider
             return new LocationList(response.Data.LocationList);
         }
 
-        public TripList GetTripList(string originStopId, string destinationStopId) => GetTripList(originStopId, destinationStopId, DateTime.Now);
-
-        public TripList GetTripList(string originStopId, string destinationStopId, DateTime dateTime)
-        {
-            Log($"Request -> {nameof(GetTripList)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}.");
-
-            IRestRequest request = new RestRequest("/trip");
-            request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
-            request.AddQueryParameter("originId", originStopId);
-            request.AddQueryParameter("destId", destinationStopId);
-            request.AddQueryParameter("date", dateTime.ToString("yyyy-MM-dd"));
-            request.AddQueryParameter("time", dateTime.ToString("HH:mm"));
-            request.AddQueryParameter("format", "json");
-
-            IRestResponse<TripListRoot> response = _client.Execute<TripListRoot>(request, Method.GET);
-            Log($"Response -> {nameof(GetTripList)} {response.StatusCode}");
-
-            return new TripList(response.Data.TripList);
-        }
-
         public async Task<TripList> GetTripListAsync(string originStopId, string destinationStopId) => await GetTripListAsync(originStopId, destinationStopId, DateTime.Now);
 
-        public async Task<TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime)
+        public async Task<TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime, bool isSearchForArrival = false)
         {
             Log($"Request -> {nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}.");
 
@@ -124,10 +76,11 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("destId", destinationStopId);
             request.AddQueryParameter("date", dateTime.ToString("yyyy-MM-dd"));
             request.AddQueryParameter("time", dateTime.ToString("HH:mm"));
+            request.AddQueryParameter("searchForArrival", (isSearchForArrival ? 1 : 0).ToString()); // Convert bool to bit
             request.AddQueryParameter("format", "json");
 
             IRestResponse<TripListRoot> response = await _client.ExecuteTaskAsync<TripListRoot>(request, Method.GET);
-            Log($"Response -> {nameof(GetTripList)} {response.StatusCode}");
+            Log($"Response -> {nameof(GetTripListAsync)} {response.StatusCode}");
 
             return new TripList(response.Data.TripList);
         }

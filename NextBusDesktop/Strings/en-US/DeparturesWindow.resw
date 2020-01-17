@@ -126,6 +126,9 @@
   <data name="Days" xml:space="preserve">
     <value>days</value>
   </data>
+  <data name="DaysAbbr" xml:space="preserve">
+    <value>d</value>
+  </data>
   <data name="DepartsIn" xml:space="preserve">
     <value>Departs {0} in {1} {2}</value>
     <comment>Insert time, span and time unit</comment>
@@ -146,14 +149,23 @@
   <data name="Hours" xml:space="preserve">
     <value>hours</value>
   </data>
+  <data name="HoursAbbr" xml:space="preserve">
+    <value>h</value>
+  </data>
   <data name="Line.Text" xml:space="preserve">
     <value>Line</value>
   </data>
   <data name="Minutes" xml:space="preserve">
     <value>minutes</value>
   </data>
+  <data name="MinutesAbbr" xml:space="preserve">
+    <value>min</value>
+  </data>
   <data name="NewTime" xml:space="preserve">
     <value>New time</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>now</value>
   </data>
   <data name="Remaining.Text" xml:space="preserve">
     <value>Remaining</value>
@@ -163,6 +175,9 @@
   </data>
   <data name="Seconds" xml:space="preserve">
     <value>seconds</value>
+  </data>
+  <data name="SecondsAbbr" xml:space="preserve">
+    <value>s</value>
   </data>
   <data name="Track.Text" xml:space="preserve">
     <value>Track</value>

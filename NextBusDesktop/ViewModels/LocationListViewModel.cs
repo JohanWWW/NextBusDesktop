@@ -9,6 +9,7 @@ using NextBusDesktop.DataProvider;
 
 namespace NextBusDesktop.ViewModels
 {
+    [Obsolete]
     public class LocationListViewModel : ViewModelBase
     {
         private bool _errorOnGetLocationList;

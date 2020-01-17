@@ -34,29 +34,19 @@ namespace NextBusDesktop.ViewModels
         public Color StatusIndicatorColor
         {
             get => _statusIndicatorColor;
-            set
-            {
-                SetProperty(ref _statusIndicatorColor, value);
-                StatusIndicatorBrush = new SolidColorBrush(value);
-            }
+            set => SetProperty(ref _statusIndicatorColor, value);
         }
 
-        private SolidColorBrush _statusIndicatorBrush;
-        //public string StatusIndicatorColor => IsRescheduled ? "Yellow" : null;
-        public SolidColorBrush StatusIndicatorBrush
-        {
-            get => _statusIndicatorBrush;
-            set => SetProperty(ref _statusIndicatorBrush, value);
-        }
+        public Color LineLogoBackground { get; private set; }
 
-        public string LineLogoBackground => Model.LineLogoBackgroundColor;
-        public string LineLogoForeground => Model.LineLogoTextColor;
+        public Color LineLogoForeground { get; private set; }
 
         public DepartureViewModel(Departure departure) : base(departure)
         {
             _translator = new Translator("DeparturesWindow");
+            LineLogoBackground = HexToRgb.HexToColor(Model.LineLogoBackgroundColor);
+            LineLogoForeground = HexToRgb.HexToColor(Model.LineLogoTextColor);
             _timeLeftInfo = GetTimeLeftMessage();
-            //_statusIndicatorColor = IsRescheduled ? new SolidColorBrush(Color.FromArgb(255, 255, 255, 0)) : null;
         }
 
         public void TriggerTimeUpdate() => TimeLeftInfo = GetTimeLeftMessage();
@@ -88,22 +78,15 @@ namespace NextBusDesktop.ViewModels
             else
                 timeLeft = Model.ScheduledDeparture - DateTime.Now;
 
-            // TODO: Localize time unit
-            string format;
+            // Localize time units
             if (timeLeft.TotalMinutes < 1)
-                format = @"\n\o\w"; // TODO: Come up with a better solution than this
+                return _translator["Now"];
             else if (timeLeft.TotalMinutes < 60)
-                format = @"mm\ \m\i\n";
+                return string.Format("{0} {1}", timeLeft.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
             else if (timeLeft.TotalHours < 24)
-                format = @"hh\h\ mm\m\i\n";
+                return string.Format("{0}{1} {2}{3}", timeLeft.ToString("hh"), _translator["HoursAbbr"], timeLeft.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
             else
-                format = @"dd\ \d";
-
-            // Debug
-            //format = "hh\\:mm\\:ss";
-
-            return timeLeft.ToString(format).TrimStart('0');
-            //return timeLeft.ToString(format);
+                return string.Format("{0} {1}", timeLeft.ToString("dd"), _translator["DaysAbbr"]).TrimStart('0');
         }
     }
 }

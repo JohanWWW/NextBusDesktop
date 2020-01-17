@@ -7,7 +7,6 @@ using RestSharp.Deserializers;
 
 namespace NextBusDesktop.ResponseModels
 {
-    // TODO: Model
     public class AccessTokenResponse
     {
         [DeserializeAs(Name = "scope")] public string Scope { get; set; }

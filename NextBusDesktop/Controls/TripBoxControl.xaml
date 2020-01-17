@@ -4,40 +4,52 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:NextBusDesktop.Controls"
     xmlns:viewModels="using:NextBusDesktop.ViewModels"
-    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters="using:NextBusDesktop.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <converters:BoolToVisibility x:Key="BoolToVisibility"/>
+        <converters:ColorToSolidColorBrush x:Key="ColorToSolidColorBrush"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal"
+        <StackPanel Orientation="Vertical"
                     CornerRadius="5"
                     Padding="4 1 4 4">
             <StackPanel.Background>
                 <SolidColorBrush Color="{ThemeResource SystemAltLowColor}"/>
             </StackPanel.Background>
 
-            <TextBlock x:Name="HeaderDepartureTextBlock" 
-                       Text="{x:Bind Trip.Origin.StopName}"
-                       Foreground="White"
-                       FontSize="18"
-                       FontWeight="Bold"/>
-            <TextBlock Text="&#xF0AF;"
-                       Foreground="White"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       FontFamily="Segoe MDL2 Assets"
-                       Margin="5 5 5 0"/>
-            <TextBlock x:Name="HeaderArrivalTextBlock"
-                       Text="{x:Bind Trip.Destination.StopName}"
-                       Foreground="White"
-                       FontSize="18"
-                       FontWeight="Bold"/>
-            <TextBlock Text="{x:Bind Trip.TimeLeftInfo, Mode=OneWay}"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Bind Trip.DepartureTimeInfo}"
+                           Foreground="White"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0 0 5 0"/>
+                <TextBlock x:Name="HeaderDepartureTextBlock" 
+                           Text="{x:Bind Trip.Origin.StopName}"
+                           Foreground="White"
+                           FontSize="18"
+                           FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Bind Trip.ArrivalTimeInfo}"
+                           Foreground="White"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0 0 5 0"/>
+                <TextBlock x:Name="HeaderArrivalTextBlock"
+                           Text="{x:Bind Trip.Destination.StopName}"
+                           Foreground="White"
+                           FontSize="18"
+                           FontWeight="Bold"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Vertical"
                     Padding="10"
@@ -67,9 +79,9 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
-                                        <local:LineLogoControl LineNumberBackground="{x:Bind LineForegroundColor}"
+                                        <local:LineLogoControl LineNumberBackground="{x:Bind LineForegroundColor, Converter={StaticResource ColorToSolidColorBrush}}"
                                                                LineNumberText="{x:Bind LineNumberInfo}"
-                                                               LineNumberForeground="{x:Bind LineBackgroundColor}"
+                                                               LineNumberForeground="{x:Bind LineBackgroundColor, Converter={StaticResource ColorToSolidColorBrush}}"
                                                                Grid.Column="0"
                                                                Grid.Row="0"/>
                                         <StackPanel Orientation="Vertical"
@@ -85,7 +97,7 @@
                                                         Foreground="White"
                                                         FontSize="18"
                                                         TextWrapping="Wrap"
-                                                        Visibility="{x:Bind ExtraInfoVisibility}"/>
+                                                        Visibility="{x:Bind HasExtraInfo, Converter={StaticResource BoolToVisibility}}"/>
                                         </StackPanel>
                                     </Grid>
                                 </StackPanel>
@@ -94,7 +106,7 @@
                                            FontSize="18"/>
                                 <!--IF last step => Visibility = Visible-->
                                 <TextBlock Text="{x:Bind DestinationInfo}"
-                                           Visibility="{x:Bind Visibility}"
+                                           Visibility="{x:Bind IsLastStep, Converter={StaticResource BoolToVisibility}}"
                                            Foreground="White"
                                            FontWeight="Bold"
                                            FontSize="18"/>

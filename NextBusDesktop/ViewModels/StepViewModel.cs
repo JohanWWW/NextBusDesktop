@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.Models;
 using NextBusDesktop.Models.TripPlanner;
+using Windows.UI;
 
 namespace NextBusDesktop.ViewModels
 {
-    // TODO: In trip "header" include departure time, arrival time and realistic duration
-    // TODO: Add ability to specify whether the time represents departure or arrival time
     public class StepViewModel : ViewModelBase<Step>
     {
         private Translator _translator;
@@ -27,6 +26,8 @@ namespace NextBusDesktop.ViewModels
         private bool ArrivalIsRescheduled => Destination.RealisticArrivalDateTime != null && Destination.RealisticArrivalDateTime != Destination.ArrivalDateTime;
 
         public bool IsLastStep { get; set; }
+        public bool HasExtraInfo => DepartureIsRescheduled || ArrivalIsRescheduled;
+
         public string FullName
         {
             get => Model.FullName;
@@ -93,8 +94,8 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(Model.Destination, value, () => Model.Destination = value);
         }
 
-        public string OriginInfo => $"{Origin.StopName} Läge {Origin.Track}"; // TODO: Localize
-        public string DestinationInfo => $"{Destination.StopName} Läge {Destination.Track}"; // TODO: Localize
+        public string OriginInfo => !string.IsNullOrEmpty(Origin.Track) ? string.Format("{0} {1} {2}", Origin.StopName, _translator["Track"], Origin.Track) : Origin.StopName;
+        public string DestinationInfo => !string.IsNullOrEmpty(Destination.Track) ? string.Format("{0} {1} {2}", Destination.StopName, _translator["Track"], Destination.Track) : Destination.StopName;
         public string StepInfo
         {
             get
@@ -103,18 +104,20 @@ namespace NextBusDesktop.ViewModels
                 switch (VehicleType)
                 {
                     case VehicleType.Walk:
-                        message = _translator["WalkInfoMessage", Origin.StopName, Origin.Track];
+                        message = !string.IsNullOrEmpty(Destination.Track) ? 
+                            string.Format("{0} {1} {2}", _translator["WalkInfoMessage", Destination.StopName], _translator["Track"], Destination.Track) : 
+                            _translator["WalkInfoMessage", Destination.StopName];
                         break;
                     case VehicleType.Train:
-                        message = $"Ta tåg {JourneyNumber} mot {Direction}"; // TODO: Localize this string
+                        message = _translator["TrainInfoMessage", JourneyNumber, Direction];
                         break;
                     case VehicleType.Bus:
                     case VehicleType.Boat:
                     case VehicleType.Tram:
-                        message = _translator["StepInfoMessage", Model.FullName, Model.Direction]; // TODO: If track is is not specified, do not print "Track" or "Läge"
+                        message = _translator["StepInfoMessage", Model.FullName, Model.Direction];
                         break;
                     default:
-                        message = "Unknown"; // TODO: Localize this string
+                        message = _translator["Unknown"];
                         break;
                 }
 
@@ -185,7 +188,6 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
-        private string _departureTimeInfo;
         public string DepartureTimeInfo
         {
             get
@@ -221,15 +223,17 @@ namespace NextBusDesktop.ViewModels
         }
 
         public string LineNumberInfo => VehicleType == VehicleType.Walk ? "GÅ" : ShortName;
-        public string LineForegroundColor => VehicleType == VehicleType.Walk ? "White" : LineLogoForeground;
-        public string LineBackgroundColor => VehicleType == VehicleType.Walk ? "Gray" : LineLogoBackground;
+        //public string LineForegroundColor => VehicleType == VehicleType.Walk ? "White" : LineLogoForeground;
+        //public string LineBackgroundColor => VehicleType == VehicleType.Walk ? "Gray" : LineLogoBackground;
 
-        public string Visibility => IsLastStep ? "Visible" : "Collapsed";
-        public string ExtraInfoVisibility => DepartureIsRescheduled || ArrivalIsRescheduled ? "Visible" : "Collapsed";
+        public Color LineForegroundColor { get; private set; }
+        public Color LineBackgroundColor { get; private set; }
 
         public StepViewModel(Step step = null) : base(step)
         {
             _translator = new Translator("TripPlannerResources");
+            LineForegroundColor = VehicleType == VehicleType.Walk ? Color.FromArgb(255, 255, 255, 255) : HexToRgb.HexToColor(Model.LineLogoForeground);
+            LineBackgroundColor = VehicleType == VehicleType.Walk ? HexToRgb.HexToColor("#b3b3b3") : HexToRgb.HexToColor(Model.LineLogoBackground);
         }
     }
 }

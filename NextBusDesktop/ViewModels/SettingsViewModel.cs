@@ -55,7 +55,7 @@ namespace NextBusDesktop.ViewModels
             _selectedLanguageIndex = -1;
             _translator = new Translator("SettingsWindow");
             _languageLabel = _translator["Language.Text"];
-            _languages = new ObservableCollection<LanguageViewModel>(_translator.SupportedLanguages.Select(lang => new LanguageViewModel(_translator[lang], lang)));
+            _languages = new ObservableCollection<LanguageViewModel>(Translator.SupportedLanguages.Select(lang => new LanguageViewModel(_translator[lang], lang)));
         }
 
         public SettingsViewModel(Action externalUpdate) : this() => _externalUpdate = externalUpdate;
@@ -63,7 +63,7 @@ namespace NextBusDesktop.ViewModels
         public async void UpdateLanguage()
         {
             string code = SelectedLanguage.LanguageCode;
-            _translator.SetLanguage(code);
+            Translator.SetLanguage(code);
 
             await Task.Delay(10);
 
@@ -74,7 +74,7 @@ namespace NextBusDesktop.ViewModels
 
             _externalUpdate?.Invoke();
 
-            System.Diagnostics.Debug.WriteLine($"Updated language to: {_translator.CurrentLanguage}");
+            System.Diagnostics.Debug.WriteLine($"Updated language to: {Translator.CurrentLanguage}");
         }
     }
 }

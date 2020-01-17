@@ -49,24 +49,29 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _errorOccurred, value, nameof(ErrorOccurred));
         }
 
-        private string _dateTimeTextBox;
-        public string DateTimeTextBox // TODO: Change to date picker
+        private DateTime _givenDate;
+        public DateTime GivenDate
         {
-            get => _dateTimeTextBox;
-            set => _dateTimeTextBox = value;
+            get => _givenDate;
+            set => SetProperty(ref _givenDate, value);
         }
 
-        private DateTime _dateTime
+        private TimeSpan _givenTime;
+        public TimeSpan GivenTime
         {
-            get
-            {
-                if (DateTime.TryParse(_dateTimeTextBox, out DateTime parsed))
-                    return parsed;
-                else
-                    return DateTime.Now;
-            }
+            get => _givenTime;
+            set => SetProperty(ref _givenTime, value);
+        }
 
-            set => _dateTimeTextBox = value.ToString("yyyy-MM-dd");
+        private bool _isGivenDateTimeForArrivals;
+        /// <summary>
+        /// Given date and time represents arrival time.
+        /// If false it represents departure time.
+        /// </summary>
+        public bool IsGivenDateTimeForArrivals
+        {
+            get => _isGivenDateTimeForArrivals;
+            set => SetProperty(ref _isGivenDateTimeForArrivals, value);
         }
 
         private string _originSearchQuery;
@@ -165,7 +170,10 @@ namespace NextBusDesktop.ViewModels
         public TripPlannerViewModel()
         {
             _errorOccurred = false;
-            _dateTime = DateTime.Now;
+            var dateTime = DateTime.Now;
+            _givenDate = dateTime.Date;
+            _givenTime = dateTime.TimeOfDay;
+            _isGivenDateTimeForArrivals = false;
             _originStopLocations = new ObservableCollection<StopLocationViewModel>();
             _destinationStopLocations = new ObservableCollection<StopLocationViewModel>();
             _selectedOriginIndex = -1;
@@ -217,7 +225,9 @@ namespace NextBusDesktop.ViewModels
             TripList tripList = null;
             try
             {
-                tripList = await TripPlannerProviderContainer.TripPlannerProvider.GetTripListAsync(_selectedOrigin.Id, _selectedDestination.Id, _dateTime);
+                DateTime dateTime = _givenDate.AddHours(_givenTime.Hours).AddMinutes(_givenTime.Minutes);
+                System.Diagnostics.Debug.WriteLine(dateTime);
+                tripList = await TripPlannerProviderContainer.TripPlannerProvider.GetTripListAsync(_selectedOrigin.Id, _selectedDestination.Id, dateTime, _isGivenDateTimeForArrivals);
             }
             catch (Exception e)
             {

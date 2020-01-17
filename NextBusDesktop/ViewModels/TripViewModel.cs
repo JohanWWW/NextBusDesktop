@@ -11,6 +11,8 @@ namespace NextBusDesktop.ViewModels
 {
     public class TripViewModel : ViewModelBase
     {
+        private readonly Translator _translator;
+
         public TripViewModel This => this;
 
         private ObservableCollection<StepViewModel> _steps;
@@ -40,8 +42,12 @@ namespace NextBusDesktop.ViewModels
             private set => SetProperty(ref _timeLeftInfo, value);
         }
 
+        public string DepartureTimeInfo => (RealisticDeparture ?? ScheduledDeparture).ToString("HH:mm");
+        public string ArrivalTimeInfo => (RealisticArrival ?? ScheduledArrival).ToString("HH:mm");
+
         public TripViewModel(Trip trip)
         {
+            _translator = new Translator("TripPlannerResources");
             _steps = new ObservableCollection<StepViewModel>();
             foreach (var step in trip.Steps)
             {
@@ -54,21 +60,17 @@ namespace NextBusDesktop.ViewModels
         {
             TimeSpan timeLeft = (RealisticDeparture ?? ScheduledDeparture) - DateTime.Now;
 
-            string format;
             if (timeLeft.TotalMinutes < 1)
-                format = @"\n\o\w";
+                return _translator["Now"];
+
             else if (timeLeft.TotalMinutes < 60)
-                format = @"mm\ \m\i\n";
+                return string.Format("{0} {1}", timeLeft.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
+
             else if (timeLeft.TotalHours < 24)
-                format = @"hh\h\ mm\m\i\n";
+                return string.Format("{0}{1} {2}{3}", timeLeft.ToString("hh"), _translator["HoursAbbr"], timeLeft.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
+
             else
-                format = @"dd\ \d";
-
-            // Debug
-            //format = "hh\\:mm\\:ss";
-
-            return timeLeft.ToString(format).TrimStart('0');
-            //return timeLeft.ToString(format);
+                return string.Format("{0} {1}", timeLeft.ToString("dd"), _translator["DaysAbbr"]).TrimStart('0');
         }
 
 

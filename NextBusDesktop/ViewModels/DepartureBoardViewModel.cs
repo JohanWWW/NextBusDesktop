@@ -111,14 +111,6 @@ namespace NextBusDesktop.ViewModels
             DateTime now = DateTime.Now;
             DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
             _trackFilter = new TrackFilterListViewModel();
-
-            PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName is nameof(ErrorOccurred))
-                {
-                    System.Diagnostics.Debug.WriteLine($"Error occurred: {ErrorOccurred}");
-                }
-            };
         }
 
         protected override void Deconstruct()

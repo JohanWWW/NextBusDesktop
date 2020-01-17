@@ -121,6 +121,9 @@
     <value>{0} ankommer till {1} {2} {3} {4} än vanligt</value>
     <comment>vehicle, location, timespan, timeunit, earlier/later</comment>
   </data>
+  <data name="DaysAbbr" xml:space="preserve">
+    <value>d</value>
+  </data>
   <data name="DepartureArrivalInfoMessage" xml:space="preserve">
     <value>{0} avgår från {1} {2} {3} {4} och ankommer till {5} {6} {7} {8} än vanligt</value>
     <comment>vehicle, location, timespan, timeunit, earlier/later, location, timespan, timeunit, earlier/later</comment>
@@ -136,6 +139,9 @@
     <value>Från</value>
     <comment>from text box</comment>
   </data>
+  <data name="HoursAbbr" xml:space="preserve">
+    <value>t</value>
+  </data>
   <data name="Later" xml:space="preserve">
     <value>senare</value>
   </data>
@@ -145,9 +151,18 @@
   <data name="Minutes" xml:space="preserve">
     <value>minuter</value>
   </data>
+  <data name="MinutesAbbr" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>nu</value>
+  </data>
   <data name="Search.Content" xml:space="preserve">
     <value>Sök</value>
     <comment>search button</comment>
+  </data>
+  <data name="SecondsAbbr" xml:space="preserve">
+    <value>s</value>
   </data>
   <data name="StepInfoMessage" xml:space="preserve">
     <value>Ta {0} mot {1}</value>
@@ -173,8 +188,18 @@
     <value>Till</value>
     <comment>to text box</comment>
   </data>
+  <data name="Track" xml:space="preserve">
+    <value>Läge</value>
+  </data>
+  <data name="TrainInfoMessage" xml:space="preserve">
+    <value>Ta tåg {0} mot {1}</value>
+    <comment>journey number, direction</comment>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Okänt</value>
+  </data>
   <data name="WalkInfoMessage" xml:space="preserve">
-    <value>Gå till hållplats {0} Läge {1}</value>
-    <comment>stop name, track</comment>
+    <value>Gå till hållplats {0}</value>
+    <comment>stop name</comment>
   </data>
 </root>

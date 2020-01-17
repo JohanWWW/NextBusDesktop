@@ -12,8 +12,8 @@ namespace NextBusDesktop
     {
         private ResourceLoader _loader;
 
-        public string[] SupportedLanguages => ApplicationLanguages.ManifestLanguages.ToArray();
-        public string CurrentLanguage => ApplicationLanguages.PrimaryLanguageOverride;
+        public static string[] SupportedLanguages => ApplicationLanguages.ManifestLanguages.ToArray();
+        public static string CurrentLanguage => ApplicationLanguages.PrimaryLanguageOverride;
 
         public Translator(string name) => _loader = ResourceLoader.GetForCurrentView(name);
 
@@ -35,6 +35,6 @@ namespace NextBusDesktop
             }
         }
 
-        public void SetLanguage(string language) => ApplicationLanguages.PrimaryLanguageOverride = language;
+        public static void SetLanguage(string language) => ApplicationLanguages.PrimaryLanguageOverride = language;
     }
 }

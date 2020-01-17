@@ -121,6 +121,9 @@
     <value>{0} arrives at {1} {2} {3} {4} than usual</value>
     <comment>vehicle, location, timespan, timeunit, earlier/later</comment>
   </data>
+  <data name="DaysAbbr" xml:space="preserve">
+    <value>d</value>
+  </data>
   <data name="DepartureArrivalInfoMessage" xml:space="preserve">
     <value>{0} departs from {1} {2} {3} {4} and arrives at {5} {6} {7} {8} than usual</value>
     <comment>vehicle, location, timespan, timeunit, earlier/later, location, timespan, timeunit, earlier/later</comment>
@@ -136,6 +139,9 @@
     <value>From</value>
     <comment>from text box</comment>
   </data>
+  <data name="HoursAbbr" xml:space="preserve">
+    <value>h</value>
+  </data>
   <data name="Later" xml:space="preserve">
     <value>later</value>
   </data>
@@ -145,9 +151,18 @@
   <data name="Minutes" xml:space="preserve">
     <value>minutes</value>
   </data>
+  <data name="MinutesAbbr" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>Now</value>
+  </data>
   <data name="Search.Content" xml:space="preserve">
     <value>Search</value>
     <comment>search button</comment>
+  </data>
+  <data name="SecondsAbbr" xml:space="preserve">
+    <value>s</value>
   </data>
   <data name="StepInfoMessage" xml:space="preserve">
     <value>Take {0} in direction of {1}</value>
@@ -173,8 +188,18 @@
     <value>To</value>
     <comment>to text box</comment>
   </data>
+  <data name="Track" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="TrainInfoMessage" xml:space="preserve">
+    <value>Take train {0} in direction of {1}</value>
+    <comment>journey number, direction</comment>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
   <data name="WalkInfoMessage" xml:space="preserve">
-    <value>Walk to {0} Track {1}</value>
-    <comment>stop name, track</comment>
+    <value>Walk to {0}</value>
+    <comment>stop name</comment>
   </data>
 </root>

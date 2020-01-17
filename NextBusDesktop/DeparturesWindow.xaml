@@ -5,11 +5,17 @@
     xmlns:local="using:NextBusDesktop"
     xmlns:controls="using:NextBusDesktop.Controls"
     xmlns:viewModels="using:NextBusDesktop.ViewModels"
+    xmlns:converters="using:NextBusDesktop.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Unloaded="{x:Bind DepartureBoard.OnViewLeave}">
+
+    <Page.Resources>
+        <converters:ColorToSolidColorBrush x:Key="ColorToSolidColorBrush"/>
+    </Page.Resources>
+    
     <Grid Background="#222222">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
@@ -154,11 +160,11 @@
                                 <controls:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
                                                               TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                               Track="{x:Bind Track, Mode=OneTime}"
-                                                              LineLogoBackground="{x:Bind LineLogoForeground, Mode=OneTime}"
-                                                              LineLogoForeground="{x:Bind LineLogoBackground, Mode=OneTime}"
+                                                              LineLogoBackground="{x:Bind LineLogoForeground, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneTime}"
+                                                              LineLogoForeground="{x:Bind LineLogoBackground, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneTime}"
                                                               DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
                                                               DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
-                                                              StatusIndicatorColor="{x:Bind StatusIndicatorBrush, Mode=OneWay}"
+                                                              StatusIndicatorColor="{x:Bind StatusIndicatorColor, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneWay}"
                                                               Margin="0 1 0 0"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
