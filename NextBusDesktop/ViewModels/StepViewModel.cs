@@ -222,10 +222,7 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
-        public string LineNumberInfo => VehicleType == VehicleType.Walk ? "GÅ" : ShortName;
-        //public string LineForegroundColor => VehicleType == VehicleType.Walk ? "White" : LineLogoForeground;
-        //public string LineBackgroundColor => VehicleType == VehicleType.Walk ? "Gray" : LineLogoBackground;
-
+        public string LineNumberInfo => VehicleType == VehicleType.Walk ? "GÅ" : ShortName; // TODO: Localize
         public Color LineForegroundColor { get; private set; }
         public Color LineBackgroundColor { get; private set; }
 

@@ -16,5 +16,8 @@ namespace NextBusDesktop.DataProvider
         Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime);
         Task<TripList> GetTripListAsync(string originStopId, string destinationStopId);
         Task<TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime, bool isSearchForArrival = false);
+
+        void SetToken(AccessToken newToken);
+        bool IsAccessTokenExpired();
     }
 }

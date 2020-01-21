@@ -125,7 +125,8 @@ namespace NextBusDesktop.ViewModels
 
             try
             {
-                locations = await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(_searchQuery);
+                //locations = await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(_searchQuery);
+                locations = await TripPlannerProviderContainer.GetLocationList(_searchQuery);
                 ErrorOccurred = false;
             }
             catch (Exception e)
@@ -159,7 +160,8 @@ namespace NextBusDesktop.ViewModels
 
             try
             {
-                departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
+                //departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
+                departureBoard = await TripPlannerProviderContainer.GetDepartureBoard(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
                 ErrorOccurred = false;
             }
             catch (Exception e)
@@ -243,7 +245,8 @@ namespace NextBusDesktop.ViewModels
             DepartureBoard departureBoard;
             try
             {
-                departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, now);
+                //departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, now);
+                departureBoard = await TripPlannerProviderContainer.GetDepartureBoard(_selectedStopLocation.Id, now);
                 ErrorOccurred = false;
             }
             catch (Exception e)

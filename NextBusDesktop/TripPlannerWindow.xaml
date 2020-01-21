@@ -98,7 +98,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-                <DatePicker Date="{x:Bind TripPlanner.GivenDate, Converter={StaticResource DateTimeToDateTimeOffset}, Mode=TwoWay}"/>
+                <DatePicker Style="{StaticResource CustomDatePicker}" 
+                            Date="{x:Bind TripPlanner.GivenDate, Converter={StaticResource DateTimeToDateTimeOffset}, Mode=TwoWay}"/>
                 <TimePicker Time="{x:Bind TripPlanner.GivenTime, Mode=TwoWay}"
                             ClockIdentifier="24HourClock"/>
                 <ToggleSwitch Style="{StaticResource CustomToggleSwitchStyle}"

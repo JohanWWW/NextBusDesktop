@@ -10,6 +10,7 @@ using NextBusDesktop.Models;
 using RestSharp;
 using NextBusDesktop.Models.TripPlanner;
 using NextBusDesktop.Models.DepartureBoard;
+using System.ComponentModel;
 
 namespace NextBusDesktop.DataProvider
 {
@@ -25,11 +26,9 @@ namespace NextBusDesktop.DataProvider
         private AccessToken _accessToken;
 
         /// <param name="accessToken">Access token that is provided by <see cref="AccessTokenProvider"/></param>
-        public TripPlannerProvider(AccessToken accessToken)
-        {
-            _accessToken = accessToken;
-            _client = new RestClient("https://api.vasttrafik.se/bin/rest.exe/v2/");
-        }
+        public TripPlannerProvider(AccessToken accessToken) : this() => _accessToken = accessToken;
+
+        public TripPlannerProvider() => _client = new RestClient("https://api.vasttrafik.se/bin/rest.exe/v2/");
 
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId) => await GetDepartureBoardAsync(stopId, DateTime.Now);
 
@@ -84,6 +83,10 @@ namespace NextBusDesktop.DataProvider
 
             return new TripList(response.Data.TripList);
         }
+
+        public void SetToken(AccessToken token) => _accessToken = token;
+
+        public bool IsAccessTokenExpired() => _accessToken.ExpiresDateTime < DateTime.Now ? true : false;
 
         private void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProvider)}: {message}");
     }

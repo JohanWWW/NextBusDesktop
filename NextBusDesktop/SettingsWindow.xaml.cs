@@ -26,7 +26,7 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class SettingsWindow : Page
     {
-        private Translator _translator;
+        //private Translator _translator;
         private Action _translateMainPageSideBar;
 
         public SettingsViewModel Settings { get; set; }

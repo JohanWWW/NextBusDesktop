@@ -227,7 +227,7 @@ namespace NextBusDesktop.ViewModels
             {
                 DateTime dateTime = _givenDate.AddHours(_givenTime.Hours).AddMinutes(_givenTime.Minutes);
                 System.Diagnostics.Debug.WriteLine(dateTime);
-                tripList = await TripPlannerProviderContainer.TripPlannerProvider.GetTripListAsync(_selectedOrigin.Id, _selectedDestination.Id, dateTime, _isGivenDateTimeForArrivals);
+                tripList = await TripPlannerProviderContainer.GetTripList(_selectedOrigin.Id, _selectedDestination.Id, dateTime, _isGivenDateTimeForArrivals);
             }
             catch (Exception e)
             {
@@ -253,7 +253,7 @@ namespace NextBusDesktop.ViewModels
         }
 
         private async Task<LocationList> GetLocationList(string query) =>
-            await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(query);
+            await TripPlannerProviderContainer.GetLocationList(query);
 
         private void PopulateTripList(Func<TripViewModel, bool> selector)
         {

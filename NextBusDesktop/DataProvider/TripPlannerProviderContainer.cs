@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.ResponseModels;
 using NextBusDesktop.Models;
+using NextBusDesktop.Models.DepartureBoard;
+using NextBusDesktop.Models.TripPlanner;
 using System.Xml;
 using Windows.Storage;
 
@@ -13,31 +15,32 @@ namespace NextBusDesktop.DataProvider
 {
     public static class TripPlannerProviderContainer
     {
-        private static ITripPlannerProvider _tripPlannerProvider;
-        public static ITripPlannerProvider TripPlannerProvider
-        {
-            get => _tripPlannerProvider;
-            private set => _tripPlannerProvider = value;
-        }
+        private static ITripPlannerProvider _tripPlannerProvider { get; set; }
+        private static IAccessTokenProvider _accessTokenProvider;
+        private static IStorageFolder _accessTokenFolder;
+        private static IStorageFile _accessTokenFile;
+
+
+        private static bool IsAccessTokenExpired => _tripPlannerProvider.IsAccessTokenExpired();
 
         public static async Task Initialize()
         {
             Log("Initializing TripPlannerProvider");
-            IAccessTokenProvider accessTokenProvider = new AccessTokenProvider();
-            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            StorageFile accessTokenFile;
+            _accessTokenProvider = new AccessTokenProvider();
+            _accessTokenFolder = ApplicationData.Current.LocalFolder;
+            
             bool fileIsEmpty;
 
-            if (!File.Exists(storageFolder.Path + "\\CurrentAccessToken.txt"))
+            if (!File.Exists(_accessTokenFolder.Path + "\\CurrentAccessToken.txt"))
             {
                 fileIsEmpty = true;
-                accessTokenFile = await storageFolder.CreateFileAsync("CurrentAccessToken.txt", CreationCollisionOption.FailIfExists);
+                _accessTokenFile = await _accessTokenFolder.CreateFileAsync("CurrentAccessToken.txt", CreationCollisionOption.FailIfExists);
                 Log("Write -> Created new access token file.");
             }
             else
             {
                 fileIsEmpty = false;
-                accessTokenFile = await storageFolder.GetFileAsync("CurrentAccessToken.txt");
+                _accessTokenFile = await _accessTokenFolder.GetFileAsync("CurrentAccessToken.txt");
                 Log("Read -> Load access token from file.");
             }
 
@@ -45,9 +48,9 @@ namespace NextBusDesktop.DataProvider
 
             Func<Task<AccessToken>> createNewToken = async () =>
             {
-                AccessToken newAccessToken = await accessTokenProvider.GetAccessTokenAsync();
+                AccessToken newAccessToken = await _accessTokenProvider.GetAccessTokenAsync();
                 string serialized = Serialize(newAccessToken);
-                await FileIO.WriteTextAsync(accessTokenFile, serialized);
+                await FileIO.WriteTextAsync(_accessTokenFile, serialized);
                 Log("Write -> Save access token to file.");
                 return newAccessToken;
             };
@@ -59,7 +62,7 @@ namespace NextBusDesktop.DataProvider
             }
             else
             {
-                var data = await FileIO.ReadLinesAsync(accessTokenFile);
+                var data = await FileIO.ReadLinesAsync(_accessTokenFile);
                 string[] serializedRetrieved = data.ToArray();
                 AccessToken retrievedAccessToken = Deserialize(serializedRetrieved);
                 if (retrievedAccessToken.ExpiresDateTime < DateTime.Now)
@@ -71,6 +74,45 @@ namespace NextBusDesktop.DataProvider
             _tripPlannerProvider = new TripPlannerProvider(token);
 
             Log("Initializing complete.");
+        }
+
+        public static async Task<LocationList> GetLocationList(string query)
+        {
+            if (IsAccessTokenExpired)
+                await RenewToken();
+
+            return await _tripPlannerProvider.GetLocationListAsync(query);
+        }
+
+        public static async Task<DepartureBoard> GetDepartureBoard(string stopId) => await GetDepartureBoard(stopId, DateTime.Now);
+
+        public static async Task<DepartureBoard> GetDepartureBoard(string stopId, DateTime dateTime)
+        {
+            if (IsAccessTokenExpired)
+                await RenewToken();
+
+            return await _tripPlannerProvider.GetDepartureBoardAsync(stopId, dateTime);
+        }
+
+        public static async Task<TripList> GetTripList(string originStopId, string destinationStopId) => await GetTripList(originStopId, destinationStopId, DateTime.Now);
+
+        public static async Task<TripList> GetTripList(string originStopId, string destinationStopId, DateTime dateTime, bool isSearchForArrival = false)
+        {
+            if (IsAccessTokenExpired)
+                await RenewToken();
+
+            return await _tripPlannerProvider.GetTripListAsync(originStopId, destinationStopId, dateTime, isSearchForArrival);
+        }
+
+        private static async Task RenewToken()
+        {
+            Log($"{nameof(TripPlannerProviderContainer)}: Access token has expired. Requesting new access token.");
+            AccessToken token = await _accessTokenProvider.GetAccessTokenAsync();
+            _tripPlannerProvider.SetToken(token);
+
+            Log("Write -> Save access token to file.");
+            string serialized = Serialize(token);
+            await FileIO.WriteTextAsync(_accessTokenFile, serialized);
         }
 
         private static string Serialize(AccessToken accessToken)
