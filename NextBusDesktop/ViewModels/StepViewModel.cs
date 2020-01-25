@@ -13,7 +13,7 @@ namespace NextBusDesktop.ViewModels
     {
         private Translator _translator;
 
-        private readonly Dictionary<VehicleType, string> _temp = new Dictionary<VehicleType, string>
+        private static readonly Dictionary<VehicleType, string> _temp = new Dictionary<VehicleType, string>
         {
             [VehicleType.Bus] = "TheBus",
             [VehicleType.Train] = "TheTrain",
@@ -121,10 +121,10 @@ namespace NextBusDesktop.ViewModels
                         break;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"JourneyNumber: {JourneyNumber}");
-                System.Diagnostics.Debug.WriteLine($"Fullname: {FullName}");
-                System.Diagnostics.Debug.WriteLine($"Shortname: {ShortName}");
-                System.Diagnostics.Debug.WriteLine($"");
+                //System.Diagnostics.Debug.WriteLine($"JourneyNumber: {JourneyNumber}");
+                //System.Diagnostics.Debug.WriteLine($"Fullname: {FullName}");
+                //System.Diagnostics.Debug.WriteLine($"Shortname: {ShortName}");
+                //System.Diagnostics.Debug.WriteLine($"");
 
                 return message;
             }
@@ -222,7 +222,7 @@ namespace NextBusDesktop.ViewModels
             }
         }
 
-        public string LineNumberInfo => VehicleType == VehicleType.Walk ? "GÅ" : ShortName; // TODO: Localize
+        public string LineNumberInfo => VehicleType == VehicleType.Walk ? _translator["Walk"] : ShortName;
         public Color LineForegroundColor { get; private set; }
         public Color LineBackgroundColor { get; private set; }
 

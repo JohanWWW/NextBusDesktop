@@ -133,6 +133,7 @@
     <Compile Include="Controls\DepartureBoxControl.xaml.cs">
       <DependentUpon>DepartureBoxControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataProvider\TripPlannerProviderMock.cs" />
     <Compile Include="Models\AccessToken.cs" />
     <Compile Include="Models\LocationList.cs" />
     <Compile Include="Models\StopLocation.cs" />

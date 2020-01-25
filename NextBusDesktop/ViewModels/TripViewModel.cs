@@ -42,8 +42,16 @@ namespace NextBusDesktop.ViewModels
             private set => SetProperty(ref _timeLeftInfo, value);
         }
 
+        private string _tripDurationInfo;
+        public string TripDurationInfo
+        {
+            get => _tripDurationInfo;
+            private set => SetProperty(ref _tripDurationInfo, value);
+        }
+
         public string DepartureTimeInfo => (RealisticDeparture ?? ScheduledDeparture).ToString("HH:mm");
         public string ArrivalTimeInfo => (RealisticArrival ?? ScheduledArrival).ToString("HH:mm");
+        
 
         public TripViewModel(Trip trip)
         {
@@ -53,28 +61,34 @@ namespace NextBusDesktop.ViewModels
             {
                 _steps.Add(new StepViewModel(step) { IsLastStep = trip.Steps.Last().Direction == step.Direction });
             }
-            TimeLeftInfo = GetTimeLeftMessage();
+            TimeLeftInfo = GetActionTimeLeft();
+            TripDurationInfo = GetTripDuration();
         }
 
-        public string GetTimeLeftMessage()
+        public string GetActionTimeLeft()
         {
             TimeSpan timeLeft = (RealisticDeparture ?? ScheduledDeparture) - DateTime.Now;
-
-            if (timeLeft.TotalMinutes < 1)
-                return _translator["Now"];
-
-            else if (timeLeft.TotalMinutes < 60)
-                return string.Format("{0} {1}", timeLeft.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
-
-            else if (timeLeft.TotalHours < 24)
-                return string.Format("{0}{1} {2}{3}", timeLeft.ToString("hh"), _translator["HoursAbbr"], timeLeft.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
-
-            else
-                return string.Format("{0} {1}", timeLeft.ToString("dd"), _translator["DaysAbbr"]).TrimStart('0');
+            return TimeDurationFormatter(timeLeft);
         }
 
+        public string GetTripDuration() => TimeDurationFormatter(RealisticDuration);
 
-        public void TriggerTimeUpdate() => TimeLeftInfo = GetTimeLeftMessage();
+        public void TriggerTimeUpdate() => TimeLeftInfo = GetActionTimeLeft();
+
+        private string TimeDurationFormatter(TimeSpan duration)
+        {
+            if (duration.TotalMinutes < 1)
+                return _translator["Now"];
+
+            else if (duration.TotalMinutes < 60)
+                return string.Format("{0} {1}", duration.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
+
+            else if (duration.TotalHours < 24)
+                return string.Format("{0}{1} {2}{3}", duration.ToString("hh"), _translator["HoursAbbr"], duration.ToString("mm"), _translator["MinutesAbbr"]).TrimStart('0');
+
+            else
+                return string.Format("{0} {1}", duration.ToString("dd"), _translator["DaysAbbr"]).TrimStart('0');
+        }
 
         public override string ToString() => $"{Origin.StopName} -> {Destination.StopName}";
     }

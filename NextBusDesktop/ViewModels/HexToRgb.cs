@@ -9,8 +9,8 @@ namespace NextBusDesktop.ViewModels
 {
     public static class HexToRgb
     {
-        private static readonly string _base16Digits = "0123456789ABCDEF";
-        private static readonly string _charDigits = "ABCDEF";
+        private const string _base16Digits = "0123456789ABCDEF";
+        private const string _charDigits = "ABCDEF";
 
         public static Color HexToColor(string hex)
         {
@@ -23,8 +23,8 @@ namespace NextBusDesktop.ViewModels
             int i = 0;
             while (i < hex.Length)
             {
-                int b = ParseHexChar(hex[i + 1]); // b = x * 16^0
-                int a = ParseHexChar(hex[i]) * 16; // b = x * 16^1
+                int b = Parse0ToF(hex[i + 1]); // b = x * 16^0
+                int a = Parse0ToF(hex[i]) * 16; // b = x * 16^1
                 bytes.Add((byte)(b + a));
                 i += 2;
             }
@@ -35,16 +35,16 @@ namespace NextBusDesktop.ViewModels
         /// <summary>
         /// Parses a single hex digit value from 0 to F
         /// </summary>
-        private static int ParseHexChar(char character)
+        private static int Parse0ToF(char character)
         {
             if (int.TryParse(character.ToString(), out int result)) return result;
-            else return GetCharValue(character);
+            else return ParseAToF(character);
         }
 
         /// <summary>
         /// Parses a single digit value from A to F
         /// </summary>
-        private static int GetCharValue(char character)
+        private static int ParseAToF(char character)
         {
             bool isIndexFound = false;
             int i = -1;

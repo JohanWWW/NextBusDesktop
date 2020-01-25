@@ -198,6 +198,9 @@
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
+  <data name="Walk" xml:space="preserve">
+    <value>Walk</value>
+  </data>
   <data name="WalkInfoMessage" xml:space="preserve">
     <value>Walk to {0}</value>
     <comment>stop name</comment>

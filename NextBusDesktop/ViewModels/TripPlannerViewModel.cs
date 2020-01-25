@@ -187,8 +187,8 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetOriginLocationList()
         {
-            if (!OriginSearchQueryIsDuplicate)
-                return;
+            //if (!OriginSearchQueryIsDuplicate)
+            //    return;
 
             OriginStopLocations.Clear();
 
@@ -203,8 +203,8 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetDestinationLocationList()
         {
-            if (!DestinationSearchQueryIsDuplicate)
-                return;
+            //if (!DestinationSearchQueryIsDuplicate)
+            //    return;
 
             DestinationStopLocations.Clear();
 

@@ -72,6 +72,7 @@ namespace NextBusDesktop.DataProvider
             }
 
             _tripPlannerProvider = new TripPlannerProvider(token);
+            //_tripPlannerProvider = new TripPlannerProviderMock();
 
             Log("Initializing complete.");
         }
