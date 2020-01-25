@@ -11,7 +11,6 @@ namespace NextBusDesktop.DataProvider
 {
     public interface IAccessTokenProvider
     {
-        AccessToken GetAccessToken();
         Task<AccessToken> GetAccessTokenAsync();
     }
 }

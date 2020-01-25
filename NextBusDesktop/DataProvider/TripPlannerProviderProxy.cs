@@ -10,6 +10,7 @@ using NextBusDesktop.Models.DepartureBoard;
 using NextBusDesktop.Models.TripPlanner;
 using System.Xml;
 using Windows.Storage;
+using NextBusDesktop.Utilities;
 
 namespace NextBusDesktop.DataProvider
 {
@@ -23,12 +24,16 @@ namespace NextBusDesktop.DataProvider
         private static IStorageFolder _accessTokenFolder;
         private static IStorageFile _accessTokenFile;
 
+        private static ILog _logger;
+
         private static bool IsAccessTokenExpired => _tripPlannerProvider.IsAccessTokenExpired;
 
         public static async Task Initialize()
         {
-            Log("Initializing TripPlannerProvider");
-            _accessTokenProvider = new AccessTokenProvider();
+            _logger = new OutputLogger(typeof(TripPlannerProviderProxy));
+
+            Log("Initializing TripPlannerProvider.");
+            _accessTokenProvider = new AccessTokenProvider() { Logger = new OutputLogger(nameof(AccessTokenProvider)) };
             _accessTokenFolder = ApplicationData.Current.LocalFolder;
             
             bool fileIsEmpty;
@@ -37,13 +42,13 @@ namespace NextBusDesktop.DataProvider
             {
                 fileIsEmpty = true;
                 _accessTokenFile = await _accessTokenFolder.CreateFileAsync("CurrentAccessToken.txt", CreationCollisionOption.FailIfExists);
-                Log("Write -> Created new access token file.");
+                Log("Created new access token file.", "Out");
             }
             else
             {
                 fileIsEmpty = false;
                 _accessTokenFile = await _accessTokenFolder.GetFileAsync("CurrentAccessToken.txt");
-                Log("Read -> Load access token from file.");
+                Log("Load access token from file.", "In");
             }
 
             AccessToken token;
@@ -53,14 +58,13 @@ namespace NextBusDesktop.DataProvider
                 AccessToken newAccessToken = await _accessTokenProvider.GetAccessTokenAsync();
                 string serialized = Serialize(newAccessToken);
                 await FileIO.WriteTextAsync(_accessTokenFile, serialized);
-                Log("Write -> Save access token to file.");
                 return newAccessToken;
             };
 
             if (fileIsEmpty) // File is empty because the file was just created.
             {
+                Log("Could not find access token on file.");
                 token = await createNewToken();
-                Log("Could not find access token on file. Requesting new access token.");
             }
             else
             {
@@ -68,14 +72,19 @@ namespace NextBusDesktop.DataProvider
                 string[] serializedRetrieved = data.ToArray();
                 AccessToken retrievedAccessToken = Deserialize(serializedRetrieved);
                 if (retrievedAccessToken.ExpiresDateTime < DateTime.Now)
+                {
+                    Log("Access token has expired. Requesting new access token.");
                     token = await createNewToken();
+                }
                 else
                     token = retrievedAccessToken;
+
             }
 
-            _tripPlannerProvider = new TripPlannerProvider(token);
+            _tripPlannerProvider = new TripPlannerProvider(token) { Logger = new OutputLogger(nameof(TripPlannerProvider)) };
             //_tripPlannerProvider = new TripPlannerProviderMock();
 
+            Log($"Access token is valid to {token.ExpiresDateTime}.", "Info");
             Log("Initializing complete.");
         }
 
@@ -112,11 +121,11 @@ namespace NextBusDesktop.DataProvider
         /// </summary>
         private static async Task RenewToken()
         {
-            Log($"{nameof(TripPlannerProviderProxy)}: Access token has expired. Requesting new access token.");
+            Log("Access token has expired. Requesting new access token.");
             AccessToken token = await _accessTokenProvider.GetAccessTokenAsync();
             _tripPlannerProvider.SetToken(token);
 
-            Log("Write -> Save access token to file.");
+            Log("Save access token.", "Out");
             string serialized = Serialize(token);
             await FileIO.WriteTextAsync(_accessTokenFile, serialized);
         }
@@ -167,6 +176,8 @@ namespace NextBusDesktop.DataProvider
             return accessToken;
         }
 
-        private static void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProviderProxy)}: {message}");
+        private static void Log(string message) => _logger?.Log(message);
+
+        private static void Log(string message, string category) => _logger?.Log(message, category);
     }
 }

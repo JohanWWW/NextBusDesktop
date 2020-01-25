@@ -11,6 +11,7 @@ using RestSharp;
 using NextBusDesktop.Models.TripPlanner;
 using NextBusDesktop.Models.DepartureBoard;
 using System.ComponentModel;
+using NextBusDesktop.Utilities;
 
 namespace NextBusDesktop.DataProvider
 {
@@ -23,7 +24,13 @@ namespace NextBusDesktop.DataProvider
         private const string _timeFormat = "HH:mm";
 
         private readonly IRestClient _client;
+        private ILog _logger;
         private AccessToken _accessToken;
+
+        public ILog Logger
+        {
+            set => _logger = value;
+        }
 
         public bool IsAccessTokenExpired => _accessToken.ExpiresDateTime < DateTime.Now ? true : false;
 
@@ -35,7 +42,8 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
         {
-            Log($"Request -> {nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}.");
+            //Log($"Request -> {nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}.");
+            Log($"{nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}", "Request");
             var request = new RestRequest("/departureBoard");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddParameter("id", stopId);
@@ -44,14 +52,16 @@ namespace NextBusDesktop.DataProvider
             request.AddParameter("format", "json");
 
             var response = await _client.ExecuteTaskAsync<DepartureBoardResponseRoot>(request, Method.GET);
-            Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
+            //Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
+            Log($"{nameof(GetDepartureBoardAsync)}: {response.StatusCode}", "Response");
 
             return new DepartureBoard(response.Data.DepartureBoard);
         }
 
         public async Task<LocationList> GetLocationListAsync(string query)
         {
-            Log($"Request -> {nameof(GetLocationListAsync)}: Requesting location list for query '{query}'.");
+            //Log($"Request -> {nameof(GetLocationListAsync)}: Requesting location list for query '{query}'.");
+            Log($"{nameof(GetLocationListAsync)}: Requesting location list for query '{query}'", "Request");
 
             var request = new RestRequest("/location.name");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
@@ -59,7 +69,8 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("format", "json");
 
             var response = await _client.ExecuteTaskAsync<LocationListResponseRoot>(request, Method.GET);
-            Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
+            //Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
+            Log($"{nameof(GetLocationListAsync)}: {response.StatusCode}", "Response");
 
             return new LocationList(response.Data.LocationList);
         }
@@ -68,7 +79,8 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime, bool isSearchForArrival = false)
         {
-            Log($"Request -> {nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}.");
+            //Log($"Request -> {nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}.");
+            Log($"{nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}", "Request");
 
             var request = new RestRequest("/trip");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
@@ -80,13 +92,16 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("format", "json");
 
             var response = await _client.ExecuteTaskAsync<TripListRoot>(request, Method.GET);
-            Log($"Response -> {nameof(GetTripListAsync)} {response.StatusCode}");
+            //Log($"Response -> {nameof(GetTripListAsync)} {response.StatusCode}");
+            Log($"{nameof(GetTripListAsync)}: {response.StatusCode}", "Response");
 
             return new TripList(response.Data.TripList);
         }
 
         public void SetToken(AccessToken token) => _accessToken = token;
 
-        private void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProvider)}: {message}");
+        private void Log(string message) => _logger?.Log(message);
+
+        private void Log(string message, string category) => _logger?.Log(message, category);
     }
 }

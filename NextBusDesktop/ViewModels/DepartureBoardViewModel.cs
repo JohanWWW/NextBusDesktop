@@ -223,6 +223,9 @@ namespace NextBusDesktop.ViewModels
 
         private void PopulateDepartureBoard(Func<DepartureViewModel, bool> selector)
         {
+            if (_cachedDepartures is null)
+                return;
+
             foreach (var departure in _cachedDepartures)
             {
                 if (selector(departure))
@@ -245,7 +248,6 @@ namespace NextBusDesktop.ViewModels
             DepartureBoard departureBoard;
             try
             {
-                //departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, now);
                 departureBoard = await TripPlannerProviderProxy.GetDepartureBoard(_selectedStopLocation.Id, now);
                 ErrorOccurred = false;
             }
