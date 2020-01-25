@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.Models;
 using NextBusDesktop.Models.TripPlanner;
+using NextBusDesktop.Utilities;
 using Windows.UI;
 
 namespace NextBusDesktop.ViewModels

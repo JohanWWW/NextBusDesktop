@@ -13,15 +13,17 @@ using Windows.Storage;
 
 namespace NextBusDesktop.DataProvider
 {
-    public static class TripPlannerProviderContainer
+    /// <summary>
+    /// Passthrough and maintains the <see cref="ITripPlannerProvider"/> instance
+    /// </summary>
+    public static class TripPlannerProviderProxy
     {
-        private static ITripPlannerProvider _tripPlannerProvider { get; set; }
+        private static ITripPlannerProvider _tripPlannerProvider;
         private static IAccessTokenProvider _accessTokenProvider;
         private static IStorageFolder _accessTokenFolder;
         private static IStorageFile _accessTokenFile;
 
-
-        private static bool IsAccessTokenExpired => _tripPlannerProvider.IsAccessTokenExpired();
+        private static bool IsAccessTokenExpired => _tripPlannerProvider.IsAccessTokenExpired;
 
         public static async Task Initialize()
         {
@@ -105,9 +107,12 @@ namespace NextBusDesktop.DataProvider
             return await _tripPlannerProvider.GetTripListAsync(originStopId, destinationStopId, dateTime, isSearchForArrival);
         }
 
+        /// <summary>
+        /// Requests a new access token from server and saves it to file.
+        /// </summary>
         private static async Task RenewToken()
         {
-            Log($"{nameof(TripPlannerProviderContainer)}: Access token has expired. Requesting new access token.");
+            Log($"{nameof(TripPlannerProviderProxy)}: Access token has expired. Requesting new access token.");
             AccessToken token = await _accessTokenProvider.GetAccessTokenAsync();
             _tripPlannerProvider.SetToken(token);
 
@@ -162,6 +167,6 @@ namespace NextBusDesktop.DataProvider
             return accessToken;
         }
 
-        private static void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProviderContainer)}: {message}");
+        private static void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProviderProxy)}: {message}");
     }
 }

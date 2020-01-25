@@ -12,6 +12,8 @@ namespace NextBusDesktop.DataProvider
 {
     public class TripPlannerProviderMock : ITripPlannerProvider
     {
+        public bool IsAccessTokenExpired => false;
+
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId)
         {
             throw new NotImplementedException();
@@ -64,7 +66,6 @@ namespace NextBusDesktop.DataProvider
             throw new NotImplementedException();
         }
 
-        public bool IsAccessTokenExpired() => false;
 
         public void SetToken(AccessToken newToken)
         {

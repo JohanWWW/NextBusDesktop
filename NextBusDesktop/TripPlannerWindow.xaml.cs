@@ -23,8 +23,8 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class TripPlannerWindow : Page
     {
-        private DispatcherTimer _tripListRefreshTimer;
-        private DispatcherTimer _tripBoxTimer;
+        private readonly DispatcherTimer _tripListRefreshTimer;
+        private readonly DispatcherTimer _tripBoxTimer;
 
         public TripPlannerViewModel TripPlanner = new TripPlannerViewModel();
 
@@ -56,31 +56,27 @@ namespace NextBusDesktop
         private async void OnTripListRefreshTimerTick(object sender, object e)
         {
             System.Diagnostics.Debug.WriteLine("Triggered refresh trip list.");
-            await TripPlanner.GetTripList();
+            //await TripPlanner.GetTripList();
+            await TripPlanner.RefreshTripList();
         }
 
         private void OnTripBoxTimerTick(object sender, object e)
         {
-            System.Diagnostics.Debug.WriteLine("Triggered time update.");
+            //System.Diagnostics.Debug.WriteLine("Triggered time update.");
             foreach (var trip in TripPlanner.Trips)
                 trip.TriggerTimeUpdate();
         }
 
-        // TODO: Fix bug that causes flyouts to not show immediately after the enter button has been pressed the second time user searches for trips
-        private void OnOriginTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
+        private async void OnOriginTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
-                OriginResultsFlyout.ShowAt(OriginTextBox);
+                await TripPlanner.GetOriginLocationList();
         }
 
-        private void OnDestinationTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
+        private async void OnDestinationTextBoxKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
-                DestinationResultsFlyout.ShowAt(DestinationTextBox);
+                await TripPlanner.GetDestinationLocationList();
         }
-
-        private void OnOriginSelectionChanged(object sender, SelectionChangedEventArgs e) => OriginResultsFlyout.Hide();
-
-        private void OnDestinationSelectionChanged(object sender, SelectionChangedEventArgs e) => DestinationResultsFlyout.Hide();
     }
 }

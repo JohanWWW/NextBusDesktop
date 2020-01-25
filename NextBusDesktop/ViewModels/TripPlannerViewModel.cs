@@ -13,34 +13,8 @@ namespace NextBusDesktop.ViewModels
 {
     public class TripPlannerViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Compares current and previous query and returns true if they are equal.
-        /// </summary>
-        private bool OriginSearchQueryIsDuplicate
-        {
-            get
-            {
-                bool isDuplicate = _originSearchQuery != _cachedOriginSearchQuery;
-                if (isDuplicate) _cachedOriginSearchQuery = _originSearchQuery; // Update
-                return isDuplicate;
-            }
-        }
-
-        /// <summary>
-        /// Compares current and previous query and returns true if they are equal.
-        /// </summary>
-        private bool DestinationSearchQueryIsDuplicate
-        {
-            get
-            {
-                bool isDuplicate = _destinationSearchQuery != _cachedDestinationSearchQuery;
-                if (isDuplicate) _cachedDestinationSearchQuery = _destinationSearchQuery; // Update
-                return isDuplicate;
-            }
-        }
-
-        private string _cachedOriginSearchQuery = string.Empty;
-        private string _cachedDestinationSearchQuery = string.Empty;
+        private CurrentFocus _currentFocus;
+        private IEnumerable<TripViewModel> _cachedTrips;
 
         private bool _errorOccurred;
         public bool ErrorOccurred
@@ -74,6 +48,14 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _isGivenDateTimeForArrivals, value);
         }
 
+        private bool _isSearchResultPaneOpen;
+        public bool IsSearchResultPaneOpen
+        {
+            get => _isSearchResultPaneOpen;
+            set => SetProperty(ref _isSearchResultPaneOpen, value);
+        }
+
+
         private string _originSearchQuery;
         public string OriginSearchQuery
         {
@@ -95,32 +77,11 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _originStopLocations, value);
         }
 
-        private StopLocation _selectedOrigin;
-        public StopLocation SelectedOrigin
+        private StopLocation _origin;
+        public StopLocation Origin
         {
-            get => _selectedOrigin;
-            set
-            {
-                if (_originStopLocations != null)
-                    SetProperty(ref _selectedOrigin, value);
-            }
-        }
-
-        private int _selectedOriginIndex;
-        public int SelectedOriginIndex
-        {
-            get => _selectedOriginIndex;
-            set
-            {
-                SetProperty(ref _selectedOriginIndex, value);
-
-                if (value is -1) _selectedOrigin = null;
-                else
-                {
-                    _selectedOrigin = _originStopLocations.ElementAt(value);
-                    OriginSearchQuery = _cachedOriginSearchQuery = _selectedOrigin.Name;
-                }
-            }
+            get => _origin;
+            set => SetProperty(ref _origin, value);
         }
 
         private ObservableCollection<StopLocationViewModel> _destinationStopLocations;
@@ -130,35 +91,60 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _destinationStopLocations, value);
         }
 
-        private StopLocation _selectedDestination;
-        public StopLocation SelectedDestination
+        private StopLocation _destination;
+        public StopLocation Destination
         {
-            get => _selectedDestination;
+            get => _destination;
+            set => SetProperty(ref _destination, value);
+        }
+
+        private ObservableCollection<StopLocationViewModel> _stopLocations;
+        public ObservableCollection<StopLocationViewModel> StopLocations
+        {
+            get => _stopLocations;
+            set => SetProperty(ref _stopLocations, value);
+        }
+
+        private StopLocation _selectedStopLocation;
+        public StopLocation SelectedStopLocation
+        {
+            get => _selectedStopLocation;
             set
             {
-                if (_destinationStopLocations != null)
-                    SetProperty(ref _selectedDestination, value);
+                if (_stopLocations != null)
+                    SetProperty(ref _selectedStopLocation, value);
             }
         }
 
-        private int _selectedDestinationIndex;
-        public int SelectedDestinationIndex
+        private int _selectedStopLocationIndex;
+        public int SelectedStopLocationIndex
         {
-            get => _selectedDestinationIndex;
+            get => _selectedStopLocationIndex;
             set
             {
-                SetProperty(ref _selectedDestinationIndex, value);
+                SetProperty(ref _selectedStopLocationIndex, value);
 
-                if (value is -1) _selectedDestination = null;
+                if (value is -1) _selectedStopLocation = null;
                 else
                 {
-                    _selectedDestination = _destinationStopLocations.ElementAt(value);
-                    DestinationSearchQuery = _cachedDestinationSearchQuery = _selectedDestination.Name;
+                    _selectedStopLocation = _stopLocations.ElementAt(value);
+                    switch (_currentFocus)
+                    {
+                        case CurrentFocus.Origin:
+                            OriginSearchQuery = _selectedStopLocation.Name;
+                            _origin = _selectedStopLocation;
+                            break;
+                        case CurrentFocus.Destination:
+                            DestinationSearchQuery = _selectedStopLocation.Name;
+                            _destination = _selectedStopLocation;
+                            break;
+                        default:
+                            throw new NotImplementedException($"No case provided for '{_currentFocus}'.");
+                    }
+                    IsSearchResultPaneOpen = false;
                 }
             }
         }
-
-        private IEnumerable<TripViewModel> _cachedTrips;
 
         private ObservableCollection<TripViewModel> _trips;
         public ObservableCollection<TripViewModel> Trips
@@ -169,15 +155,14 @@ namespace NextBusDesktop.ViewModels
 
         public TripPlannerViewModel()
         {
-            _errorOccurred = false;
+            _currentFocus = CurrentFocus.Destination;
             var dateTime = DateTime.Now;
             _givenDate = dateTime.Date;
             _givenTime = dateTime.TimeOfDay;
-            _isGivenDateTimeForArrivals = false;
             _originStopLocations = new ObservableCollection<StopLocationViewModel>();
             _destinationStopLocations = new ObservableCollection<StopLocationViewModel>();
-            _selectedOriginIndex = -1;
-            _selectedDestinationIndex = -1;
+            _stopLocations = new ObservableCollection<StopLocationViewModel>();
+            _selectedStopLocationIndex = -1;
             _trips = new ObservableCollection<TripViewModel>();
         }
 
@@ -187,39 +172,64 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetOriginLocationList()
         {
-            //if (!OriginSearchQueryIsDuplicate)
-            //    return;
+            LocationList originSearchResult = null;
+            try
+            {
+                originSearchResult = await GetLocationList(_originSearchQuery);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to get location list for origin. Exception: {e.Message}");
+                return;
+            }
 
-            OriginStopLocations.Clear();
+            StopLocations.Clear();
 
-            var locationList = await GetLocationList(_originSearchQuery);
-            
-            foreach (var stop in locationList.StopLocations.ToList())
+            foreach (var stop in originSearchResult.StopLocations.ToList())
             {
                 var stopLocationVm = new StopLocationViewModel(stop);
-                OriginStopLocations.Add(stopLocationVm);
+                StopLocations.Add(stopLocationVm);
             }
+
+            IsSearchResultPaneOpen = true;
+
+            if (_currentFocus != CurrentFocus.Origin)
+                _currentFocus = CurrentFocus.Origin;
         }
 
         public async Task GetDestinationLocationList()
         {
-            //if (!DestinationSearchQueryIsDuplicate)
-            //    return;
+            LocationList destinationSearchResult = null;
+            try
+            {
+                destinationSearchResult = await GetLocationList(_destinationSearchQuery);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to get location list for destination. Exception: {e.Message}");
+                return;
+            }
 
-            DestinationStopLocations.Clear();
+            StopLocations.Clear();
 
-            var locationList = await GetLocationList(_destinationSearchQuery);
-
-            foreach (var stop in locationList.StopLocations.ToList())
+            foreach (var stop in destinationSearchResult.StopLocations.ToList())
             {
                 var stopLocationVm = new StopLocationViewModel(stop);
-                DestinationStopLocations.Add(stopLocationVm);
+                StopLocations.Add(stopLocationVm);
             }
+
+            IsSearchResultPaneOpen = true;
+
+            if (_currentFocus != CurrentFocus.Destination)
+                _currentFocus = CurrentFocus.Destination;
         }
 
         public async Task GetTripList()
         {
-            if (_selectedOrigin is null || _selectedDestination is null)
+            //if (_selectedOrigin is null || _selectedDestination is null)
+            //    return;
+
+            if (_origin is null || _destination is null)
                 return;
 
             TripList tripList = null;
@@ -227,11 +237,35 @@ namespace NextBusDesktop.ViewModels
             {
                 DateTime dateTime = _givenDate.AddHours(_givenTime.Hours).AddMinutes(_givenTime.Minutes);
                 System.Diagnostics.Debug.WriteLine(dateTime);
-                tripList = await TripPlannerProviderContainer.GetTripList(_selectedOrigin.Id, _selectedDestination.Id, dateTime, _isGivenDateTimeForArrivals);
+                //tripList = await TripPlannerProviderContainer.GetTripList(_selectedOrigin.Id, _selectedDestination.Id, dateTime, _isGivenDateTimeForArrivals);
+                tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerViewModel)} an error occurred: {e.Message}");
+                System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerViewModel)} an error occurred when attempted to get trip list: {e.Message}");
+                return;
+            }
+
+            Trips.Clear();
+            _cachedTrips = tripList.Trips.Select(trip => new TripViewModel(trip)).ToList();
+
+            PopulateTripList();
+        }
+
+        public async Task RefreshTripList()
+        {
+            if (_origin is null || _destination is null)
+                return;
+
+            TripList tripList = null;
+            try
+            {
+                DateTime dateTime = DateTime.Now;
+                tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerViewModel)} an error occurred when attempted to refresh trip list: {e.Message}");
                 return;
             }
 
@@ -243,17 +277,17 @@ namespace NextBusDesktop.ViewModels
 
         public void SwapSearchQueries()
         {
-            string swap = OriginSearchQuery;
+            string swapStr = OriginSearchQuery;
             OriginSearchQuery = DestinationSearchQuery;
-            DestinationSearchQuery = swap;
+            DestinationSearchQuery = swapStr;
 
-            StopLocation swapStopLocation = _selectedOrigin;
-            SelectedOrigin = SelectedDestination;
-            SelectedDestination = swapStopLocation;
+            StopLocation swapSl = Origin;
+            Origin = Destination;
+            Destination = swapSl;
         }
 
         private async Task<LocationList> GetLocationList(string query) =>
-            await TripPlannerProviderContainer.GetLocationList(query);
+            await TripPlannerProviderProxy.GetLocationList(query);
 
         private void PopulateTripList(Func<TripViewModel, bool> selector)
         {
@@ -265,5 +299,7 @@ namespace NextBusDesktop.ViewModels
         }
 
         private void PopulateTripList() => PopulateTripList(trip => true);
+
+        private enum CurrentFocus { Origin, Destination }
     }
 }

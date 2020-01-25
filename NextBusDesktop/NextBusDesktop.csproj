@@ -129,7 +129,7 @@
     <Compile Include="DataProvider\IAccessTokenProvider.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
-    <Compile Include="DataProvider\TripPlannerProviderContainer.cs" />
+    <Compile Include="DataProvider\TripPlannerProviderProxy.cs" />
     <Compile Include="Controls\DepartureBoxControl.xaml.cs">
       <DependentUpon>DepartureBoxControl.xaml</DependentUpon>
     </Compile>
@@ -181,9 +181,11 @@
     <Compile Include="TripPlannerWindow.xaml.cs">
       <DependentUpon>TripPlannerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\ILog.cs" />
+    <Compile Include="Utilities\OutputLogger.cs" />
     <Compile Include="ViewModels\DepartureBoardViewModel.cs" />
     <Compile Include="ViewModels\DepartureViewModel.cs" />
-    <Compile Include="ViewModels\HexToRgb.cs" />
+    <Compile Include="Utilities\HexToRgb.cs" />
     <Compile Include="ViewModels\LanguageViewModel.cs" />
     <Compile Include="ViewModels\NotificationBase.cs" />
     <Compile Include="ViewModels\LocationListViewModel.cs" />

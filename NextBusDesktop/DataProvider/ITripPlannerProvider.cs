@@ -11,6 +11,8 @@ namespace NextBusDesktop.DataProvider
 {
     public interface ITripPlannerProvider
     {
+        bool IsAccessTokenExpired { get; }
+
         Task<LocationList> GetLocationListAsync(string query);
         Task<DepartureBoard> GetDepartureBoardAsync(string stopId);
         Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime);
@@ -18,6 +20,5 @@ namespace NextBusDesktop.DataProvider
         Task<TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime, bool isSearchForArrival = false);
 
         void SetToken(AccessToken newToken);
-        bool IsAccessTokenExpired();
     }
 }

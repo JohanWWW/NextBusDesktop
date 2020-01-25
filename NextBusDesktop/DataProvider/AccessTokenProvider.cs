@@ -22,15 +22,15 @@ namespace NextBusDesktop.DataProvider
             Log($"Request -> {nameof(GetAccessTokenAsync)}: Attempting to generate new access token.");
             ApplicationDataContainer localStorage = ApplicationData.Current.LocalSettings;
 
-            IRestRequest request = new RestRequest();
+            var request = new RestRequest();
             _client.Authenticator = new HttpBasicAuthenticator(
                 localStorage.Values["Api_ClientId"].ToString(), 
                 localStorage.Values["Api_Secret"].ToString());
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials", ParameterType.GetOrPost);
 
-            IRestResponse<AccessTokenResponse> response = await _client.ExecuteTaskAsync<AccessTokenResponse>(request, Method.POST);
-            AccessToken accessToken = new AccessToken(response.Data);
+            var response = await _client.ExecuteTaskAsync<AccessTokenResponse>(request, Method.POST);
+            var accessToken = new AccessToken(response.Data);
 
             Log($"Response -> {nameof(GetAccessTokenAsync)} {response.StatusCode}: Generated new access token (expires {accessToken.ExpiresDateTime}).");
 
@@ -41,14 +41,14 @@ namespace NextBusDesktop.DataProvider
         {
             ApplicationDataContainer localStorage = ApplicationData.Current.LocalSettings;
 
-            IRestRequest request = new RestRequest();
+            var request = new RestRequest();
             _client.Authenticator = new HttpBasicAuthenticator(
                 localStorage.Values["Api_ClientId"].ToString(),
                 localStorage.Values["Api_Secret"].ToString());
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials", ParameterType.GetOrPost);
 
-            IRestResponse<AccessTokenResponse> response = _client.Execute<AccessTokenResponse>(request, Method.POST);
+            var response = _client.Execute<AccessTokenResponse>(request, Method.POST);
 
             return new AccessToken(response.Data);
         }

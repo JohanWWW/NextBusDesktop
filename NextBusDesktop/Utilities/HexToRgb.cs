@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
 
-namespace NextBusDesktop.ViewModels
+namespace NextBusDesktop.Utilities
 {
     public static class HexToRgb
     {

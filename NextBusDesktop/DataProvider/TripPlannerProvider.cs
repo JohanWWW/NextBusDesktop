@@ -25,7 +25,8 @@ namespace NextBusDesktop.DataProvider
         private readonly IRestClient _client;
         private AccessToken _accessToken;
 
-        /// <param name="accessToken">Access token that is provided by <see cref="AccessTokenProvider"/></param>
+        public bool IsAccessTokenExpired => _accessToken.ExpiresDateTime < DateTime.Now ? true : false;
+
         public TripPlannerProvider(AccessToken accessToken) : this() => _accessToken = accessToken;
 
         public TripPlannerProvider() => _client = new RestClient("https://api.vasttrafik.se/bin/rest.exe/v2/");
@@ -35,14 +36,14 @@ namespace NextBusDesktop.DataProvider
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
         {
             Log($"Request -> {nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}.");
-            IRestRequest request = new RestRequest("/departureBoard");
+            var request = new RestRequest("/departureBoard");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddParameter("id", stopId);
             request.AddParameter("date", dateTime.ToString(_dateFormat));
             request.AddParameter("time", dateTime.ToString(_timeFormat));
             request.AddParameter("format", "json");
 
-            IRestResponse<DepartureBoardResponseRoot> response = await _client.ExecuteTaskAsync<DepartureBoardResponseRoot>(request, Method.GET);
+            var response = await _client.ExecuteTaskAsync<DepartureBoardResponseRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
 
             return new DepartureBoard(response.Data.DepartureBoard);
@@ -52,12 +53,12 @@ namespace NextBusDesktop.DataProvider
         {
             Log($"Request -> {nameof(GetLocationListAsync)}: Requesting location list for query '{query}'.");
 
-            IRestRequest request = new RestRequest("/location.name");
+            var request = new RestRequest("/location.name");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddQueryParameter("input", query);
             request.AddQueryParameter("format", "json");
 
-            IRestResponse<LocationListResponseRoot> response = await _client.ExecuteTaskAsync<LocationListResponseRoot>(request, Method.GET);
+            var response = await _client.ExecuteTaskAsync<LocationListResponseRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
 
             return new LocationList(response.Data.LocationList);
@@ -69,7 +70,7 @@ namespace NextBusDesktop.DataProvider
         {
             Log($"Request -> {nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}.");
 
-            IRestRequest request = new RestRequest("/trip");
+            var request = new RestRequest("/trip");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
             request.AddQueryParameter("originId", originStopId);
             request.AddQueryParameter("destId", destinationStopId);
@@ -78,15 +79,13 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("searchForArrival", (isSearchForArrival ? 1 : 0).ToString()); // Convert bool to bit
             request.AddQueryParameter("format", "json");
 
-            IRestResponse<TripListRoot> response = await _client.ExecuteTaskAsync<TripListRoot>(request, Method.GET);
+            var response = await _client.ExecuteTaskAsync<TripListRoot>(request, Method.GET);
             Log($"Response -> {nameof(GetTripListAsync)} {response.StatusCode}");
 
             return new TripList(response.Data.TripList);
         }
 
         public void SetToken(AccessToken token) => _accessToken = token;
-
-        public bool IsAccessTokenExpired() => _accessToken.ExpiresDateTime < DateTime.Now ? true : false;
 
         private void Log(string message) => System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerProvider)}: {message}");
     }
