@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using NextBusDesktop.ViewModels;
 using System.Threading.Tasks;
 using System.Threading;
+using NextBusDesktop.Utilities;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -33,7 +34,11 @@ namespace NextBusDesktop
         private readonly Task _statusIndicatorTask;
         private readonly CancellationTokenSource _statusIndicatorTaskCancellationToken;
 
-        public readonly DepartureBoardViewModel DepartureBoard = new DepartureBoardViewModel();
+        public readonly DepartureBoardViewModel DepartureBoard = new DepartureBoardViewModel 
+        { 
+            Logger = new OutputLogger(nameof(DepartureBoardViewModel)),
+            EnableLogging = true
+        };
 
         public DeparturesWindow()
         {
@@ -86,6 +91,7 @@ namespace NextBusDesktop
                     byte yOffset = amplitude;
                     double frequency = 0.1;
 
+                    // Yellow
                     Color statusColor = Color.FromArgb(
                         (byte)(amplitude * Math.Cos(frequency * x) + yOffset), // y = a * cos(x) + m
                         255,

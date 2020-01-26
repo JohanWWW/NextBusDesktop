@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using NextBusDesktop.ViewModels;
+using NextBusDesktop.Utilities;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,7 +27,11 @@ namespace NextBusDesktop
         private readonly DispatcherTimer _tripListRefreshTimer;
         private readonly DispatcherTimer _tripBoxTimer;
 
-        public TripPlannerViewModel TripPlanner = new TripPlannerViewModel();
+        public TripPlannerViewModel TripPlanner = new TripPlannerViewModel
+        {
+            Logger = new OutputLogger(nameof(TripPlannerViewModel)),
+            EnableLogging = true
+        };
 
         public TripPlannerWindow()
         {

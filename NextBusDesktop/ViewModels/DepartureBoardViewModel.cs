@@ -99,7 +99,6 @@ namespace NextBusDesktop.ViewModels
 
         public DepartureBoardViewModel()
         {
-            EnableLogging = true;
             _translator = new Translator("DeparturesWindow");
             _errorOccurred = false;
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
@@ -125,14 +124,13 @@ namespace NextBusDesktop.ViewModels
 
             try
             {
-                //locations = await TripPlannerProviderContainer.TripPlannerProvider.GetLocationListAsync(_searchQuery);
                 locations = await TripPlannerProviderProxy.GetLocationList(_searchQuery);
                 ErrorOccurred = false;
             }
             catch (Exception e)
             {
                 ErrorOccurred = true;
-                System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} an error occurred: {e.Message}", "Error");
+                Log($"An error occurred: {e.Message}", "Error");
                 return;
             }
 
@@ -152,22 +150,25 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetDepartures()
         {
+            Log("Attempting to get departures.");
             if (_selectedStopLocation is null)
+            {
+                Log("Could not get departures because no stop location is specified.", "Warning");
                 return;
+            }
 
             DateTime today = DateTime.Today;
             DepartureBoard departureBoard = null;
 
             try
             {
-                //departureBoard = await TripPlannerProviderContainer.TripPlannerProvider.GetDepartureBoardAsync(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
                 departureBoard = await TripPlannerProviderProxy.GetDepartureBoard(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
                 ErrorOccurred = false;
             }
             catch (Exception e)
             {
                 ErrorOccurred = true;
-                System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} an error occurred: {e.Message}", "Error");
+                Log($"An error occurred: {e.Message}", "Error");
                 return;
             }
 
@@ -194,6 +195,7 @@ namespace NextBusDesktop.ViewModels
             Departures.Clear();
 
             PopulateDepartureBoard();
+            Log("Get departures done.");
         }
 
         public void FilterDepartures()
@@ -218,7 +220,7 @@ namespace NextBusDesktop.ViewModels
         {
             foreach (var departureVm in _cachedDepartures)
                 departureVm.OnViewLeave();
-            System.Diagnostics.Debug.WriteLine($"Deconstruct -> departures", "Info");
+            Log("Active resources deactivated", "Deconstruct");
         }
 
         private void PopulateDepartureBoard(Func<DepartureViewModel, bool> selector)
@@ -237,10 +239,10 @@ namespace NextBusDesktop.ViewModels
 
         public async Task RefreshBoard()
         {
-            System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} attempting to refresh board", "Info");
+            Log("Attempting to refresh board", "Info");
             if (_selectedStopLocation is null)
             {
-                System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} could not refresh board because current stop is not specified", "Error");
+                Log("Could not refresh board because current stop is not specified", "Warning");
                 return;
             }
 
@@ -254,7 +256,7 @@ namespace NextBusDesktop.ViewModels
             catch (Exception e)
             {
                 ErrorOccurred = true;
-                System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} an error occurred: {e.Message}", "Error");
+                Log($"An error occurred: {e.Message}", "Error");
                 return;
             }
 
@@ -265,7 +267,7 @@ namespace NextBusDesktop.ViewModels
 
             Departures.Clear();
             FilterDepartures();
-            System.Diagnostics.Debug.WriteLine($"{nameof(DepartureBoardViewModel)} refreshed departure board", "Info");
+            Log("Refresh departure board done", "Info");
         }
     }
 }

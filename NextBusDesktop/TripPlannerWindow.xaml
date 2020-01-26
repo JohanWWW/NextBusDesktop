@@ -153,11 +153,18 @@
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         </Style>
                     </ListBox.ItemContainerStyle>
+                    
+                    <!-- PROGRAMATICALLY GENERATED -->
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:TripViewModel">
                             <controls:TripBoxControl Trip="{x:Bind This}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+                    
+                    <!-- EXAMPLE -->
+                    <ListBoxItem>
+                        <controls:TripBoxControl/>
+                    </ListBoxItem>
                 </ListBox>
             </Grid>
         </SplitView.Content>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NextBusDesktop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,12 @@ namespace NextBusDesktop.ViewModels
     /// </summary>
     public class ViewModelBase : NotificationBase
     {
+        private ILog _logger;
+        public ILog Logger
+        {
+            set => _logger = value;
+        }
+
         public bool EnableLogging = false;
 
         /// <summary>
@@ -20,13 +27,25 @@ namespace NextBusDesktop.ViewModels
         {
         }
 
+        protected void Log(string message)
+        {
+            if (EnableLogging)
+                _logger?.Log(message);
+        }
+
+        protected void Log(string message, string category)
+        {
+            if (EnableLogging)
+                _logger?.Log(message, category);
+        }
+
         /// <summary>
         /// Should be called when the user has left the view represented by this view model.
         /// </summary>
         public void OnViewLeave()
         {
             Deconstruct();
-            System.Diagnostics.Debug.WriteLineIf(EnableLogging, $"Deconstruct -> {this}", "Info");
+            //System.Diagnostics.Debug.WriteLineIf(EnableLogging, $"Deconstruct -> {this}", "Info");
         }
     }
 
@@ -36,6 +55,12 @@ namespace NextBusDesktop.ViewModels
     /// <typeparam name="T">Model which the ViewModel represents</typeparam>
     public class ViewModelBase<T> : NotificationBase<T> where T : class, new()
     {
+        private ILog _logger;
+        public ILog Logger
+        {
+            set => _logger = value;
+        }
+
         public bool EnableLogging = false;
 
         public ViewModelBase(T value = default) : base(value)
@@ -47,6 +72,18 @@ namespace NextBusDesktop.ViewModels
         /// </summary>
         protected virtual void Deconstruct()
         {
+        }
+
+        protected void Log(string message)
+        {
+            if (EnableLogging)
+                _logger?.Log(message);
+        }
+
+        protected void Log(string message, string category)
+        {
+            if (EnableLogging)
+                _logger?.Log(message, category);
         }
 
         /// <summary>

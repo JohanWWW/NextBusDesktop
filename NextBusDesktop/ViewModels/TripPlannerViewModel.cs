@@ -179,7 +179,7 @@ namespace NextBusDesktop.ViewModels
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to get location list for origin. Exception: {e.Message}");
+                Log($"Failed to get location list for origin. Exception: {e.Message}", "Error");
                 return;
             }
 
@@ -206,7 +206,7 @@ namespace NextBusDesktop.ViewModels
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to get location list for destination. Exception: {e.Message}");
+                Log($"Failed to get location list for destination. Exception: {e.Message}", "Error");
                 return;
             }
 
@@ -226,23 +226,23 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetTripList()
         {
-            //if (_selectedOrigin is null || _selectedDestination is null)
-            //    return;
-
+            Log("Attempting to get trip list.");
             if (_origin is null || _destination is null)
+            {
+                Log("Could not get trip list because origin and destination is not specified.", "Warning");
                 return;
+            }
 
             TripList tripList = null;
             try
             {
                 DateTime dateTime = _givenDate.AddHours(_givenTime.Hours).AddMinutes(_givenTime.Minutes);
                 System.Diagnostics.Debug.WriteLine(dateTime);
-                //tripList = await TripPlannerProviderContainer.GetTripList(_selectedOrigin.Id, _selectedDestination.Id, dateTime, _isGivenDateTimeForArrivals);
                 tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerViewModel)} an error occurred when attempted to get trip list: {e.Message}");
+                Log($"An error occurred when attempting to get trip list: {e.Message}", "Error");
                 return;
             }
 
@@ -250,12 +250,17 @@ namespace NextBusDesktop.ViewModels
             _cachedTrips = tripList.Trips.Select(trip => new TripViewModel(trip)).ToList();
 
             PopulateTripList();
+            Log("Get trip list done.");
         }
 
         public async Task RefreshTripList()
         {
+            Log("Attempting to refresh trip list.");
             if (_origin is null || _destination is null)
+            {
+                Log("Could not refresh trip list because origin and destination is not specified.", "Warning");
                 return;
+            }
 
             TripList tripList = null;
             try
@@ -265,7 +270,7 @@ namespace NextBusDesktop.ViewModels
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine($"{nameof(TripPlannerViewModel)} an error occurred when attempted to refresh trip list: {e.Message}");
+                Log($"An error occurred when attempting to refresh trip list: {e.Message}", "Error");
                 return;
             }
 
@@ -273,6 +278,7 @@ namespace NextBusDesktop.ViewModels
             _cachedTrips = tripList.Trips.Select(trip => new TripViewModel(trip)).ToList();
 
             PopulateTripList();
+            Log("Refresh trip list done.");
         }
 
         public void SwapSearchQueries()
