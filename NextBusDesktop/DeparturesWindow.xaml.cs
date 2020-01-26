@@ -31,8 +31,12 @@ namespace NextBusDesktop
 
         private readonly DispatcherTimer _departureBoardRefreshTimer;
         private readonly DispatcherTimer _departureBoxTimer;
+
         private readonly Task _statusIndicatorTask;
         private readonly CancellationTokenSource _statusIndicatorTaskCancellationToken;
+
+        private readonly Task _loadingIndicatorTask;
+        private readonly CancellationTokenSource _loadingIndicatorTaskCancellationToken;
 
         public readonly DepartureBoardViewModel DepartureBoard = new DepartureBoardViewModel 
         { 
@@ -59,6 +63,11 @@ namespace NextBusDesktop
             // Initialize gui update tasks
             _statusIndicatorTaskCancellationToken = new CancellationTokenSource();
             _statusIndicatorTask = StatusIndicatorColorUpdate(_statusIndicatorTaskCancellationToken.Token);
+
+            _loadingIndicatorTaskCancellationToken = new CancellationTokenSource();
+            _loadingIndicatorTask = LoadingIndicatorUpdate(_loadingIndicatorTaskCancellationToken.Token);
+
+            LoadingIndicator.Fill = new SolidColorBrush();
 
             Unloaded += OnUnloaded;
         }
@@ -105,6 +114,65 @@ namespace NextBusDesktop
                 });
                 x++;
             }
+            System.Diagnostics.Debug.WriteLine("Cancel StatusIndicatorColorUpdate");
+        }, cancellationToken);
+
+        private Task LoadingIndicatorUpdate(CancellationToken cancellationToken) => Task.Run(async () =>
+        {
+            Func<int, int, int, int, byte> linear = (currentX, endX, startY, endY) =>
+            {
+                float k = (float)(endY - startY) / endX;
+                return (byte)(k * currentX + startY);
+            };
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(30);
+                if (DepartureBoard.IsLoading)
+                {
+                    // Transition up
+                    int x = 0;
+                    while (x < 15)
+                    {
+                        await Task.Delay(30);
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            LoadingIndicator.Fill = new SolidColorBrush(
+                                color: Color.FromArgb(
+                                    linear(x, 15, 0, 255),
+                                    255,
+                                    128,
+                                    0
+                                )
+                            );
+                        });
+                        x++;
+                    }
+
+                    // Keep same level until done loading.
+                    while (DepartureBoard.IsLoading) await Task.Delay(30);
+
+                    // Transition down
+                    x = 50;
+                    while (x >= 0)
+                    {
+                        await Task.Delay(30);
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            LoadingIndicator.Fill = new SolidColorBrush(
+                                color: Color.FromArgb(
+                                    linear(x, 50, 0, 255),
+                                    255,
+                                    128,
+                                    0
+                                )
+                            );
+                        });
+                        x--;
+                    }
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("Cancel LoadingIndicatorUpdate");
         }, cancellationToken);
 
         private async void OnUnloaded(object sender, RoutedEventArgs e)
@@ -117,8 +185,13 @@ namespace NextBusDesktop
 
             // Cancel status indicator task
             _statusIndicatorTaskCancellationToken.Cancel();
+            _loadingIndicatorTaskCancellationToken.Cancel();
             await _statusIndicatorTask; // Let task run to completion before disposal
+            await _loadingIndicatorTask;
             _statusIndicatorTask.Dispose();
+            _loadingIndicatorTask.Dispose();
+            _statusIndicatorTask.Dispose();
+            _loadingIndicatorTask.Dispose();
         }
     }
 }

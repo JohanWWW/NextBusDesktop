@@ -14,8 +14,8 @@ namespace NextBusDesktop.Utilities
 
         public OutputLogger(string ownerName) => _ownerName = ownerName;
 
-        public void Log(object value) => System.Diagnostics.Debug.WriteLine($"{_ownerName} -> {value.ToString()}");
+        public void Log(object value) => System.Diagnostics.Debug.WriteLine($"[{DateTime.Now}]: {_ownerName} -> {value.ToString()}");
 
-        public void Log(object value, string category) => System.Diagnostics.Debug.WriteLine($"{_ownerName} -> [{category}] -> {value.ToString()}");
+        public void Log(object value, string category) => System.Diagnostics.Debug.WriteLine($"[{DateTime.Now}]: {_ownerName} -> [{category}] -> {value.ToString()}");
     }
 }

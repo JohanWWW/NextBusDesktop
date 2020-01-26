@@ -15,13 +15,6 @@ namespace NextBusDesktop.ViewModels
     {
         private Translator _translator;
 
-        private bool _errorOccurred;
-        public bool ErrorOccurred
-        {
-            get => _errorOccurred;
-            set => SetProperty(ref _errorOccurred, value, nameof(ErrorOccurred));
-        }
-
         private string _searchQuery;
         public string SearchQuery
         {
@@ -100,7 +93,6 @@ namespace NextBusDesktop.ViewModels
         public DepartureBoardViewModel()
         {
             _translator = new Translator("DeparturesWindow");
-            _errorOccurred = false;
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
             _departures = new ObservableCollection<DepartureViewModel>();
             _selectedStopLocationIndex = -1;
@@ -120,18 +112,22 @@ namespace NextBusDesktop.ViewModels
 
         public async void GetLocationList()
         {
-            LocationList locations = null;
-
+            IsLoading = true;
+            LocationList locations;
             try
             {
                 locations = await TripPlannerProviderProxy.GetLocationList(_searchQuery);
-                ErrorOccurred = false;
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
-                ErrorOccurred = true;
+                HasErrorOccurred = true;
                 Log($"An error occurred: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             if (locations.StopLocations is null)
@@ -157,19 +153,24 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
+            IsLoading = true;
+
             DateTime today = DateTime.Today;
             DepartureBoard departureBoard = null;
-
             try
             {
                 departureBoard = await TripPlannerProviderProxy.GetDepartureBoard(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
-                ErrorOccurred = false;
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
-                ErrorOccurred = true;
+                HasErrorOccurred = true;
                 Log($"An error occurred: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             TrackFilter.Clear();
@@ -246,18 +247,24 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
+            IsLoading = true;
+
             DateTime now = DateTime.Now;
             DepartureBoard departureBoard;
             try
             {
                 departureBoard = await TripPlannerProviderProxy.GetDepartureBoard(_selectedStopLocation.Id, now);
-                ErrorOccurred = false;
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
-                ErrorOccurred = true;
+                HasErrorOccurred = true;
                 Log($"An error occurred: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             if (_cachedDepartures != null)

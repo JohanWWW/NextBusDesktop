@@ -48,11 +48,16 @@
         <SplitView.Content>
             <Grid Background="#222222">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="5"/>
                     <RowDefinition Height="45"/>
                     <RowDefinition Height="45"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
+                <Rectangle x:Name="LoadingIndicator"
+                           Fill="Orange"
+                           Grid.Row="0"/>
+                <Grid Grid.Row="1"
+                      Padding="15 0 15 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="50"/>
@@ -62,28 +67,13 @@
                     <TextBox x:Name="OriginTextBox"
                              x:Uid="/TripPlannerResources/From"
                              Text="{x:Bind TripPlanner.OriginSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"
                              PlaceholderText="From"
                              FontSize="24"
                              Grid.Column="0"
                              BorderThickness="0"
-                             KeyDown="OnOriginTextBoxKeyDown">
-                        <!--<FlyoutBase.AttachedFlyout>
-                            <Flyout x:Name="OriginResultsFlyout" 
-                                    Placement="BottomEdgeAlignedLeft"
-                                    Opening="{x:Bind TripPlanner.GetOriginLocationList}">
-                                <ListBox x:Name="OriginSearchResultsListBox"
-                                         ItemsSource="{x:Bind TripPlanner.OriginStopLocations}"
-                                         SelectedItem="{x:Bind TripPlanner.Origin, Mode=OneWay}"
-                                         SelectionChanged="OnOriginSelectionChanged">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate x:DataType="viewModels:StopLocationViewModel">
-                                            <TextBlock Text="{x:Bind Name}"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </Flyout>
-                        </FlyoutBase.AttachedFlyout>-->
-                    </TextBox>
+                             KeyDown="OnOriginTextBoxKeyDown"
+                             CornerRadius="5"/>
                     <Button Content="&#xF1CB;"
                             FontFamily="Segoe MDL2 Assets"
                             FontSize="24"
@@ -97,75 +87,57 @@
                     <TextBox x:Name="DestinationTextBox"
                              x:Uid="/TripPlannerResources/To"
                              Text="{x:Bind TripPlanner.DestinationSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"
                              PlaceholderText="To"
                              FontSize="24"
                              Grid.Column="2"
                              BorderThickness="0"
-                             KeyDown="OnDestinationTextBoxKeyDown">
-                        <!--<FlyoutBase.AttachedFlyout>
-                            <Flyout x:Name="DestinationResultsFlyout" 
-                                    Placement="BottomEdgeAlignedLeft"
-                                    Opening="{x:Bind TripPlanner.GetDestinationLocationList}">
-                                <ListBox x:Name="DestinationSearchResultListBox"
-                                         ItemsSource="{x:Bind TripPlanner.DestinationStopLocations}"
-                                         SelectedItem="{x:Bind TripPlanner.Destination, Mode=OneWay}"
-                                         SelectionChanged="OnDestinationSelectionChanged">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate x:DataType="viewModels:StopLocationViewModel">
-                                            <TextBlock Text="{x:Bind Name}"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </Flyout>
-                        </FlyoutBase.AttachedFlyout>-->
-                    </TextBox>
+                             KeyDown="OnDestinationTextBoxKeyDown"
+                             CornerRadius="5"/>
                 </Grid>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="2"
+                      Padding="15 5 15 0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal">
-                        <DatePicker Style="{StaticResource CustomDatePicker}" 
-                                    Date="{x:Bind TripPlanner.GivenDate, Converter={StaticResource DateTimeToDateTimeOffset}, Mode=TwoWay}"/>
-                        <TimePicker Time="{x:Bind TripPlanner.GivenTime, Mode=TwoWay}"
-                                    ClockIdentifier="24HourClock"/>
-                        <ToggleSwitch Style="{StaticResource CustomToggleSwitchStyle}"
-                                      IsOn="{x:Bind TripPlanner.IsGivenDateTimeForArrivals, Mode=TwoWay}"
-                                      OffContent="Avgång" 
-                                      OnContent="Ankomst"/>
-                    </StackPanel>
+
+                    <DatePicker Style="{StaticResource CustomDatePicker}" 
+                                Date="{x:Bind TripPlanner.GivenDate, Converter={StaticResource DateTimeToDateTimeOffset}, Mode=TwoWay}"
+                                Grid.Column="0"/>
+                    <TimePicker Time="{x:Bind TripPlanner.GivenTime, Mode=TwoWay}"
+                                ClockIdentifier="24HourClock"
+                                Grid.Column="1"/>
+                    <ToggleSwitch Style="{StaticResource CustomToggleSwitchStyle}"
+                                  IsOn="{x:Bind TripPlanner.IsGivenDateTimeForArrivals, Mode=TwoWay}"
+                                  OffContent="Avgång" 
+                                  OnContent="Ankomst"
+                                  Margin="10 0 0 0"
+                                  Grid.Column="2"/>
                     <Button x:Uid="/TripPlannerResources/Search"
-                            Grid.Column="2"
+                            Grid.Column="3"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Content="Search"
                             Foreground="White"
+                            Background="Orange"
                             FontSize="18"
-                            Click="{x:Bind TripPlanner.GetTripList}"/>
+                            Click="{x:Bind TripPlanner.GetTripList}"
+                            CornerRadius="5"
+                            Height="35"/>
                 </Grid>
-                <ListBox Grid.Row="2"
-                         Background="#222222"
-                         ItemsSource="{x:Bind TripPlanner.Trips}">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    
-                    <!-- PROGRAMATICALLY GENERATED -->
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="viewModels:TripViewModel">
-                            <controls:TripBoxControl Trip="{x:Bind This}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    
-                    <!-- EXAMPLE -->
-                    <ListBoxItem>
-                        <controls:TripBoxControl/>
-                    </ListBoxItem>
-                </ListBox>
+                <ScrollViewer Grid.Row="3">
+                    <ItemsControl ItemsSource="{x:Bind TripPlanner.Trips}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:TripViewModel">
+                                <controls:TripBoxControl Trip="{x:Bind This}"
+                                                         Margin="15 5 15 5"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>                    
+                </ScrollViewer>
             </Grid>
         </SplitView.Content>
     </SplitView>

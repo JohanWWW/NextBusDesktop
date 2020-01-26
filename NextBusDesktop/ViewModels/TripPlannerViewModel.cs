@@ -16,13 +16,6 @@ namespace NextBusDesktop.ViewModels
         private CurrentFocus _currentFocus;
         private IEnumerable<TripViewModel> _cachedTrips;
 
-        private bool _errorOccurred;
-        public bool ErrorOccurred
-        {
-            get => _errorOccurred;
-            set => SetProperty(ref _errorOccurred, value, nameof(ErrorOccurred));
-        }
-
         private DateTime _givenDate;
         public DateTime GivenDate
         {
@@ -172,15 +165,23 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetOriginLocationList()
         {
+            IsLoading = true;
+
             LocationList originSearchResult = null;
             try
             {
                 originSearchResult = await GetLocationList(_originSearchQuery);
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
+                HasErrorOccurred = true;
                 Log($"Failed to get location list for origin. Exception: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             StopLocations.Clear();
@@ -199,15 +200,23 @@ namespace NextBusDesktop.ViewModels
 
         public async Task GetDestinationLocationList()
         {
+            IsLoading = true;
+
             LocationList destinationSearchResult = null;
             try
             {
                 destinationSearchResult = await GetLocationList(_destinationSearchQuery);
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
+                HasErrorOccurred = true;
                 Log($"Failed to get location list for destination. Exception: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             StopLocations.Clear();
@@ -233,17 +242,24 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
+            IsLoading = true;
+
             TripList tripList = null;
             try
             {
                 DateTime dateTime = _givenDate.AddHours(_givenTime.Hours).AddMinutes(_givenTime.Minutes);
-                System.Diagnostics.Debug.WriteLine(dateTime);
                 tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
+                HasErrorOccurred = true;
                 Log($"An error occurred when attempting to get trip list: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             Trips.Clear();
@@ -262,16 +278,24 @@ namespace NextBusDesktop.ViewModels
                 return;
             }
 
+            IsLoading = true;
+
             TripList tripList = null;
             try
             {
                 DateTime dateTime = DateTime.Now;
                 tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
+                HasErrorOccurred = false;
             }
             catch (Exception e)
             {
+                HasErrorOccurred = true;
                 Log($"An error occurred when attempting to refresh trip list: {e.Message}", "Error");
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
             Trips.Clear();

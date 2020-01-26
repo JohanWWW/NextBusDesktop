@@ -18,6 +18,26 @@ namespace NextBusDesktop.ViewModels
             set => _logger = value;
         }
 
+        private bool _isLoading;
+        /// <summary>
+        /// Notifies UI whether or not the view model is busy.
+        /// </summary>
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+        private bool _hasErrorOccurred;
+        /// <summary>
+        /// Notifies UI whether or not an error has occurred in the view model.
+        /// </summary>
+        public bool HasErrorOccurred
+        {
+            get => _hasErrorOccurred;
+            set => SetProperty(ref _hasErrorOccurred, value);
+        }
+
         public bool EnableLogging = false;
 
         /// <summary>
@@ -59,6 +79,26 @@ namespace NextBusDesktop.ViewModels
         public ILog Logger
         {
             set => _logger = value;
+        }
+
+        private bool _isLoading;
+        /// <summary>
+        /// Notifies UI whether or not the view model is busy.
+        /// </summary>
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value);
+        }
+
+        private bool _hasErrorOccurred;
+        /// <summary>
+        /// Notifies UI whether or not an error has occurred in the view model.
+        /// </summary>
+        public bool HasErrorOccurred
+        {
+            get => _hasErrorOccurred;
+            set => SetProperty(ref _hasErrorOccurred, value);
         }
 
         public bool EnableLogging = false;

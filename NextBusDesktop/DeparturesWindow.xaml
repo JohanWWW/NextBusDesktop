@@ -14,6 +14,7 @@
 
     <Page.Resources>
         <converters:ColorToSolidColorBrush x:Key="ColorToSolidColorBrush"/>
+        <converters:BoolToVisibility x:Key="BoolToVisibility"/>
     </Page.Resources>
     
     <Grid Background="#222222">
@@ -21,6 +22,7 @@
             <RowDefinition Height="45"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
         <TextBox x:Name="SearchTextBox"
                  x:Uid="/DeparturesWindow/SearchForStop"
                  Text="{x:Bind DepartureBoard.SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -34,7 +36,7 @@
                    IsPaneOpen="{x:Bind DepartureBoard.SearchResultPaneIsOpen, Mode=OneWay}"
                    DisplayMode="Inline"
                    OpenPaneLength="250"
-                   Grid.Row="2">
+                   Grid.Row="1">
             <SplitView.Pane>
                 <ListBox x:Name="SearchResultList"
                          ItemsSource="{x:Bind DepartureBoard.StopLocations, Mode=OneWay}"
@@ -47,17 +49,35 @@
                                            TextWrapping="Wrap"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+
+                    <!-- Example -->
+                    <ListBoxItem>
+                        <TextBlock Text="Stenungsunds station, Stenungsund"
+                                   TextWrapping="Wrap"></TextBlock>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <TextBlock Text="Nösnäs, Stenungsund"
+                                   TextWrapping="Wrap"></TextBlock>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <TextBlock Text="Borealis kracker, Stenungsund"
+                                   TextWrapping="Wrap"></TextBlock>
+                    </ListBoxItem>
                 </ListBox>
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
                         <RowDefinition Height="45"/>
                         <RowDefinition Height="45"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
+                    <Rectangle x:Name="LoadingIndicator" 
+                               Grid.Row="0"
+                               Fill="Orange"/>
                     <StackPanel Orientation="Horizontal"
-                                Grid.Row="0">
+                                Grid.Row="1">
                         <TextBlock x:Uid="/DeparturesWindow/Earliest" 
                                    Text="Earliest"
                                    Foreground="White"
@@ -88,7 +108,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                    <StackPanel Grid.Row="1"
+                    <StackPanel Grid.Row="2"
                                 Margin="10 15 10 0">
                         <Grid BorderBrush="White"
                               BorderThickness="0 0 0 1">
@@ -114,7 +134,7 @@
                                            Text="Direction"
                                            Margin="5 0 0 5"
                                            Foreground="White" 
-                                           FontSize="18"/> 
+                                           FontSize="18"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2"
                                         BorderBrush="White"
@@ -145,34 +165,23 @@
                             </StackPanel>
                         </Grid>
                     </StackPanel>
-                    <ListBox x:Name="DepartureListBox"
-                             ItemsSource="{x:Bind DepartureBoard.Departures, Mode=OneWay}"
-                             Grid.Row="2" 
-                             Background="#222222">
-                        <!-- Programatically generated -->
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="viewModels:DepartureViewModel">
-                                <controls:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
-                                                              TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                              Track="{x:Bind Track, Mode=OneTime}"
-                                                              LineLogoBackground="{x:Bind LineLogoForeground, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneTime}"
-                                                              LineLogoForeground="{x:Bind LineLogoBackground, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneTime}"
-                                                              DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
-                                                              DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
-                                                              StatusIndicatorColor="{x:Bind StatusIndicatorColor, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneWay}"
-                                                              Margin="0 1 0 0"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-
-                        <ListBoxItem>
-                            <controls:DepartureBoxControl Margin="0 1 0 0"/>
-                        </ListBoxItem>
-                    </ListBox>
+                    <ScrollViewer Grid.Row="3">
+                        <ItemsControl ItemsSource="{x:Bind DepartureBoard.Departures}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:DepartureViewModel">
+                                    <controls:DepartureBoxControl Line="{x:Bind ShortName, Mode=OneTime}"
+                                                                  TimeLeftInfo="{x:Bind TimeLeftInfo, Mode=OneWay}"
+                                                                  Track="{x:Bind Track, Mode=OneTime}"
+                                                                  LineLogoBackground="{x:Bind LineLogoForeground, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneTime}"
+                                                                  LineLogoForeground="{x:Bind LineLogoBackground, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneTime}"
+                                                                  DepartureTimeInfo="{x:Bind DepartureTimeInfo, Mode=OneTime}"
+                                                                  DirectionInfo="{x:Bind DirectionInfo, Mode=OneTime}"
+                                                                  StatusIndicatorColor="{x:Bind StatusIndicatorColor, Converter={StaticResource ColorToSolidColorBrush}, Mode=OneWay}"
+                                                                  Margin="10 25 10 0"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </SplitView.Content>
         </SplitView>

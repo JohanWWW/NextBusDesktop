@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using NextBusDesktop.ViewModels;
 using NextBusDesktop.Utilities;
+using System.Threading.Tasks;
+using System.Threading;
+using Windows.UI;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,6 +30,9 @@ namespace NextBusDesktop
         private readonly DispatcherTimer _tripListRefreshTimer;
         private readonly DispatcherTimer _tripBoxTimer;
 
+        private readonly Task _loadingIndicatorTask;
+        private readonly CancellationTokenSource _loadingIndicatorTaskCancellationToken;
+
         public TripPlannerViewModel TripPlanner = new TripPlannerViewModel
         {
             Logger = new OutputLogger(nameof(TripPlannerViewModel)),
@@ -37,6 +43,7 @@ namespace NextBusDesktop
         {
             InitializeComponent();
 
+            // Initialize timers
             _tripListRefreshTimer = new DispatcherTimer();
             _tripListRefreshTimer.Interval = TimeSpan.FromMinutes(1f);
             _tripListRefreshTimer.Tick += OnTripListRefreshTimerTick;
@@ -48,14 +55,13 @@ namespace NextBusDesktop
             _tripListRefreshTimer.Start();
             _tripBoxTimer.Start();
 
-            Unloaded += (s, e) => // Destroy timers
-            {
-                _tripListRefreshTimer.Stop();
-                _tripListRefreshTimer.Tick -= OnTripListRefreshTimerTick;
+            LoadingIndicator.Fill = new SolidColorBrush();
 
-                _tripBoxTimer.Stop();
-                _tripBoxTimer.Tick -= OnTripBoxTimerTick;
-            };
+            // Initialize gui update tasks
+            _loadingIndicatorTaskCancellationToken = new CancellationTokenSource();
+            _loadingIndicatorTask = LoadingIndicatorUpdate(_loadingIndicatorTaskCancellationToken.Token);
+
+            Unloaded += OnUnloaded;
         }
 
         private async void OnTripListRefreshTimerTick(object sender, object e)
@@ -82,6 +88,80 @@ namespace NextBusDesktop
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
                 await TripPlanner.GetDestinationLocationList();
+        }
+
+        private Task LoadingIndicatorUpdate(CancellationToken cancellationToken) => Task.Run(async () =>
+        {
+            Func<int, int, int, int, byte> linear = (currentX, endX, startY, endY) =>
+            {
+                float k = (float)(endY - startY) / endX;
+                return (byte)(k * currentX + startY);
+            };
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(30);
+                if (TripPlanner.IsLoading)
+                {
+                    // Transition up
+                    int x = 0;
+                    while (x < 15)
+                    {
+                        await Task.Delay(30);
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            LoadingIndicator.Fill = new SolidColorBrush(
+                                color: Color.FromArgb(
+                                    linear(x, 15, 0, 255),
+                                    255,
+                                    128,
+                                    0
+                                )
+                            );
+                        });
+                        x++;
+                    }
+
+                    // Keep same level until done loading.
+                    while (TripPlanner.IsLoading) await Task.Delay(30);
+
+                    // Transition down
+                    x = 50;
+                    while (x >= 0)
+                    {
+                        await Task.Delay(30);
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            LoadingIndicator.Fill = new SolidColorBrush(
+                                color: Color.FromArgb(
+                                    linear(x, 50, 0, 255),
+                                    255,
+                                    128,
+                                    0
+                                )
+                            );
+                        });
+                        x--;
+                    }
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("Cancel LoadingIndicatorUpdate");
+        }, cancellationToken);
+
+        private async void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            // Destroy timers
+            _tripListRefreshTimer.Stop();
+            _tripListRefreshTimer.Tick -= OnTripListRefreshTimerTick;
+
+            _tripBoxTimer.Stop();
+            _tripBoxTimer.Tick -= OnTripBoxTimerTick;
+
+            // Cancel and destroy tasks
+            _loadingIndicatorTaskCancellationToken.Cancel();
+            await _loadingIndicatorTask;
+            _loadingIndicatorTask.Dispose();
+            _loadingIndicatorTaskCancellationToken.Dispose();
         }
     }
 }
