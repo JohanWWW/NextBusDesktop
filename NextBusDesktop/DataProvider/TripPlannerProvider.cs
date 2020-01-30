@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.ResponseModels;
 using NextBusDesktop.ResponseModels.TripPlanner;
@@ -10,7 +7,6 @@ using NextBusDesktop.Models;
 using RestSharp;
 using NextBusDesktop.Models.TripPlanner;
 using NextBusDesktop.Models.DepartureBoard;
-using System.ComponentModel;
 using NextBusDesktop.Utilities;
 
 namespace NextBusDesktop.DataProvider
@@ -42,7 +38,6 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<DepartureBoard> GetDepartureBoardAsync(string stopId, DateTime dateTime)
         {
-            //Log($"Request -> {nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}.");
             Log($"{nameof(GetDepartureBoardAsync)}: Requesting departure board for stop {stopId}", "Request");
             var request = new RestRequest("/departureBoard");
             request.AddHeader("Authorization", $"{_accessToken.Type} {_accessToken.Token}");
@@ -52,7 +47,6 @@ namespace NextBusDesktop.DataProvider
             request.AddParameter("format", "json");
 
             var response = await _client.ExecuteTaskAsync<DepartureBoardResponseRoot>(request, Method.GET);
-            //Log($"Response -> {nameof(GetDepartureBoardAsync)} {response.StatusCode}");
             Log($"{nameof(GetDepartureBoardAsync)}: {response.StatusCode}", "Response");
 
             return new DepartureBoard(response.Data.DepartureBoard);
@@ -60,7 +54,6 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<LocationList> GetLocationListAsync(string query)
         {
-            //Log($"Request -> {nameof(GetLocationListAsync)}: Requesting location list for query '{query}'.");
             Log($"{nameof(GetLocationListAsync)}: Requesting location list for query '{query}'", "Request");
 
             var request = new RestRequest("/location.name");
@@ -69,7 +62,6 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("format", "json");
 
             var response = await _client.ExecuteTaskAsync<LocationListResponseRoot>(request, Method.GET);
-            //Log($"Response -> {nameof(GetLocationListAsync)} {response.StatusCode}: location list count {response.Data?.LocationList?.StopLocations?.Count()}");
             Log($"{nameof(GetLocationListAsync)}: {response.StatusCode}", "Response");
 
             return new LocationList(response.Data.LocationList);
@@ -79,7 +71,6 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<TripList> GetTripListAsync(string originStopId, string destinationStopId, DateTime dateTime, bool isSearchForArrival = false)
         {
-            //Log($"Request -> {nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}.");
             Log($"{nameof(GetTripListAsync)}: Requesting trips for {nameof(originStopId)} {originStopId} and {nameof(destinationStopId)} {destinationStopId}", "Request");
 
             var request = new RestRequest("/trip");
@@ -92,7 +83,6 @@ namespace NextBusDesktop.DataProvider
             request.AddQueryParameter("format", "json");
 
             var response = await _client.ExecuteTaskAsync<TripListRoot>(request, Method.GET);
-            //Log($"Response -> {nameof(GetTripListAsync)} {response.StatusCode}");
             Log($"{nameof(GetTripListAsync)}: {response.StatusCode}", "Response");
 
             return new TripList(response.Data.TripList);

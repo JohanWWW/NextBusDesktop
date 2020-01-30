@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NextBusDesktop.Models;
 using NextBusDesktop.Models.DepartureBoard;
 using NextBusDesktop.DataProvider;
-using Windows.UI.Xaml;
 
 namespace NextBusDesktop.ViewModels
 {
     public class DepartureBoardViewModel : ViewModelBase
     {
-        private Translator _translator;
+        private readonly Translator _translator;
 
         private string _searchQuery;
         public string SearchQuery
@@ -96,18 +94,9 @@ namespace NextBusDesktop.ViewModels
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
             _departures = new ObservableCollection<DepartureViewModel>();
             _selectedStopLocationIndex = -1;
-            _selectedStopLocation = null;
-            _searchResultPaneIsOpen = false;
-            _selectTrackEnabled = false;
             DateTime now = DateTime.Now;
             DepartureTime = new TimeSpan(now.Hour, now.Minute, now.Second);
             _trackFilter = new TrackFilterListViewModel();
-        }
-
-        protected override void Deconstruct()
-        {
-            if (_cachedDepartures != null)
-                DeconstructDepartures();
         }
 
         public async void GetLocationList()
@@ -178,8 +167,6 @@ namespace NextBusDesktop.ViewModels
             SearchResultPaneIsOpen = false;
             SelectTrackEnabled = true;
 
-            if (_cachedDepartures != null)
-                DeconstructDepartures(); // deconstruct existing departures before creating new ones.
             _cachedDepartures = departureBoard.Departures?.Select(d => new DepartureViewModel(d)).ToList();
 
             TrackFilter.Add(new TrackViewModel(_translator["All"], "*"));
@@ -215,13 +202,6 @@ namespace NextBusDesktop.ViewModels
                 Departures.Clear();
                 PopulateDepartureBoard(departure => departure.Track == selectedTrack.TrackNumber);
             }
-        }
-
-        private void DeconstructDepartures()
-        {
-            foreach (var departureVm in _cachedDepartures)
-                departureVm.OnViewLeave();
-            Log("Active resources deactivated", "Deconstruct");
         }
 
         private void PopulateDepartureBoard(Func<DepartureViewModel, bool> selector)
@@ -266,9 +246,6 @@ namespace NextBusDesktop.ViewModels
             {
                 IsLoading = false;
             }
-
-            if (_cachedDepartures != null)
-                DeconstructDepartures();
 
             _cachedDepartures = departureBoard.Departures.Select(departure => new DepartureViewModel(departure)).ToList();
 

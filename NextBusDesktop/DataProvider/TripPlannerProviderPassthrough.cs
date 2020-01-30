@@ -1,14 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NextBusDesktop.ResponseModels;
 using NextBusDesktop.Models;
 using NextBusDesktop.Models.DepartureBoard;
 using NextBusDesktop.Models.TripPlanner;
-using System.Xml;
 using Windows.Storage;
 using NextBusDesktop.Utilities;
 

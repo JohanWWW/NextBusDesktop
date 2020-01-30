@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NextBusDesktop.Models;
 using NextBusDesktop.Models.TripPlanner;
 using NextBusDesktop.Utilities;
@@ -12,9 +9,9 @@ namespace NextBusDesktop.ViewModels
 {
     public class StepViewModel : ViewModelBase<Step>
     {
-        private Translator _translator;
+        private readonly Translator _translator;
 
-        private static readonly Dictionary<VehicleType, string> _temp = new Dictionary<VehicleType, string>
+        private static readonly Dictionary<VehicleType, string> _vehicleKeyDict = new Dictionary<VehicleType, string>
         {
             [VehicleType.Bus] = "TheBus",
             [VehicleType.Train] = "TheTrain",
@@ -122,11 +119,6 @@ namespace NextBusDesktop.ViewModels
                         break;
                 }
 
-                //System.Diagnostics.Debug.WriteLine($"JourneyNumber: {JourneyNumber}");
-                //System.Diagnostics.Debug.WriteLine($"Fullname: {FullName}");
-                //System.Diagnostics.Debug.WriteLine($"Shortname: {ShortName}");
-                //System.Diagnostics.Debug.WriteLine($"");
-
                 return message;
             }
         }
@@ -151,7 +143,7 @@ namespace NextBusDesktop.ViewModels
                     double adjustedArrivalMinutes = Math.Round(((DateTime)Destination.RealisticArrivalDateTime - Destination.ArrivalDateTime).TotalMinutes);
 
                     message = _translator["DepartureArrivalInfoMessage",
-                        _translator[_temp[VehicleType]],
+                        _translator[_vehicleKeyDict[VehicleType]],
                         Origin.StopName,
                         Math.Abs(adjustedDepartureMinutes),
                         timeUnit(adjustedDepartureMinutes),
@@ -166,7 +158,7 @@ namespace NextBusDesktop.ViewModels
                 {
                     double adjustedDepartureMinutes = Math.Round(((DateTime)Origin.RealisticDepartureDateTime - Origin.DepartureDateTime).TotalMinutes);
                     message = _translator["DepartureInfoMessage",
-                        _translator[_temp[VehicleType]],
+                        _translator[_vehicleKeyDict[VehicleType]],
                         Origin.StopName,
                         Math.Abs(adjustedDepartureMinutes),
                         timeUnit(adjustedDepartureMinutes),
@@ -177,7 +169,7 @@ namespace NextBusDesktop.ViewModels
                 {
                     double adjustedArrivalMinutes = Math.Round(((DateTime)Destination.RealisticArrivalDateTime - Destination.ArrivalDateTime).TotalMinutes);
                     message = _translator["ArrivalInfoMessage",
-                        _translator[_temp[VehicleType]],
+                        _translator[_vehicleKeyDict[VehicleType]],
                         Destination.StopName,
                         Math.Abs(adjustedArrivalMinutes),
                         timeUnit(adjustedArrivalMinutes),

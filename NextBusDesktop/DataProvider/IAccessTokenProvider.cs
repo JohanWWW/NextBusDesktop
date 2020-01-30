@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NextBusDesktop.ResponseModels;
+﻿using System.Threading.Tasks;
+using System;
 using NextBusDesktop.Models;
-using RestSharp;
 
 namespace NextBusDesktop.DataProvider
 {

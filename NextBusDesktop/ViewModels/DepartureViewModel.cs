@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Win32.SafeHandles;
 using NextBusDesktop.Models.DepartureBoard;
 using NextBusDesktop.Utilities;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 
 namespace NextBusDesktop.ViewModels
 {
@@ -51,10 +43,6 @@ namespace NextBusDesktop.ViewModels
         }
 
         public void TriggerTimeUpdate() => TimeLeftInfo = GetTimeLeftMessage();
-
-        protected override void Deconstruct()
-        {
-        }
 
         private string GetDirectionMessage() => _translator["DirectionOf", Model.Direction];
 

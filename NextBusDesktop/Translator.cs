@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Globalization;
 
@@ -10,7 +7,7 @@ namespace NextBusDesktop
 {
     public class Translator
     {
-        private ResourceLoader _loader;
+        private readonly ResourceLoader _loader;
 
         public static string[] SupportedLanguages => ApplicationLanguages.ManifestLanguages.ToArray();
         public static string CurrentLanguage => ApplicationLanguages.PrimaryLanguageOverride;

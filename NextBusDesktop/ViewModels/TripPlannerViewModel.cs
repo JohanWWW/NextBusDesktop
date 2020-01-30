@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace NextBusDesktop.ViewModels
 {
@@ -141,10 +139,6 @@ namespace NextBusDesktop.ViewModels
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
             _selectedStopLocationIndex = -1;
             _trips = new ObservableCollection<TripViewModel>();
-        }
-
-        protected override void Deconstruct()
-        {
         }
 
         public async Task GetOriginLocationList()

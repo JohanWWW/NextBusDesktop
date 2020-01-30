@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NextBusDesktop.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private Translator _translator;
-        private Action _externalUpdate;
+        private readonly Translator _translator;
+        private readonly Action _externalUpdate;
 
         private ObservableCollection<LanguageViewModel> _languages;
         public ObservableCollection<LanguageViewModel> Languages

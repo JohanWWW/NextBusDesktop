@@ -3,13 +3,11 @@ using NextBusDesktop.Models.DepartureBoard;
 using NextBusDesktop.Models.TripPlanner;
 using NextBusDesktop.ResponseModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NextBusDesktop.DataProvider
 {
+#pragma warning disable
     public class TripPlannerProviderMock : ITripPlannerProvider
     {
         public bool IsAccessTokenExpired => false;
@@ -71,4 +69,5 @@ namespace NextBusDesktop.DataProvider
         {
         }
     }
+#pragma warning restore
 }

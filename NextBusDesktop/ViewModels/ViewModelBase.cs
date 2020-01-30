@@ -1,9 +1,5 @@
-﻿using NextBusDesktop.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using NextBusDesktop.Utilities;
 
 namespace NextBusDesktop.ViewModels
 {
@@ -40,14 +36,6 @@ namespace NextBusDesktop.ViewModels
 
         public bool EnableLogging = false;
 
-        /// <summary>
-        /// Cleans resources or anything that might be running when this instance is no longer in use.
-        /// </summary>
-        [Obsolete]
-        protected virtual void Deconstruct()
-        {
-        }
-
         protected void Log(string message)
         {
             if (EnableLogging)
@@ -58,16 +46,6 @@ namespace NextBusDesktop.ViewModels
         {
             if (EnableLogging)
                 _logger?.Log(message, category);
-        }
-
-        /// <summary>
-        /// Should be called when the user has left the view represented by this view model.
-        /// </summary>
-        [Obsolete]
-        public void OnViewLeave()
-        {
-            Deconstruct();
-            //System.Diagnostics.Debug.WriteLineIf(EnableLogging, $"Deconstruct -> {this}", "Info");
         }
     }
 
@@ -109,14 +87,6 @@ namespace NextBusDesktop.ViewModels
         {
         }
 
-        /// <summary>
-        /// Cleans resources or anything that might be running when this instance is no longer in use.
-        /// </summary>
-        [Obsolete]
-        protected virtual void Deconstruct()
-        {
-        }
-
         protected void Log(string message)
         {
             if (EnableLogging)
@@ -127,16 +97,6 @@ namespace NextBusDesktop.ViewModels
         {
             if (EnableLogging)
                 _logger?.Log(message, category);
-        }
-
-        /// <summary>
-        /// Should be called when the user has left the view represented by this view model.
-        /// </summary>
-        [Obsolete]
-        public void OnViewLeave()
-        {
-            Deconstruct();
-            System.Diagnostics.Debug.WriteLineIf(EnableLogging, $"Deconstruct -> {this}", "Info");
         }
     }
 }
