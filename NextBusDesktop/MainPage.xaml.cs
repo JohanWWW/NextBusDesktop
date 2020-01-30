@@ -52,7 +52,7 @@ namespace NextBusDesktop
         {
             try
             {
-                await TripPlannerProviderProxy.Initialize();
+                await TripPlannerProviderPassthrough.Initialize();
             }
             catch (Exception e)
             {

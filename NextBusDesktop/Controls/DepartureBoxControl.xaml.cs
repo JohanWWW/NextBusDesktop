@@ -29,11 +29,15 @@ namespace NextBusDesktop.Controls
             set => LineLogo.LineNumberText = value;
         }
 
+        public static DependencyProperty LineProperty = DependencyProperty.Register(nameof(Line), typeof(string), typeof(DepartureBoxControl), null);
+
         public string DirectionInfo
         {
             get => DirectionTextBlock.Text;
             set => DirectionTextBlock.Text = value;
         }
+
+        public static DependencyProperty DirectionInfoProperty = DependencyProperty.Register(nameof(DirectionInfo), typeof(string), typeof(DepartureBoxControl), null);
 
         public string DepartureTimeInfo
         {
@@ -41,17 +45,23 @@ namespace NextBusDesktop.Controls
             set => DepartureTimeTextBlock.Text = value;
         }
 
+        public static DependencyProperty DepartureTimeInfoProperty = DependencyProperty.Register(nameof(DepartureTimeInfo), typeof(string), typeof(DepartureBoxControl), null);
+
         public Brush LineLogoBackground
         {
             get => LineLogo.LineNumberBackground;
             set => LineLogo.LineNumberBackground = value;
         }
 
+        public static DependencyProperty LineLogoBackgroundProperty = DependencyProperty.Register(nameof(LineLogoBackground), typeof(Brush), typeof(DepartureBoxControl), null);
+
         public Brush LineLogoForeground
         {
             get => LineLogo.LineNumberForeground;
             set => LineLogo.LineNumberForeground = value;
         }
+
+        public static DependencyProperty LineLogoForegroundProperty = DependencyProperty.Register(nameof(LineLogoForeground), typeof(Brush), typeof(DepartureBoxControl), null);
 
         public Brush StatusIndicatorColor
         {
@@ -75,12 +85,8 @@ namespace NextBusDesktop.Controls
             set => TrackNumberTextBlock.Text = value;
         }
 
-        public DepartureBoxControl()
-        {
-            InitializeComponent();
-        }
+        public static DependencyProperty TrackProperty = DependencyProperty.Register(nameof(Track), typeof(string), typeof(DepartureBoxControl), null);
 
-        private Color ColorHelper(string value) =>
-            (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), value);
+        public DepartureBoxControl() => InitializeComponent();
     }
 }

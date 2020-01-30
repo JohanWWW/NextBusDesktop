@@ -48,11 +48,12 @@
         <SplitView.Content>
             <Grid Background="#222222">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="5"/>
-                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="45"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                
                 <Rectangle x:Name="LoadingIndicator"
                            Fill="Orange"
                            Grid.Row="0"/>
@@ -74,6 +75,7 @@
                              BorderThickness="0"
                              KeyDown="OnOriginTextBoxKeyDown"
                              CornerRadius="5"/>
+                    
                     <Button Content="&#xF1CB;"
                             FontFamily="Segoe MDL2 Assets"
                             FontSize="24"
@@ -82,8 +84,8 @@
                             Grid.Column="1"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Click="{x:Bind TripPlanner.SwapSearchQueries}">
-                    </Button>
+                            Click="{x:Bind TripPlanner.SwapSearchQueries}"/>
+
                     <TextBox x:Name="DestinationTextBox"
                              x:Uid="/TripPlannerResources/To"
                              Text="{x:Bind TripPlanner.DestinationSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -110,10 +112,11 @@
                     <TimePicker Time="{x:Bind TripPlanner.GivenTime, Mode=TwoWay}"
                                 ClockIdentifier="24HourClock"
                                 Grid.Column="1"/>
-                    <ToggleSwitch Style="{StaticResource CustomToggleSwitchStyle}"
+                    <ToggleSwitch x:Uid="/TripPlannerResources/SearchMode" 
+                                  Style="{StaticResource CustomToggleSwitchStyle}"
                                   IsOn="{x:Bind TripPlanner.IsGivenDateTimeForArrivals, Mode=TwoWay}"
-                                  OffContent="Avgång" 
-                                  OnContent="Ankomst"
+                                  OffContent="Depart" 
+                                  OnContent="Arrive"
                                   Margin="10 0 0 0"
                                   Grid.Column="2"/>
                     <Button x:Uid="/TripPlannerResources/Search"

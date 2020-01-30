@@ -64,7 +64,10 @@ namespace NextBusDesktop.ViewModels
             DateTime? realisticDeparture = Model.RealisticDeparture;
             string message;
             if (IsRescheduled)
-                message = string.Format("{0} {1}", realisticDeparture?.ToString("HH:mm"), _translator["NewTime"]);
+            {
+                double minutes = Math.Round(((DateTime)realisticDeparture - scheduledDeparture).TotalMinutes);
+                message = string.Format("{0} {1}", scheduledDeparture.ToString("HH:mm"), (minutes < 0 ? "-" : "+") + Math.Abs(minutes));
+            }
             else
                 message = scheduledDeparture.ToString("HH:mm");
 

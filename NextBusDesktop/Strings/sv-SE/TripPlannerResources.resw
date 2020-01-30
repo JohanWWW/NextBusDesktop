@@ -161,6 +161,12 @@
     <value>Sök</value>
     <comment>search button</comment>
   </data>
+  <data name="SearchMode.OffContent" xml:space="preserve">
+    <value>Avgång</value>
+  </data>
+  <data name="SearchMode.OnContent" xml:space="preserve">
+    <value>Ankomst</value>
+  </data>
   <data name="SecondsAbbr" xml:space="preserve">
     <value>s</value>
   </data>

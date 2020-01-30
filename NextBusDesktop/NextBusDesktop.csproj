@@ -129,7 +129,7 @@
     <Compile Include="DataProvider\IAccessTokenProvider.cs" />
     <Compile Include="DataProvider\ITripPlannerProvider.cs" />
     <Compile Include="DataProvider\TripPlannerProvider.cs" />
-    <Compile Include="DataProvider\TripPlannerProviderProxy.cs" />
+    <Compile Include="DataProvider\TripPlannerProviderPassthrough.cs" />
     <Compile Include="Controls\DepartureBoxControl.xaml.cs">
       <DependentUpon>DepartureBoxControl.xaml</DependentUpon>
     </Compile>

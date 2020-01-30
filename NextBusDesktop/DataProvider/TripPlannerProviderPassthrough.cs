@@ -17,7 +17,7 @@ namespace NextBusDesktop.DataProvider
     /// <summary>
     /// Passthrough and maintains the <see cref="ITripPlannerProvider"/> instance
     /// </summary>
-    public static class TripPlannerProviderProxy
+    public static class TripPlannerProviderPassthrough
     {
         private static ITripPlannerProvider _tripPlannerProvider;
         private static IAccessTokenProvider _accessTokenProvider;
@@ -30,7 +30,7 @@ namespace NextBusDesktop.DataProvider
 
         public static async Task Initialize()
         {
-            _logger = new OutputLogger(typeof(TripPlannerProviderProxy));
+            _logger = new OutputLogger(typeof(TripPlannerProviderPassthrough));
 
             Log("Initializing TripPlannerProvider.");
             _accessTokenProvider = new AccessTokenProvider() { Logger = new OutputLogger(nameof(AccessTokenProvider)) };

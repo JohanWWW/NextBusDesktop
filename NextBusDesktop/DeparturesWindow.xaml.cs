@@ -27,8 +27,6 @@ namespace NextBusDesktop
     /// </summary>
     public sealed partial class DeparturesWindow : Page
     {
-        private const byte _opaque = 255;
-
         private readonly DispatcherTimer _departureBoardRefreshTimer;
         private readonly DispatcherTimer _departureBoxTimer;
 
@@ -96,13 +94,9 @@ namespace NextBusDesktop
                 await Task.Delay(30);
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    byte amplitude = _opaque / 2;
-                    byte yOffset = amplitude;
-                    double frequency = 0.1;
-
                     // Yellow
                     Color statusColor = Color.FromArgb(
-                        (byte)(amplitude * Math.Cos(frequency * x) + yOffset), // y = a * cos(x) + m
+                        (byte)((255 / 2) * Math.Cos(0.1f * x) + (255 / 2)), // y = a * cos(f * x) + m
                         255,
                         255,
                         0
@@ -117,10 +111,16 @@ namespace NextBusDesktop
             System.Diagnostics.Debug.WriteLine("Cancel StatusIndicatorColorUpdate");
         }, cancellationToken);
 
+        /// <summary>
+        /// Quickly transition indicator to visible state when loading, 
+        /// pulse while loading and slowly transition to invisible state when done loading.
+        /// </summary>
         private Task LoadingIndicatorUpdate(CancellationToken cancellationToken) => Task.Run(async () =>
         {
+            // Linear function: y = k * x + m
             Func<int, int, int, int, byte> linear = (currentX, endX, startY, endY) =>
             {
+                // Solve k
                 float k = (float)(endY - startY) / endX;
                 return (byte)(k * currentX + startY);
             };
@@ -149,26 +149,45 @@ namespace NextBusDesktop
                         x++;
                     }
 
-                    // Keep same level until done loading.
-                    while (DepartureBoard.IsLoading) await Task.Delay(30);
-
-                    // Transition down
-                    x = 50;
-                    while (x >= 0)
+                    // The indicator pulses while loading
+                    int i = 0;
+                    while (DepartureBoard.IsLoading)
                     {
                         await Task.Delay(30);
                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                         {
                             LoadingIndicator.Fill = new SolidColorBrush(
                                 color: Color.FromArgb(
-                                    linear(x, 50, 0, 255),
+                                    (byte)((255 / 2 - 50) * Math.Cos(0.1f * i) + (255 / 2 + 50)),
                                     255,
                                     128,
                                     0
                                 )
                             );
                         });
-                        x--;
+                        i++;
+                    }
+
+                    // Store last known alpha value for smooth transition
+                    byte lastKnownValue = (byte)((255 / 2 - 50) * Math.Cos(0.1f * i) + (255 / 2 + 50));
+
+                    // Transition down
+                    x = 0;
+                    while (x <= 30)
+                    {
+                        await Task.Delay(30);
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            LoadingIndicator.Fill = new SolidColorBrush(
+                                color: Color.FromArgb(
+                                    linear(x, 30, lastKnownValue, 0),
+                                    255,
+                                    128,
+                                    0
+                                )
+                            );
+                        });
+                        x++;
                     }
                 }
             }
@@ -188,8 +207,8 @@ namespace NextBusDesktop
             _loadingIndicatorTaskCancellationToken.Cancel();
             await _statusIndicatorTask; // Let task run to completion before disposal
             await _loadingIndicatorTask;
-            _statusIndicatorTask.Dispose();
-            _loadingIndicatorTask.Dispose();
+
+            // Dispose of resources
             _statusIndicatorTask.Dispose();
             _loadingIndicatorTask.Dispose();
         }

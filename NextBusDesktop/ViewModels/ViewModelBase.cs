@@ -43,6 +43,7 @@ namespace NextBusDesktop.ViewModels
         /// <summary>
         /// Cleans resources or anything that might be running when this instance is no longer in use.
         /// </summary>
+        [Obsolete]
         protected virtual void Deconstruct()
         {
         }
@@ -62,6 +63,7 @@ namespace NextBusDesktop.ViewModels
         /// <summary>
         /// Should be called when the user has left the view represented by this view model.
         /// </summary>
+        [Obsolete]
         public void OnViewLeave()
         {
             Deconstruct();
@@ -110,6 +112,7 @@ namespace NextBusDesktop.ViewModels
         /// <summary>
         /// Cleans resources or anything that might be running when this instance is no longer in use.
         /// </summary>
+        [Obsolete]
         protected virtual void Deconstruct()
         {
         }
@@ -129,6 +132,7 @@ namespace NextBusDesktop.ViewModels
         /// <summary>
         /// Should be called when the user has left the view represented by this view model.
         /// </summary>
+        [Obsolete]
         public void OnViewLeave()
         {
             Deconstruct();

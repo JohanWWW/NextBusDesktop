@@ -51,7 +51,6 @@ namespace NextBusDesktop.ViewModels
 
         public string DepartureTimeInfo => (RealisticDeparture ?? ScheduledDeparture).ToString("HH:mm");
         public string ArrivalTimeInfo => (RealisticArrival ?? ScheduledArrival).ToString("HH:mm");
-        
 
         public TripViewModel(Trip trip)
         {

@@ -18,19 +18,6 @@
             <ColumnDefinition Width="30*"/>
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
-        <!--<StackPanel x:Name="LineLogoStackPanel"
-                    Orientation="Vertical"
-                    Background="#0071C1"
-                    Height="60"
-                    CornerRadius="10"
-                    Grid.Column="0">
-            <TextBlock x:Name="LineNumberTextBlock"
-                       Text="[line]"
-                       FontSize="24"
-                       Foreground="White"
-                       HorizontalAlignment="Center"
-                       Margin="0 13 0 0"/>
-        </StackPanel>-->
         <local:LineLogoControl x:Name="LineLogo"
                                Grid.Column="0"/>
 

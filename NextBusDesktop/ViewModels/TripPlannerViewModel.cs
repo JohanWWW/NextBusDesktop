@@ -63,25 +63,11 @@ namespace NextBusDesktop.ViewModels
             set => SetProperty(ref _destinationSearchQuery, value);
         }
 
-        private ObservableCollection<StopLocationViewModel> _originStopLocations;
-        public ObservableCollection<StopLocationViewModel> OriginStopLocations
-        {
-            get => _originStopLocations;
-            set => SetProperty(ref _originStopLocations, value);
-        }
-
         private StopLocation _origin;
         public StopLocation Origin
         {
             get => _origin;
             set => SetProperty(ref _origin, value);
-        }
-
-        private ObservableCollection<StopLocationViewModel> _destinationStopLocations;
-        public ObservableCollection<StopLocationViewModel> DestinationStopLocations
-        {
-            get => _destinationStopLocations;
-            set => SetProperty(ref _destinationStopLocations, value);
         }
 
         private StopLocation _destination;
@@ -152,8 +138,6 @@ namespace NextBusDesktop.ViewModels
             var dateTime = DateTime.Now;
             _givenDate = dateTime.Date;
             _givenTime = dateTime.TimeOfDay;
-            _originStopLocations = new ObservableCollection<StopLocationViewModel>();
-            _destinationStopLocations = new ObservableCollection<StopLocationViewModel>();
             _stopLocations = new ObservableCollection<StopLocationViewModel>();
             _selectedStopLocationIndex = -1;
             _trips = new ObservableCollection<TripViewModel>();
@@ -248,7 +232,7 @@ namespace NextBusDesktop.ViewModels
             try
             {
                 DateTime dateTime = _givenDate.AddHours(_givenTime.Hours).AddMinutes(_givenTime.Minutes);
-                tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
+                tripList = await TripPlannerProviderPassthrough.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
                 HasErrorOccurred = false;
             }
             catch (Exception e)
@@ -284,7 +268,7 @@ namespace NextBusDesktop.ViewModels
             try
             {
                 DateTime dateTime = DateTime.Now;
-                tripList = await TripPlannerProviderProxy.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
+                tripList = await TripPlannerProviderPassthrough.GetTripList(_origin.Id, _destination.Id, dateTime, _isGivenDateTimeForArrivals);
                 HasErrorOccurred = false;
             }
             catch (Exception e)
@@ -317,7 +301,7 @@ namespace NextBusDesktop.ViewModels
         }
 
         private async Task<LocationList> GetLocationList(string query) =>
-            await TripPlannerProviderProxy.GetLocationList(query);
+            await TripPlannerProviderPassthrough.GetLocationList(query);
 
         private void PopulateTripList(Func<TripViewModel, bool> selector)
         {

@@ -116,7 +116,7 @@ namespace NextBusDesktop.ViewModels
             LocationList locations;
             try
             {
-                locations = await TripPlannerProviderProxy.GetLocationList(_searchQuery);
+                locations = await TripPlannerProviderPassthrough.GetLocationList(_searchQuery);
                 HasErrorOccurred = false;
             }
             catch (Exception e)
@@ -159,7 +159,7 @@ namespace NextBusDesktop.ViewModels
             DepartureBoard departureBoard = null;
             try
             {
-                departureBoard = await TripPlannerProviderProxy.GetDepartureBoard(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
+                departureBoard = await TripPlannerProviderPassthrough.GetDepartureBoard(_selectedStopLocation.Id, new DateTime(today.Year, today.Month, today.Day, _departureTime.Hours, _departureTime.Minutes, _departureTime.Seconds));
                 HasErrorOccurred = false;
             }
             catch (Exception e)
@@ -253,7 +253,7 @@ namespace NextBusDesktop.ViewModels
             DepartureBoard departureBoard;
             try
             {
-                departureBoard = await TripPlannerProviderProxy.GetDepartureBoard(_selectedStopLocation.Id, now);
+                departureBoard = await TripPlannerProviderPassthrough.GetDepartureBoard(_selectedStopLocation.Id, now);
                 HasErrorOccurred = false;
             }
             catch (Exception e)

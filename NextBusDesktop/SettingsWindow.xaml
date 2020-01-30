@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="#222222">
+    <!--<Grid Background="#222222">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
@@ -30,5 +30,37 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+    </Grid>-->
+
+    <Grid Background="#222222">
+        <StackPanel>
+            <TextBlock x:Uid="/SettingsWindow/Localization"
+                       Text="Localization" 
+                       Foreground="White"
+                       FontSize="24"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Uid="/SettingsWindow/Language"
+                           Text="Language"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           Grid.Column="0"/>
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{x:Bind Settings.Languages}"
+                          SelectedIndex="{x:Bind Settings.SelectedLanguageIndex, Mode=TwoWay}"
+                          SelectedItem="{x:Bind Settings.SelectedLanguage, Mode=TwoWay}"
+                          SelectionChanged="{x:Bind Settings.UpdateLanguage}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:LanguageViewModel">
+                            <TextBlock Text="{x:Bind Language}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Page>

@@ -161,6 +161,12 @@
     <value>Search</value>
     <comment>search button</comment>
   </data>
+  <data name="SearchMode.OffContent" xml:space="preserve">
+    <value>Depart</value>
+  </data>
+  <data name="SearchMode.OnContent" xml:space="preserve">
+    <value>Arrive</value>
+  </data>
   <data name="SecondsAbbr" xml:space="preserve">
     <value>s</value>
   </data>

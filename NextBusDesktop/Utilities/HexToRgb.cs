@@ -9,7 +9,7 @@ namespace NextBusDesktop.Utilities
 {
     public static class HexToRgb
     {
-        private const string _base16Digits = "0123456789ABCDEF";
+        private const string _base16Digits = "0123456789ABCDEF"; // all
         private const string _charDigits = "ABCDEF";
 
         public static Color HexToColor(string hex)

@@ -26,7 +26,7 @@ namespace NextBusDesktop.DataProvider
 
         public async Task<LocationList> GetLocationListAsync(string query)
         {
-            await Task.Delay(10000);
+            await Task.Delay(new Random().Next(10, 10001));
 
             return new LocationList(new ResponseModels.LocationListResponse
             {

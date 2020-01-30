@@ -126,6 +126,9 @@
   <data name="Language.Text" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Localization.Text" xml:space="preserve">
+    <value>Localization</value>
+  </data>
   <data name="sv-SE" xml:space="preserve">
     <value>Swedish (Svenska)</value>
   </data>

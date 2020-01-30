@@ -90,10 +90,16 @@ namespace NextBusDesktop
                 await TripPlanner.GetDestinationLocationList();
         }
 
+        /// <summary>
+        /// Quickly transition indicator to visible state when loading, 
+        /// pulse while loading and slowly transition to invisible state when done loading.
+        /// </summary>
         private Task LoadingIndicatorUpdate(CancellationToken cancellationToken) => Task.Run(async () =>
         {
+            // Linear function: y = k * x + m
             Func<int, int, int, int, byte> linear = (currentX, endX, startY, endY) =>
             {
+                // Solve k
                 float k = (float)(endY - startY) / endX;
                 return (byte)(k * currentX + startY);
             };
@@ -122,26 +128,45 @@ namespace NextBusDesktop
                         x++;
                     }
 
-                    // Keep same level until done loading.
-                    while (TripPlanner.IsLoading) await Task.Delay(30);
-
-                    // Transition down
-                    x = 50;
-                    while (x >= 0)
+                    // The indicator pulses while loading
+                    int i = 0;
+                    while (TripPlanner.IsLoading)
                     {
                         await Task.Delay(30);
                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                         {
                             LoadingIndicator.Fill = new SolidColorBrush(
                                 color: Color.FromArgb(
-                                    linear(x, 50, 0, 255),
+                                    (byte)((255 / 2 - 50) * Math.Cos(0.1f * i) + (255 / 2 + 50)),
                                     255,
                                     128,
                                     0
                                 )
                             );
                         });
-                        x--;
+                        i++;
+                    }
+
+                    // Store last known alpha value for smooth transition
+                    byte lastKnownValue = (byte)((255 / 2 - 50) * Math.Cos(0.1f * i) + (255 / 2 + 50));
+
+                    // Transition down
+                    x = 0;
+                    while (x <= 30)
+                    {
+                        await Task.Delay(30);
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            LoadingIndicator.Fill = new SolidColorBrush(
+                                color: Color.FromArgb(
+                                    linear(x, 30, lastKnownValue, 0),
+                                    255,
+                                    128,
+                                    0
+                                )
+                            );
+                        });
+                        x++;
                     }
                 }
             }
@@ -160,6 +185,8 @@ namespace NextBusDesktop
             // Cancel and destroy tasks
             _loadingIndicatorTaskCancellationToken.Cancel();
             await _loadingIndicatorTask;
+
+            // Dispose of resources
             _loadingIndicatorTask.Dispose();
             _loadingIndicatorTaskCancellationToken.Dispose();
         }
