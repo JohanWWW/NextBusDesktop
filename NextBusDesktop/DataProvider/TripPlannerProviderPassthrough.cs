@@ -33,17 +33,13 @@ namespace NextBusDesktop.DataProvider
             _accessTokenProvider = new AccessTokenProvider() { Logger = new OutputLogger(nameof(AccessTokenProvider)) };
             _accessTokenFolder = ApplicationData.Current.LocalFolder;
             
-            bool fileIsEmpty;
-
-            if (!File.Exists(_accessTokenFolder.Path + "\\CurrentAccessToken.txt"))
+            if (!File.Exists(_accessTokenFolder.Path + "\\CurrentAccessToken.txt") || await IsFileEmpty())
             {
-                fileIsEmpty = true;
-                _accessTokenFile = await _accessTokenFolder.CreateFileAsync("CurrentAccessToken.txt", CreationCollisionOption.FailIfExists);
+                _accessTokenFile = await _accessTokenFolder.CreateFileAsync("CurrentAccessToken.txt", CreationCollisionOption.ReplaceExisting);
                 Log("Created new access token file.", "Out");
             }
             else
             {
-                fileIsEmpty = false;
                 _accessTokenFile = await _accessTokenFolder.GetFileAsync("CurrentAccessToken.txt");
                 Log("Load access token from file.", "In");
             }
@@ -58,7 +54,7 @@ namespace NextBusDesktop.DataProvider
                 return newAccessToken;
             };
 
-            if (fileIsEmpty) // File is empty because the file was just created.
+            if (await IsFileEmpty()) // File should be empty if the file was just created.
             {
                 Log("Could not find access token on file.");
                 token = await createNewToken();
@@ -111,6 +107,14 @@ namespace NextBusDesktop.DataProvider
                 await RenewToken();
 
             return await _tripPlannerProvider.GetTripListAsync(originStopId, destinationStopId, dateTime, isSearchForArrival);
+        }
+
+        private static async Task<bool> IsFileEmpty()
+        {
+            IStorageFile storageFile = await _accessTokenFolder.GetFileAsync("CurrentAccessToken.txt");
+            string result = await FileIO.ReadTextAsync(storageFile);
+
+            return result.Length is 0;
         }
 
         /// <summary>
