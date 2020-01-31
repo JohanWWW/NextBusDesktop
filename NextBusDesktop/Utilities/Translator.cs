@@ -3,7 +3,7 @@ using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.Globalization;
 
-namespace NextBusDesktop
+namespace NextBusDesktop.Utilities
 {
     public class Translator
     {

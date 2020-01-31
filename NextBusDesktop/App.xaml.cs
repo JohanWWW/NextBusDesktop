@@ -22,6 +22,8 @@ namespace NextBusDesktop
     /// </summary>
     sealed partial class App : Application
     {
+        private readonly Utilities.ILog _logger;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,6 +32,7 @@ namespace NextBusDesktop
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            _logger = new Utilities.OutputLogger(nameof(App));
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace NextBusDesktop
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -70,6 +73,16 @@ namespace NextBusDesktop
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
+            }
+
+            // Initialize data provider passthrough class
+            try
+            {
+                await DataProvider.TripPlannerProviderPassthrough.Initialize();
+            }
+            catch (Exception ex)
+            {
+                _logger.Log($"Something went wrong on application launch: {ex.Message}", "Error");
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using NextBusDesktop.Models.TripPlanner;
+using NextBusDesktop.Utilities;
 
 namespace NextBusDesktop.ViewModels
 {

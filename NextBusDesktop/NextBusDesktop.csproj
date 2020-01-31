@@ -174,7 +174,7 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Translator.cs" />
+    <Compile Include="Utilities\Translator.cs" />
     <Compile Include="TripPlannerWindow.xaml.cs">
       <DependentUpon>TripPlannerWindow.xaml</DependentUpon>
     </Compile>

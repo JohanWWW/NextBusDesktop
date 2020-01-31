@@ -2,6 +2,7 @@
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using NextBusDesktop.DataProvider;
+using NextBusDesktop.Utilities;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -20,29 +21,8 @@ namespace NextBusDesktop
 
             _translator = new Translator("MainPage");
 
-            try
-            {
-                InitializeTripPlannerProvider();
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"{nameof(MainPage)} an error occurred: {e.Message}", "Error");
-            }
-
             UtilitiyListBox.SelectedIndex = 0;
             MainContentFrame.Navigate(typeof(TripPlannerWindow));
-        }
-
-        private async void InitializeTripPlannerProvider()
-        {
-            try
-            {
-                await TripPlannerProviderPassthrough.Initialize();
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"{nameof(MainPage)} an error occurred: {e.Message}", "Error");
-            }
         }
 
         private void OnPointerEnterMainSplitViewPane(object sender, PointerRoutedEventArgs e) => MainSplitView.IsPaneOpen = true;

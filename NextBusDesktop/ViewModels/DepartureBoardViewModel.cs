@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NextBusDesktop.Models;
 using NextBusDesktop.Models.DepartureBoard;
 using NextBusDesktop.DataProvider;
+using NextBusDesktop.Utilities;
 
 namespace NextBusDesktop.ViewModels
 {
