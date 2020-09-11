@@ -134,7 +134,7 @@
     <comment>Insert time, span and time unit</comment>
   </data>
   <data name="DepartureTime.Text" xml:space="preserve">
-    <value>Avgångstid</value>
+    <value>Avgår</value>
   </data>
   <data name="Direction.Text" xml:space="preserve">
     <value>Riktning</value>
@@ -165,10 +165,10 @@
     <value>Ny tid</value>
   </data>
   <data name="Now" xml:space="preserve">
-    <value>nu</value>
+    <value>avgår nu!</value>
   </data>
   <data name="Remaining.Text" xml:space="preserve">
-    <value>Återstående</value>
+    <value>Återstående tid</value>
   </data>
   <data name="SearchForStop.PlaceholderText" xml:space="preserve">
     <value>Sök efter hållplats</value>

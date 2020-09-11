@@ -171,7 +171,7 @@
     <value>s</value>
   </data>
   <data name="StepInfoMessage" xml:space="preserve">
-    <value>Take {0} in direction of {1}</value>
+    <value>Take {0} towards {1}</value>
     <comment>line id / line name, direction</comment>
   </data>
   <data name="TheBoat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <value>Track</value>
   </data>
   <data name="TrainInfoMessage" xml:space="preserve">
-    <value>Take train {0} in direction of {1}</value>
+    <value>Take train {0} towards {1}</value>
     <comment>journey number, direction</comment>
   </data>
   <data name="Unknown" xml:space="preserve">

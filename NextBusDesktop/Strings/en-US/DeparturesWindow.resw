@@ -140,7 +140,7 @@
     <value>Direction</value>
   </data>
   <data name="DirectionOf" xml:space="preserve">
-    <value>direction of {0}</value>
+    <value>Towards {0}</value>
     <comment>Insert direction</comment>
   </data>
   <data name="Earliest.Text" xml:space="preserve">
@@ -165,10 +165,10 @@
     <value>New time</value>
   </data>
   <data name="Now" xml:space="preserve">
-    <value>now</value>
+    <value>departs now!</value>
   </data>
   <data name="Remaining.Text" xml:space="preserve">
-    <value>Remaining</value>
+    <value>Remaining time</value>
   </data>
   <data name="SearchForStop.PlaceholderText" xml:space="preserve">
     <value>Search for stop</value>
