@@ -5,6 +5,9 @@ NextBus is a Windows 10 application in which the user can plan their trips and s
 The departure board view is designed to be left open as it is polling data from Västtrafik's servers every minute, keeping the departure board up to date.
 A slim pulsating orange horizontal line appears below the search box whenever data is requested from the server and fades away when done.
 
+![Image of the departure board interface](/Images/departureboard.png)
+*Image of the departure board interface*
+
 ### Track Filter
 The departure list can be filtered to only show departures departing from a specified track. The list is unfiltered by default.
 If a stop is missing track numbers or it is unknown, the track number defaults to "-" which means missing/unknown.
@@ -19,6 +22,9 @@ Values for remaining time until departure automatically adjust in case of a resc
 The trip planner is currently a work in progress and contains bugs. With the trip planner tool, the user can plan their trips between two points. 
 A trip provides the user with a step-by-step guide showing which lines and vehicles to take and how to get to their connecting departure.
 If a line within a trip is rescheduled, this is presented to the user in a human readable language.
+
+![Image of the trip planner interface](/Images/tripplanner.png)
+*Image of the trip planner interface*
 
 ## Lanugage Support
 NextBus currently supports following languages:
