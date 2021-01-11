@@ -6,53 +6,17 @@ namespace NextBusDesktop.Utilities
 {
     public static class HexToRgb
     {
-        private const string _base16Digits = "0123456789ABCDEF"; // all
-        private const string _charDigits = "ABCDEF";
-
         public static Color HexToColor(string hex)
         {
-            hex = hex.TrimStart('#').ToUpper();
+            string hexString = hex[0] == '#' ? hex.TrimStart('#') : hex;
+            uint value = uint.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
 
-            if (hex.Length != 6 || !hex.All(d => _base16Digits.Contains(d)))
-                return new Color();
-
-            var bytes = new List<byte>(3);
-            int i = 0;
-            while (i < hex.Length)
-            {
-                int b = Parse0ToF(hex[i + 1]); // b = x * 16^0
-                int a = Parse0ToF(hex[i]) * 16; // b = x * 16^1
-                bytes.Add((byte)(b + a));
-                i += 2;
-            }
-
-            return Color.FromArgb(255, bytes[0], bytes[1], bytes[2]);
-        }
-
-        /// <summary>
-        /// Parses a single hex digit value from 0 to F
-        /// </summary>
-        private static int Parse0ToF(char character)
-        {
-            if (int.TryParse(character.ToString(), out int result)) return result;
-            else return ParseAToF(character);
-        }
-
-        /// <summary>
-        /// Parses a single digit value from A to F
-        /// </summary>
-        private static int ParseAToF(char character)
-        {
-            bool isIndexFound = false;
-            int i = -1;
-            do
-            {
-                i++;
-                if (_charDigits[i] == character) 
-                    isIndexFound = true;
-            } while (i < _charDigits.Length && !isIndexFound);
-
-            return i + 10; // Offset i by the number of integer digit values that can be represented (0-9)
+            return Color.FromArgb(
+                a: 0xFF, 
+                r: (byte)((value >> 16) & 0xFF), 
+                g: (byte)((value >> 8) & 0xFF), 
+                b: (byte)(value & 0xFF)
+            );
         }
     }
 }
